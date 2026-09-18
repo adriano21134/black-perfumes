@@ -287,12 +287,12 @@
                             <label class="block text-xs font-medium text-zinc-400 mb-1">Foto Principal (Subir Archivo)</label>
                             <input type="file" id="new-image-file" accept="image/*" onchange="handleNewImageFile(event)" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-4 py-2 text-xs text-zinc-400 focus:border-gold outline-none file:mr-4 file:py-1 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-gold file:text-zinc-950 cursor-pointer">
                             <input type="hidden" id="new-image-url" required value="https://placehold.co/600x600/18181b/D4AF37?text=Perfume">
-                            <span id="new-img-status" class="text-[10px] text-zinc-500 mt-1 block"></span>
+                            <span id="new-img-status" class="text-[10px] text-gold mt-1 block font-semibold"></span>
                         </div>
                         <div class="sm:col-span-2">
                             <label class="block text-xs font-medium text-zinc-400 mb-1">Fotos Adicionales (Subir Archivos)</label>
                             <input type="file" id="new-extra-files" accept="image/*" multiple onchange="handleNewExtraFiles(event)" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-4 py-2 text-xs text-zinc-400 focus:border-gold outline-none file:mr-4 file:py-1 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-zinc-800 file:text-zinc-300 cursor-pointer">
-                            <span id="new-extra-status" class="text-[10px] text-zinc-500 mt-1 block"></span>
+                            <span id="new-extra-status" class="text-[10px] text-gold mt-1 block font-semibold"></span>
                             <div id="new-extra-urls-preview" class="flex flex-wrap gap-2 mt-2"></div>
                         </div>
                         <div class="sm:col-span-2">
@@ -313,7 +313,7 @@
                             <div>
                                 <label class="block text-xs font-medium text-zinc-400 mb-2">Subir Logo de tu Negocio</label>
                                 <input type="file" id="setting-logo-file" accept="image/*" onchange="handleLogoUpload(event)" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-4 py-2 text-xs text-zinc-400 focus:border-gold outline-none file:mr-4 file:py-1 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-zinc-800 file:text-white cursor-pointer">
-                                <span id="logo-upload-status" class="text-[10px] text-zinc-500 mt-1 block"></span>
+                                <span id="logo-upload-status" class="text-[10px] text-gold mt-1 block font-semibold"></span>
                                 <div class="mt-3 flex items-center gap-4">
                                     <img id="admin-logo-preview" src="" class="h-12 w-12 object-cover rounded-full hidden bg-zinc-900 p-1 border border-zinc-800">
                                     <button type="button" onclick="removeLogo()" id="admin-logo-remove" class="text-red-400 text-xs hidden hover:underline cursor-pointer"><i class="fa-solid fa-trash"></i> Quitar logo</button>
@@ -455,12 +455,12 @@
                         <label class="block text-xs font-medium text-zinc-400 mb-1">URL de Foto Principal (O subir archivo)</label>
                         <input type="text" id="edit-image-url" required class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-4 py-2 text-sm focus:border-gold outline-none text-zinc-100 mb-2">
                         <input type="file" id="edit-image-file" accept="image/*" onchange="handleEditImageFile(event)" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-4 py-2 text-xs text-zinc-400 focus:border-gold outline-none file:mr-4 file:py-1 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-zinc-800 file:text-zinc-300 cursor-pointer">
-                        <span id="edit-img-status" class="text-[10px] text-zinc-500 mt-1 block"></span>
+                        <span id="edit-img-status" class="text-[10px] text-gold mt-1 block font-semibold"></span>
                     </div>
                     <div>
                         <label class="block text-xs font-medium text-zinc-400 mb-1">Agregar más Fotos (Subir Archivo)</label>
                         <input type="file" id="edit-extra-files" accept="image/*" multiple onchange="handleEditExtraFiles(event)" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-4 py-2 text-xs text-zinc-400 focus:border-gold outline-none file:mr-4 file:py-1 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-zinc-800 file:text-zinc-300 cursor-pointer">
-                        <span id="edit-extra-status" class="text-[10px] text-zinc-500 mt-1 block"></span>
+                        <span id="edit-extra-status" class="text-[10px] text-gold mt-1 block font-semibold"></span>
                     </div>
                     <div id="edit-current-extra-preview" class="space-y-2">
                         <label class="block text-xs font-medium text-zinc-400">Fotos adicionales cargadas actualmente</label>
@@ -1008,8 +1008,8 @@
             });
         };
 
-        // Image compression helper to keep payload size safely below Firebase Firestore limits
-        function compressImage(file, maxWidth = 600, quality = 0.7) {
+        // Image compression helper to keep payload size safely below Firestore limits
+        function compressImage(file, maxWidth = 400, quality = 0.6) {
             return new Promise((resolve) => {
                 const reader = new FileReader();
                 reader.onload = function(e) {
@@ -1036,20 +1036,26 @@
 
         window.handleNewImageFile = async function(e) {
             const file = e.target.files[0];
+            const statusEl = document.getElementById('new-img-status');
             if (file) {
+                if (statusEl) statusEl.innerText = "Optimizando imagen principal...";
                 const compressedDataUrl = await compressImage(file);
                 document.getElementById('new-image-url').value = compressedDataUrl;
+                if (statusEl) statusEl.innerText = "¡Imagen principal lista y optimizada!";
             }
         };
 
         window.newExtraUrls = [];
         window.handleNewExtraFiles = async function(e) {
             const files = e.target.files;
+            const statusEl = document.getElementById('new-extra-status');
             for (let i = 0; i < files.length; i++) {
+                if (statusEl) statusEl.innerText = `Optimizando extra ${i+1} de ${files.length}...`;
                 const compressedDataUrl = await compressImage(files[i]);
                 window.newExtraUrls.push(compressedDataUrl);
                 renderNewExtraPreviews();
             }
+            if (statusEl) statusEl.innerText = "¡Imágenes adicionales listas!";
         };
 
         function renderNewExtraPreviews() {
@@ -1066,20 +1072,26 @@
 
         window.handleEditImageFile = async function(e) {
             const file = e.target.files[0];
+            const statusEl = document.getElementById('edit-img-status');
             if (file) {
+                if (statusEl) statusEl.innerText = "Optimizando imagen...";
                 const compressedDataUrl = await compressImage(file);
                 document.getElementById('edit-image-url').value = compressedDataUrl;
+                if (statusEl) statusEl.innerText = "¡Imagen lista!";
             }
         };
 
         window.editExtraUrls = [];
         window.handleEditExtraFiles = async function(e) {
             const files = e.target.files;
+            const statusEl = document.getElementById('edit-extra-status');
             for (let i = 0; i < files.length; i++) {
+                if (statusEl) statusEl.innerText = `Optimizando extra ${i+1} de ${files.length}...`;
                 const compressedDataUrl = await compressImage(files[i]);
                 window.editExtraUrls.push(compressedDataUrl);
                 renderEditExtraThumbs();
             }
+            if (statusEl) statusEl.innerText = "¡Imágenes adicionales listas!";
         };
 
         function openAdminAuth() {
@@ -1159,6 +1171,8 @@
             await window.showCustomAlert("Producto creado exitosamente.");
             document.getElementById('add-product-form').reset();
             document.getElementById('new-extra-urls-preview').innerHTML = '';
+            document.getElementById('new-img-status').innerText = '';
+            document.getElementById('new-extra-status').innerText = '';
             document.getElementById('new-image-url').value = "https://placehold.co/600x600/18181b/D4AF37?text=Perfume";
             renderAdminProducts(); renderSite(); switchAdminTab('productos');
         }
@@ -1174,6 +1188,8 @@
             document.getElementById('edit-image-url').value = p.image;
             document.getElementById('edit-image-file').value = '';
             document.getElementById('edit-extra-files').value = '';
+            document.getElementById('edit-img-status').innerText = '';
+            document.getElementById('edit-extra-status').innerText = '';
             
             window.editExtraUrls = p.images ? [...p.images] : [];
             renderEditExtraThumbs();
@@ -1258,7 +1274,7 @@
             }
         }
         function removeLogo() {
-            tempLogoUrl = ""; document.getElementById('setting-logo-file').value = ""; updateLogoPreview();
+            tempLogoUrl = ""; document.getElementById('setting-logo-file').value = ""; document.getElementById('logo-upload-status').innerText = ""; updateLogoPreview();
         }
         function updateLogoPreview() {
             const preview = document.getElementById('admin-logo-preview');
