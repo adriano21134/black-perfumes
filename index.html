@@ -1,0 +1,1404 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Black Perfumes</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        gold: {
+                            DEFAULT: 'var(--color-gold)',
+                            light: 'var(--color-gold-light)',
+                            dark: 'var(--color-gold-dark)',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --color-gold: #D4AF37;
+            --color-gold-light: #F3E5AB;
+            --color-gold-dark: #AA8C2C;
+        }
+        .font-sans-custom { font-family: 'Plus Jakarta Sans', sans-serif; }
+        .font-serif-custom { font-family: 'Playfair Display', serif; }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #111; }
+        ::-webkit-scrollbar-thumb { background: var(--color-gold); border-radius: 4px; }
+    </style>
+</head>
+<body class="bg-zinc-950 text-zinc-100 min-h-screen flex flex-col selection:bg-gold selection:text-zinc-950 font-sans-custom w-full">
+
+    <header class="sticky top-0 z-50 bg-zinc-950/90 backdrop-blur-md border-b border-gold/20">
+        <div id="header-container" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-24 flex items-center justify-between transition-all duration-300">
+            <div id="header-left" class="flex items-center space-x-3.5 transition-all shrink-0">
+                <div class="bg-gradient-to-tr from-gold-dark via-gold to-gold-light p-0.5 rounded-full overflow-hidden flex items-center justify-center shadow-xl shadow-gold/20">
+                    <div class="bg-zinc-950 p-1 rounded-full flex items-center justify-center">
+                        <img id="brand-logo-img" src="" alt="Logo" class="h-16 w-16 sm:h-20 sm:w-20 object-cover rounded-full">
+                    </div>
+                </div>
+                <div class="border border-gold/40 px-4 py-2.5 rounded-xl bg-zinc-900/50 shadow-inner">
+                    <span id="brand-title" class="font-serif-custom font-bold text-lg sm:text-2xl tracking-wider text-transparent bg-clip-text bg-gradient-to-r from-gold-light via-gold to-gold-dark uppercase block leading-tight">Black Perfumes</span>
+                    <span class="text-[10px] uppercase tracking-widest text-zinc-400 font-semibold block">Importados Originales</span>
+                </div>
+            </div>
+
+            <nav id="header-nav" class="hidden lg:flex items-center justify-center gap-1.5 text-sm font-medium tracking-wide transition-all mx-4">
+                <a href="#catalogo" class="bg-gold text-zinc-950 px-4 py-2 rounded-full hover:bg-gold-light transition-all whitespace-nowrap font-bold shadow-sm shadow-gold/25">Catálogo</a>
+                <a href="#bloque-garantia" class="text-zinc-300 hover:text-gold hover:bg-zinc-900/80 px-4 py-2 rounded-full transition-all whitespace-nowrap">Garantía</a>
+                <a href="#bloque-pagos" class="text-zinc-300 hover:text-gold hover:bg-zinc-900/80 px-4 py-2 rounded-full transition-all whitespace-nowrap">Formas de pago</a>
+                <a href="#bloque-envios" class="text-zinc-300 hover:text-gold hover:bg-zinc-900/80 px-4 py-2 rounded-full transition-all whitespace-nowrap">Envíos</a>
+                <a href="#contacto" class="text-zinc-300 hover:text-gold hover:bg-zinc-900/80 px-4 py-2 rounded-full transition-all whitespace-nowrap">Contacto</a>
+                <a href="#bloque-revendedores" class="text-zinc-300 hover:text-gold hover:bg-zinc-900/80 px-4 py-2 rounded-full transition-all whitespace-nowrap">Revendedores</a>
+            </nav>
+
+            <div id="header-right" class="flex items-center space-x-4 transition-all shrink-0">
+                <button onclick="toggleCart()" class="relative bg-gold hover:bg-gold-light text-zinc-950 px-5 py-2.5 rounded-xl font-bold transition-all flex items-center gap-2.5 shadow-lg shadow-gold/20 cursor-pointer">
+                    <i class="fa-solid fa-bag-shopping"></i>
+                    <span class="hidden sm:inline">Carrito</span>
+                    <span id="cart-counter" class="absolute -top-2 -right-2 bg-zinc-100 text-zinc-950 text-xs font-bold w-5 h-5 rounded-full flex items-center justify-center border border-gold">0</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <section class="relative bg-zinc-950 border-b border-gold/20 py-24 md:py-32 overflow-hidden flex flex-col items-center justify-center min-h-[60vh]">
+        <div class="absolute inset-0 opacity-10 bg-[radial-gradient(var(--color-gold)_1px,transparent_1px)] [background-size:24px_24px]"></div>
+        <div class="absolute inset-0 bg-gradient-to-b from-zinc-950 via-transparent to-zinc-950"></div>
+        
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center space-y-8">
+            <div id="hero-text-container" class="space-y-6">
+                <h1 id="hero-heading" class="font-serif-custom text-4xl sm:text-6xl md:text-7xl font-bold tracking-tight text-zinc-100 leading-tight drop-shadow-2xl">
+                    Perfumes originales, <br/>
+                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-gold-light via-gold to-gold-dark italic">sin gastar de más</span>
+                </h1>
+                
+                <div id="hero-subtext" class="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6 text-zinc-300 text-base md:text-lg font-medium tracking-wide">
+                    <div class="flex items-center gap-2 bg-zinc-900/85 backdrop-blur-sm px-5 py-2.5 rounded-full border border-zinc-800 shadow-lg">
+                        <i class="fa-solid fa-users text-gold"></i>
+                        <span>+100 clientes</span>
+                    </div>
+                    <div class="hidden sm:block w-1.5 h-1.5 rounded-full bg-gold"></div>
+                    <div class="flex items-center gap-2 bg-zinc-900/85 backdrop-blur-sm px-5 py-2.5 rounded-full border border-zinc-800 shadow-lg">
+                        <i class="fa-solid fa-location-dot text-gold"></i>
+                        <span>Villa Urquiza, CABA</span>
+                    </div>
+                </div>
+            </div>
+
+            <div id="hero-buttons-container" class="flex flex-col sm:flex-row gap-4 justify-center pt-8">
+                <a id="hero-catalog-btn" href="#catalogo" class="bg-gradient-to-r from-gold to-gold-dark hover:from-gold-light hover:to-gold text-zinc-950 font-bold px-10 py-4 rounded-full shadow-xl shadow-gold/25 transition-all transform hover:-translate-y-1 text-lg flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-book-open"></i> Ver Catálogo Completo
+                </a>
+                <a id="hero-whatsapp-btn" href="#" target="_blank" class="bg-zinc-900/85 backdrop-blur-md border border-zinc-700 hover:border-gold hover:bg-zinc-800 text-zinc-100 font-semibold px-10 py-4 rounded-full transition-all flex items-center justify-center gap-3 text-lg group">
+                    <i class="fa-brands fa-whatsapp text-green-500 text-2xl group-hover:scale-110 transition-transform"></i> Hablar por WhatsApp
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <section class="bg-zinc-950 py-16 space-y-20 border-b border-zinc-900">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div id="info-blocks-container" class="space-y-24"></div>
+        </div>
+    </section>
+
+    <main id="catalogo" class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 w-full scroll-mt-24">
+        <div class="text-center mb-10">
+            <span class="text-xs font-bold uppercase tracking-widest text-gold bg-gold/10 px-3.5 py-1.5 rounded-full border border-gold/20">Nuestra Tienda</span>
+            <h2 class="font-serif-custom text-3xl md:text-4xl font-bold text-zinc-100 mt-3">Catálogo de Fragancias</h2>
+        </div>
+
+        <div class="flex flex-col md:flex-row justify-between items-center gap-6 mb-10 pb-6 border-b border-zinc-800">
+            <div id="category-filters" class="flex flex-wrap gap-2 justify-center md:justify-start"></div>
+
+            <div class="flex flex-wrap gap-3 w-full md:w-auto justify-end">
+                <div class="relative flex-grow sm:flex-grow-0">
+                    <input type="text" id="search-input" oninput="handleSearch()" placeholder="Buscar perfume o marca..." class="bg-zinc-900 border border-zinc-800 focus:border-gold text-zinc-100 px-4 py-2.5 pl-10 rounded-xl text-sm w-full sm:w-64 outline-none transition-all">
+                    <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-3.5 text-zinc-500 text-sm"></i>
+                </div>
+                <select id="sort-select" onchange="handleSort()" class="bg-zinc-900 border border-zinc-800 focus:border-gold text-zinc-100 px-4 py-2.5 rounded-xl text-sm outline-none transition-all cursor-pointer">
+                    <option value="relevancia">Ordenar por relevancia</option>
+                    <option value="menor">Precio: menor a mayor</option>
+                    <option value="mayor">Precio: mayor a menor</option>
+                </select>
+            </div>
+        </div>
+
+        <div id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"></div>
+    </main>
+
+    <div id="product-detail-modal" class="fixed inset-0 z-50 overflow-y-auto hidden">
+        <div class="fixed inset-0 bg-zinc-950/85 backdrop-blur-md transition-opacity" onclick="closeProductDetail()"></div>
+        <div class="min-h-screen px-4 text-center flex items-center justify-center">
+            <div class="inline-block w-full max-w-5xl p-6 sm:p-10 my-8 text-left align-middle transition-all transform bg-zinc-900 border border-gold/40 rounded-3xl shadow-2xl relative">
+                <button onclick="closeProductDetail()" class="absolute top-6 right-6 text-zinc-400 hover:text-zinc-100 bg-zinc-800 p-3 rounded-xl z-10 hover:bg-zinc-700 transition-all cursor-pointer">
+                    <i class="fa-solid fa-xmark text-xl"></i>
+                </button>
+                <div id="product-detail-content" class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center"></div>
+            </div>
+        </div>
+    </div>
+
+    <section id="contacto" class="bg-zinc-900/30 border-t border-zinc-800/80 py-20 scroll-mt-24">
+        <div class="max-w-4xl mx-auto px-4 text-center">
+            <span class="text-xs font-bold uppercase tracking-widest text-gold bg-gold/10 px-3.5 py-1.5 rounded-full border border-gold/20">Atención Directa</span>
+            <h2 class="font-serif-custom text-3xl md:text-4xl font-bold text-zinc-100 mt-3 mb-8">Contacto y Redes Sociales</h2>
+            
+            <div id="social-icons-container" class="flex justify-center gap-6 mb-10"></div>
+
+            <a id="footer-whatsapp-btn" href="#" target="_blank" class="inline-flex items-center justify-center gap-3 bg-green-500 hover:bg-green-600 text-white font-bold py-4 px-8 rounded-2xl shadow-xl shadow-green-500/20 transition-transform transform hover:-translate-y-1 text-lg w-full sm:w-auto">
+                <i class="fa-brands fa-whatsapp text-3xl"></i> Envianos mensaje por WhatsApp
+            </a>
+        </div>
+    </section>
+
+    <footer class="bg-zinc-950 border-t border-gold/20 py-8 text-center text-sm text-zinc-500 relative">
+        <button onclick="openAdminAuth()" class="absolute bottom-4 right-4 text-[10px] tracking-widest uppercase text-zinc-400 hover:text-gold transition-colors flex items-center gap-1.5 p-2.5 bg-zinc-900/80 rounded-xl border border-zinc-800 shadow-md z-30 font-bold cursor-pointer">
+            <i class="fa-solid fa-lock text-xs text-gold"></i> Admin
+        </button>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <p>&copy; <span id="footer-year">2026</span> <span id="footer-brand">Black Perfumes</span>. Todos los derechos reservados.</p>
+            <p class="text-gold">Ventas Mayoristas y Minoristas por WhatsApp</p>
+        </div>
+    </footer>
+
+    <div id="cart-drawer" class="fixed inset-0 z-50 overflow-hidden hidden">
+        <div class="absolute inset-0 bg-zinc-950/80 backdrop-blur-sm transition-opacity" onclick="toggleCart()"></div>
+        <div class="absolute inset-y-0 right-0 max-w-full flex pl-10">
+            <div class="w-screen max-w-md bg-zinc-900 border-l border-gold/30 flex flex-col shadow-2xl">
+                <div class="p-6 border-b border-zinc-800 flex items-center justify-between">
+                    <h2 class="font-serif-custom font-bold text-xl text-zinc-100 flex items-center gap-2">
+                        <i class="fa-solid fa-bag-shopping text-gold"></i> Tu Carrito
+                    </h2>
+                    <button onclick="toggleCart()" class="text-zinc-400 hover:text-zinc-100 text-xl p-2 cursor-pointer"><i class="fa-solid fa-xmark"></i></button>
+                </div>
+                <div id="cart-items-container" class="flex-grow overflow-y-auto p-6 space-y-4 divide-y divide-zinc-800/60"></div>
+                <div class="p-6 border-t border-zinc-800 bg-zinc-950 space-y-4">
+                    <div class="flex justify-between text-base font-medium">
+                        <span class="text-zinc-400">Total Estimado:</span>
+                        <span id="cart-total-price" class="font-bold text-gold text-xl">$0</span>
+                    </div>
+                    <button onclick="checkoutWhatsApp()" class="w-full bg-green-600 hover:bg-green-500 text-white font-bold py-3.5 px-4 rounded-xl shadow-lg shadow-green-600/20 transition-all flex items-center justify-center gap-3 text-base cursor-pointer">
+                        <i class="fa-brands fa-whatsapp text-2xl"></i> Enviar Pedido por WhatsApp
+                    </button>
+                    <p class="text-xs text-center text-zinc-500">Sin pagos online obligatorios. Acordás directamente con el vendedor.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <a id="floating-whatsapp-btn" href="#" target="_blank" class="fixed bottom-6 right-6 z-40 bg-green-500 hover:bg-green-600 text-white w-14 h-14 rounded-full flex items-center justify-center shadow-2xl shadow-green-500/30 transition-transform transform hover:scale-110" title="Contactar por WhatsApp">
+        <i class="fa-brands fa-whatsapp text-3xl"></i>
+    </a>
+
+    <div id="admin-auth-modal" class="fixed inset-0 z-50 overflow-y-auto hidden">
+        <div class="fixed inset-0 bg-zinc-950/85 backdrop-blur-md transition-opacity" onclick="closeAdminAuth()"></div>
+        <div class="min-h-screen px-4 text-center flex items-center justify-center">
+            <div class="inline-block w-full max-w-md p-6 sm:p-8 my-8 text-left align-middle transition-all transform bg-zinc-900 border border-gold/40 rounded-3xl shadow-2xl relative">
+                <div class="flex justify-between items-center pb-4 border-b border-zinc-800 mb-6">
+                    <h3 class="font-serif-custom font-bold text-xl text-gold flex items-center gap-2"><i class="fa-solid fa-lock"></i> Acceso Administrador</h3>
+                    <button onclick="closeAdminAuth()" class="text-zinc-400 hover:text-zinc-100 bg-zinc-800 p-2 rounded-xl cursor-pointer"><i class="fa-solid fa-xmark"></i></button>
+                </div>
+                <form onsubmit="handleAdminLogin(event)" class="space-y-4">
+                    <div>
+                        <label class="block text-xs font-medium text-zinc-400 mb-1">Contraseña de Administrador</label>
+                        <input type="password" id="admin-password-input" required placeholder="Ingresá la clave..." class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-4 py-3 text-sm focus:border-gold outline-none text-zinc-100">
+                        <p id="auth-error-msg" class="text-red-400 text-xs mt-1 hidden">Contraseña incorrecta.</p>
+                    </div>
+                    <div class="pt-2">
+                        <button type="submit" class="w-full bg-gold hover:bg-gold-light text-zinc-950 font-bold py-3.5 rounded-xl transition-all shadow-lg shadow-gold/20 cursor-pointer">Ingresar al Panel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div id="admin-modal" class="fixed inset-0 z-50 overflow-y-auto hidden">
+        <div class="fixed inset-0 bg-zinc-950/85 backdrop-blur-md transition-opacity" onclick="toggleAdminPanel()"></div>
+        <div class="min-h-screen px-4 text-center flex items-center justify-center">
+            <div class="inline-block w-full max-w-5xl p-6 sm:p-8 my-8 text-left align-middle transition-all transform bg-zinc-900 border border-gold/40 rounded-3xl shadow-2xl relative">
+                <div class="flex justify-between items-center pb-6 border-b border-zinc-800 mb-6">
+                    <div>
+                        <h2 class="font-serif-custom font-bold text-2xl text-gold">Panel de Administración CMS</h2>
+                        <p class="text-sm text-zinc-400">Control total con URLs de imágenes optimizadas para Firebase.</p>
+                    </div>
+                    <div class="flex items-center gap-4">
+                        <div class="bg-zinc-950 border border-gold/30 px-4 py-2 rounded-xl flex items-center gap-3 shadow-inner">
+                            <span class="relative flex h-3 w-3">
+                              <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                              <span class="relative inline-flex rounded-full h-3 w-3 bg-emerald-500"></span>
+                            </span>
+                            <div class="text-left">
+                                <span class="text-[10px] text-zinc-400 uppercase tracking-widest block font-semibold">Visitantes en vivo</span>
+                                <span id="live-visitors-count" class="font-bold text-gold text-base">1</span>
+                            </div>
+                        </div>
+                        <button onclick="toggleAdminPanel()" class="text-zinc-400 hover:text-zinc-100 bg-zinc-800 p-2.5 rounded-xl transition-all cursor-pointer"><i class="fa-solid fa-xmark text-lg"></i></button>
+                    </div>
+                </div>
+
+                <div class="flex flex-wrap gap-2 mb-6 border-b border-zinc-800 pb-4">
+                    <button onclick="switchAdminTab('productos')" id="tab-btn-productos" class="admin-tab-btn px-4 py-2 rounded-xl text-sm font-semibold bg-gold text-zinc-950 transition-all cursor-pointer">Productos</button>
+                    <button onclick="switchAdminTab('nuevo')" id="tab-btn-nuevo" class="admin-tab-btn px-4 py-2 rounded-xl text-sm font-semibold bg-zinc-800 text-zinc-300 hover:text-zinc-100 transition-all cursor-pointer">Nuevo Prod.</button>
+                    <button onclick="switchAdminTab('apariencia')" id="tab-btn-apariencia" class="admin-tab-btn px-4 py-2 rounded-xl text-sm font-semibold bg-zinc-800 text-zinc-300 hover:text-zinc-100 transition-all cursor-pointer">Logo & Estilos</button>
+                    <button onclick="switchAdminTab('textos')" id="tab-btn-textos" class="admin-tab-btn px-4 py-2 rounded-xl text-sm font-semibold bg-zinc-800 text-zinc-300 hover:text-zinc-100 transition-all cursor-pointer">Textos</button>
+                    <button onclick="switchAdminTab('bloques')" id="tab-btn-bloques" class="admin-tab-btn px-4 py-2 rounded-xl text-sm font-semibold bg-zinc-800 text-zinc-300 hover:text-zinc-100 transition-all cursor-pointer">Secciones</button>
+                    <button onclick="switchAdminTab('respaldo')" id="tab-btn-respaldo" class="admin-tab-btn px-4 py-2 rounded-xl text-sm font-semibold bg-zinc-800 text-zinc-300 hover:text-zinc-100 transition-all cursor-pointer"><i class="fa-solid fa-database"></i> Respaldo</button>
+                    <button onclick="switchAdminTab('redes')" id="tab-btn-redes" class="admin-tab-btn px-4 py-2 rounded-xl text-sm font-semibold bg-zinc-800 text-zinc-300 hover:text-zinc-100 transition-all cursor-pointer">Redes</button>
+                    <button onclick="switchAdminTab('seguridad')" id="tab-btn-seguridad" class="admin-tab-btn px-4 py-2 rounded-xl text-sm font-semibold bg-zinc-800 text-zinc-300 hover:text-zinc-100 transition-all cursor-pointer"><i class="fa-solid fa-key"></i> Contraseña</button>
+                </div>
+
+                <!-- Admin Tab: Productos -->
+                <div id="admin-tab-productos" class="admin-tab-content space-y-4 max-h-[60vh] overflow-y-auto pr-2">
+                    <div class="flex justify-between items-center">
+                        <h3 class="text-sm font-semibold uppercase tracking-wider text-zinc-400">Lista actual de productos</h3>
+                        <button onclick="resetDefaultData()" class="text-xs text-red-400 hover:underline cursor-pointer"><i class="fa-solid fa-rotate-right"></i> Restaurar fábrica</button>
+                    </div>
+                    <div id="admin-product-list" class="space-y-3"></div>
+                </div>
+
+                <!-- Admin Tab: Nuevo Producto -->
+                <div id="admin-tab-nuevo" class="admin-tab-content space-y-4 hidden max-h-[60vh] overflow-y-auto pr-2">
+                    <h3 class="text-sm font-semibold uppercase tracking-wider text-zinc-400">Crear nuevo producto (con conversión automática de archivo a URL)</h3>
+                    <form id="add-product-form" onsubmit="handleAddNewProduct(event)" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-medium text-zinc-400 mb-1">Nombre del Perfume</label>
+                            <input type="text" id="new-name" required class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-4 py-2.5 text-sm focus:border-gold outline-none text-zinc-100">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium text-zinc-400 mb-1">Categoría</label>
+                            <input type="text" id="new-category" required class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-4 py-2.5 text-sm focus:border-gold outline-none text-zinc-100">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium text-zinc-400 mb-1">Precio ($ ARS)</label>
+                            <input type="number" id="new-price" required class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-4 py-2.5 text-sm focus:border-gold outline-none text-zinc-100">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium text-zinc-400 mb-1">Foto Principal (Subir Archivo -> URL)</label>
+                            <input type="file" id="new-image-file" accept="image/*" onchange="handleNewImageFile(event)" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-4 py-2 text-xs text-zinc-400 focus:border-gold outline-none file:mr-4 file:py-1 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-gold file:text-zinc-950 cursor-pointer">
+                            <input type="hidden" id="new-image-url" required value="https://placehold.co/600x600/18181b/D4AF37?text=Perfume">
+                        </div>
+                        <div class="sm:col-span-2">
+                            <label class="block text-xs font-medium text-zinc-400 mb-1">Fotos Adicionales (Subir Archivos -> URLs)</label>
+                            <input type="file" id="new-extra-files" accept="image/*" multiple onchange="handleNewExtraFiles(event)" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-4 py-2 text-xs text-zinc-400 focus:border-gold outline-none file:mr-4 file:py-1 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-zinc-800 file:text-zinc-300 cursor-pointer">
+                            <div id="new-extra-urls-preview" class="flex flex-wrap gap-2 mt-2"></div>
+                        </div>
+                        <div class="sm:col-span-2">
+                            <label class="block text-xs font-medium text-zinc-400 mb-1">Notas Olfativas / Descripción</label>
+                            <input type="text" id="new-notes" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-4 py-2.5 text-sm focus:border-gold outline-none text-zinc-100">
+                        </div>
+                        <div class="sm:col-span-2 pt-2">
+                            <button type="submit" class="w-full bg-gold hover:bg-gold-light text-zinc-950 font-bold py-3 rounded-xl transition-all shadow-lg shadow-gold/20 cursor-pointer">Guardar y Publicar</button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Admin Tab: Apariencia -->
+                <div id="admin-tab-apariencia" class="admin-tab-content space-y-6 hidden">
+                    <h3 class="text-sm font-semibold uppercase tracking-wider text-zinc-400">Apariencia y Logo</h3>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 bg-zinc-950/50 p-6 rounded-2xl border border-zinc-800">
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-xs font-medium text-zinc-400 mb-2">Subir Logo de tu Negocio (Archivo -> URL)</label>
+                                <input type="file" id="setting-logo-file" accept="image/*" onchange="handleLogoUpload(event)" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-4 py-2 text-xs text-zinc-400 focus:border-gold outline-none file:mr-4 file:py-1 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-zinc-800 file:text-white cursor-pointer">
+                                <div class="mt-3 flex items-center gap-4">
+                                    <img id="admin-logo-preview" src="" class="h-12 w-12 object-cover rounded-full hidden bg-zinc-900 p-1 border border-zinc-800">
+                                    <button type="button" onclick="removeLogo()" id="admin-logo-remove" class="text-red-400 text-xs hidden hover:underline cursor-pointer"><i class="fa-solid fa-trash"></i> Quitar logo</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-xs font-medium text-zinc-400 mb-1">Color Principal (Dorado)</label>
+                                <div class="flex items-center gap-3">
+                                    <input type="color" id="setting-color" class="w-12 h-12 rounded cursor-pointer bg-zinc-950 border border-zinc-800 p-1">
+                                    <input type="text" id="setting-color-text" class="flex-grow bg-zinc-950 border border-zinc-800 rounded-xl px-4 py-2.5 text-sm text-zinc-300 focus:border-gold outline-none uppercase" readonly>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <button onclick="saveSiteSettings()" class="w-full bg-gold hover:bg-gold-light text-zinc-950 font-bold py-3 rounded-xl transition-all shadow-lg shadow-gold/20 cursor-pointer">Guardar Apariencia</button>
+                </div>
+
+                <!-- Admin Tab: Textos -->
+                <div id="admin-tab-textos" class="admin-tab-content space-y-4 hidden">
+                    <h3 class="text-sm font-semibold uppercase tracking-wider text-zinc-400">Textos Principales</h3>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-medium text-zinc-400 mb-1">Nombre de la Marca</label>
+                            <input type="text" id="setting-brand" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-4 py-2.5 text-sm text-zinc-100 focus:border-gold outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium text-zinc-400 mb-1">WhatsApp de Ventas (Ej: 5491100000000)</label>
+                            <input type="text" id="setting-whatsapp" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-4 py-2.5 text-sm text-zinc-100 focus:border-gold outline-none">
+                        </div>
+                        <div class="sm:col-span-2">
+                            <label class="block text-xs font-medium text-zinc-400 mb-1">Título Principal (Pantalla Inicio)</label>
+                            <input type="text" id="setting-hero-title" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-4 py-2.5 text-sm text-zinc-100 focus:border-gold outline-none">
+                        </div>
+                        <div class="sm:col-span-2">
+                            <label class="block text-xs font-medium text-zinc-400 mb-1">Subtítulo (Badges de clientes y ubicación)</label>
+                            <input type="text" id="setting-hero-sub" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-4 py-2.5 text-sm text-zinc-100 focus:border-gold outline-none">
+                        </div>
+                    </div>
+                    <button onclick="saveSiteSettings()" class="w-full bg-gold hover:bg-gold-light text-zinc-950 font-bold py-3 rounded-xl transition-all shadow-lg shadow-gold/20 cursor-pointer">Guardar Textos</button>
+                </div>
+
+                <!-- Admin Tab: Bloques -->
+                <div id="admin-tab-bloques" class="admin-tab-content space-y-6 max-h-[65vh] overflow-y-auto pr-2 hidden">
+                    <div class="bg-zinc-950/50 p-6 rounded-2xl border border-zinc-800">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="text-sm font-semibold uppercase tracking-wider text-zinc-400">Secciones y Tarjetas Estilo Grilla</h3>
+                            <button type="button" onclick="addAdminSection()" class="text-xs bg-zinc-800 hover:bg-zinc-700 px-3 py-1.5 rounded-lg text-zinc-200 cursor-pointer"><i class="fa-solid fa-plus"></i> Añadir Sección</button>
+                        </div>
+                        <div id="admin-sections-list" class="space-y-6"></div>
+                    </div>
+                    <button onclick="saveSiteSettings()" class="w-full bg-gold hover:bg-gold-light text-zinc-950 font-bold py-3 rounded-xl transition-all shadow-lg shadow-gold/20 sticky bottom-0 cursor-pointer">Guardar Todas las Secciones</button>
+                </div>
+
+                <!-- Admin Tab: Respaldo -->
+                <div id="admin-tab-respaldo" class="admin-tab-content space-y-6 hidden">
+                    <h3 class="text-sm font-semibold uppercase tracking-wider text-zinc-400"><i class="fa-solid fa-database text-gold"></i> Respaldo de Base de Datos</h3>
+                    <div class="bg-zinc-950 p-6 rounded-2xl border border-zinc-800 flex flex-col sm:flex-row gap-4 items-center justify-between">
+                        <div>
+                            <h4 class="font-bold text-zinc-100 text-sm">Exportar Respaldo Actual</h4>
+                            <p class="text-xs text-zinc-500">Descarga un archivo JSON con tu stock y configuraciones.</p>
+                        </div>
+                        <button onclick="exportBackupJSON()" class="bg-gold hover:bg-gold-light text-zinc-950 font-bold px-6 py-3 rounded-xl text-xs transition-all flex items-center gap-2 shadow-md cursor-pointer"><i class="fa-solid fa-download"></i> Descargar JSON</button>
+                    </div>
+                    <div class="bg-zinc-950 p-6 rounded-2xl border border-zinc-800 flex flex-col sm:flex-row gap-4 items-center justify-between">
+                        <div>
+                            <h4 class="font-bold text-zinc-100 text-sm">Importar Respaldo Guardado</h4>
+                            <p class="text-xs text-zinc-500">Sube tu archivo JSON previo para restaurar tus datos.</p>
+                        </div>
+                        <label class="bg-zinc-800 hover:bg-zinc-700 text-zinc-100 font-bold px-6 py-3 rounded-xl text-xs transition-all flex items-center gap-2 cursor-pointer border border-zinc-700">
+                            <i class="fa-solid fa-upload"></i> Seleccionar JSON <input type="file" id="import-backup-file" accept=".json" onchange="importBackupJSON(event)" class="hidden">
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Admin Tab: Redes Sociales -->
+                <div id="admin-tab-redes" class="admin-tab-content space-y-4 hidden">
+                    <h3 class="text-sm font-semibold uppercase tracking-wider text-zinc-400">Links de Redes Sociales</h3>
+                    <div class="space-y-4 max-w-lg">
+                        <div>
+                            <label class="flex items-center gap-2 text-xs font-medium text-zinc-400 mb-1"><i class="fa-brands fa-instagram text-pink-500 text-base"></i> Link de Instagram</label>
+                            <input type="url" id="setting-ig" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-4 py-2.5 text-sm text-zinc-100 focus:border-gold outline-none">
+                        </div>
+                        <div>
+                            <label class="flex items-center gap-2 text-xs font-medium text-zinc-400 mb-1"><i class="fa-brands fa-facebook text-blue-500 text-base"></i> Link de Facebook</label>
+                            <input type="url" id="setting-fb" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-4 py-2.5 text-sm text-zinc-100 focus:border-gold outline-none">
+                        </div>
+                        <div>
+                            <label class="flex items-center gap-2 text-xs font-medium text-zinc-400 mb-1"><i class="fa-brands fa-tiktok text-white text-base"></i> Link de TikTok</label>
+                            <input type="url" id="setting-tk" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-4 py-2.5 text-sm text-zinc-100 focus:border-gold outline-none">
+                        </div>
+                    </div>
+                    <div class="pt-4"><button onclick="saveSiteSettings()" class="w-full bg-gold hover:bg-gold-light text-zinc-950 font-bold py-3 rounded-xl transition-all shadow-lg shadow-gold/20 cursor-pointer">Guardar Redes</button></div>
+                </div>
+
+                <!-- Admin Tab: Seguridad -->
+                <div id="admin-tab-seguridad" class="admin-tab-content space-y-4 hidden">
+                    <h3 class="text-sm font-semibold uppercase tracking-wider text-zinc-400"><i class="fa-solid fa-key text-gold"></i> Cambiar Contraseña de Administrador</h3>
+                    <form onsubmit="handlePasswordChange(event)" class="space-y-4 max-w-md">
+                        <div>
+                            <label class="block text-xs font-medium text-zinc-400 mb-1">Nueva Contraseña</label>
+                            <input type="password" id="new-admin-password" required placeholder="Ingresá la nueva clave..." class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-4 py-3 text-sm focus:border-gold outline-none text-zinc-100">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium text-zinc-400 mb-1">Confirmar Nueva Contraseña</label>
+                            <input type="password" id="confirm-admin-password" required placeholder="Repetila..." class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-4 py-3 text-sm focus:border-gold outline-none text-zinc-100">
+                        </div>
+                        <button type="submit" class="w-full bg-gold hover:bg-gold-light text-zinc-950 font-bold py-3.5 rounded-xl transition-all shadow-lg shadow-gold/20 cursor-pointer">Actualizar Contraseña</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="edit-modal" class="fixed inset-0 z-50 overflow-y-auto hidden">
+        <div class="fixed inset-0 bg-zinc-950/85 backdrop-blur-md transition-opacity" onclick="closeEditModal()"></div>
+        <div class="min-h-screen px-4 text-center flex items-center justify-center">
+            <div class="inline-block w-full max-w-xl p-6 sm:p-8 my-8 text-left align-middle transition-all transform bg-zinc-900 border border-gold/40 rounded-3xl shadow-2xl relative">
+                <div class="flex justify-between items-center pb-4 border-b border-zinc-800 mb-6">
+                    <h3 class="font-serif-custom font-bold text-xl text-gold">Modificar Producto</h3>
+                    <button onclick="closeEditModal()" class="text-zinc-400 hover:text-zinc-100 bg-zinc-800 p-2 rounded-xl cursor-pointer"><i class="fa-solid fa-xmark"></i></button>
+                </div>
+                <form id="edit-product-form" onsubmit="handleSaveEditedProduct(event)" class="space-y-4 max-h-[65vh] overflow-y-auto pr-2">
+                    <input type="hidden" id="edit-id">
+                    <div>
+                        <label class="block text-xs font-medium text-zinc-400 mb-1">Nombre</label>
+                        <input type="text" id="edit-name" required class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-4 py-2 text-sm focus:border-gold outline-none text-zinc-100">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-zinc-400 mb-1">Categoría</label>
+                        <input type="text" id="edit-category" required class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-4 py-2 text-sm focus:border-gold outline-none text-zinc-100">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-zinc-400 mb-1">Precio ($ ARS)</label>
+                        <input type="number" id="edit-price" required class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-4 py-2 text-sm focus:border-gold outline-none text-zinc-100">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-zinc-400 mb-1">URL de Foto Principal (O subir archivo para convertir)</label>
+                        <input type="text" id="edit-image-url" required class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-4 py-2 text-sm focus:border-gold outline-none text-zinc-100 mb-2">
+                        <input type="file" id="edit-image-file" accept="image/*" onchange="handleEditImageFile(event)" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-4 py-2 text-xs text-zinc-400 focus:border-gold outline-none file:mr-4 file:py-1 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-zinc-800 file:text-zinc-300 cursor-pointer">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-zinc-400 mb-1">Agregar más Fotos (Subir Archivo -> URLs)</label>
+                        <input type="file" id="edit-extra-files" accept="image/*" multiple onchange="handleEditExtraFiles(event)" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-4 py-2 text-xs text-zinc-400 focus:border-gold outline-none file:mr-4 file:py-1 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-zinc-800 file:text-zinc-300 cursor-pointer">
+                    </div>
+                    <div id="edit-current-extra-preview" class="space-y-2">
+                        <label class="block text-xs font-medium text-zinc-400">Fotos adicionales cargadas actualmente</label>
+                        <div id="edit-extra-thumbs" class="flex flex-wrap gap-2"></div>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-zinc-400 mb-1">Notas Olfativas</label>
+                        <input type="text" id="edit-notes" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-4 py-2 text-sm focus:border-gold outline-none text-zinc-100">
+                    </div>
+                    <div class="pt-4">
+                        <button type="submit" class="w-full bg-gold hover:bg-gold-light text-zinc-950 font-bold py-3 rounded-xl transition-all shadow-lg shadow-gold/20 cursor-pointer">Guardar Cambios</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div id="custom-modal-overlay" class="fixed inset-0 z-[100] bg-zinc-950/85 backdrop-blur-md hidden items-center justify-center">
+        <div class="bg-zinc-900 border border-gold/40 rounded-3xl p-6 sm:p-8 max-w-sm w-full mx-4 shadow-2xl text-center space-y-6">
+            <p id="custom-modal-message" class="text-zinc-100 text-base sm:text-lg"></p>
+            <div id="custom-modal-actions" class="flex justify-center gap-4"></div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, setDoc, onSnapshot, collection, query } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        const myFirebaseConfig = {
+            apiKey: "AIzaSyA__ONWSqwzBqPkrDIbQWuzv_nQTRbJPcA",
+            authDomain: "black-perfumes-bd.firebaseapp.com",
+            projectId: "black-perfumes-bd",
+            storageBucket: "black-perfumes-bd.firebasestorage.app",
+            messagingSenderId: "1005208384289",
+            appId: "1:1005208384289:web:ad25e2cd7a299cacbec460",
+            measurementId: "G-Q6S83ZV5DS"
+        };
+
+        const defaultProducts = [
+            { id: 1740000001, name: "Gold Edition Al Haramain 120ml", category: "Perfumes Árabes de Hombre", price: 90000, notes: "Salida: Bergamota y notas verdes. Corazón: Melón, piña y notas dulces gourmand. Fondo: Almizcle blanco, vainilla y ámbar.", image: "https://placehold.co/600x600/18181b/D4AF37?text=Gold+Edition" },
+            { id: 1740000002, name: "Dubai Night Al Haramain 100ml", category: "Perfumes Árabes de Hombre", price: 90000, notes: "Salida: Azafrán, bergamota y elemí. Corazón: Rosa de Bulgaria, madera de oud y lirio de los valles. Fondo: Haba tonka, ámbar y almizcle.", image: "https://placehold.co/600x600/18181b/D4AF37?text=Dubai+Night" },
+            { id: 1740000003, name: "Asad Elixir Lattafa 100ml", category: "Perfumes Árabes de Hombre", price: 60000, notes: "Salida: Pimienta negra, piña y notas especiadas. Corazón: Café, pachulí y maderas intensas. Fondo: Vainilla bourbon, ámbar y ládano.", image: "https://placehold.co/600x600/18181b/D4AF37?text=Asad+Elixir" },
+            { id: 1740000004, name: "Bharara King 100ml", category: "Perfumes Árabes de Hombre", price: 100000, notes: "Salida: Naranja dulce, limón y bergamota. Corazón: Frutas tropicales y acordes dulces. Fondo: Almizcle blanco, ámbar y vainilla.", image: "https://placehold.co/600x600/18181b/D4AF37?text=Bharara+King" },
+            { id: 1740000005, name: "9pm Black Afnan 100ml", category: "Perfumes Árabes de Hombre", price: 50000, notes: "Salida: Manzana silvestre, canela y lavanda. Corazón: Flor de azahar del naranjo y lirio. Fondo: Vainilla oscura, haba tonka y pachulí.", image: "https://placehold.co/600x600/18181b/D4AF37?text=9pm+Black" },
+            { id: 1740000006, name: "Hawas For Him Rasasi 100ml", category: "Perfumes Árabes de Hombre", price: 50000, notes: "Salida: Manzana, bergamota, canela y limón. Corazón: Notas acuáticas, cardamomo y ciruela. Fondo: Ámbar gris, almizcle y cedro.", image: "https://placehold.co/600x600/18181b/D4AF37?text=Hawas+Rasasi" },
+            { id: 1740000007, name: "Hawas Ice Rasasi 100ml", category: "Perfumes Árabes de Hombre", price: 70000, notes: "Salida: Menta helada, limón y manzana verde. Corazón: Azahar, ciruela y cardamomo aromático. Fondo: Musgo de roble, almizcle y ámbar gris.", image: "https://placehold.co/600x600/18181b/D4AF37?text=Hawas+Ice" },
+            { id: 1740000008, name: "Intense Man Club de Nuit Armaf 105ml", category: "Perfumes Árabes de Hombre", price: 60000, notes: "Salida: Limón, piña, bergamota y grosellas negras. Corazón: Abedul, jazmín y rosa. Fondo: Almizcle, ámbar gris, pachulí y vainilla.", image: "https://placehold.co/600x600/18181b/D4AF37?text=Intense+Man" },
+            { id: 1740000009, name: "Mandarin Sky Odyssey Armaf 100ml", category: "Perfumes Árabes de Hombre", price: 50000, notes: "Salida: Mandarina jugosa, naranja y azafrán. Corazón: Caramelo fundido y haba tonka. Fondo: Ambroxan, cedro y maderas claras.", image: "https://placehold.co/600x600/18181b/D4AF37?text=Mandarin+Sky" },
+            { id: 1740000010, name: "Dubai Chocolat Odyssey Armaf 100ml", category: "Perfumes Árabes de Hombre", price: 30000, notes: "Salida: Cacao tostado y avellanas. Corazón: Chocolate con leche, acordes gourmand. Fondo: Vainilla cremosa y almizcle cálido.", image: "https://placehold.co/600x600/18181b/D4AF37?text=Dubai+Chocolat" },
+            { id: 1740000011, name: "Honor And Glory (White) Lattafa 100ml", category: "Perfumes Árabes de Hombre", price: 50000, notes: "Salida: Piña y crème brûlée dulce. Corazón: Canela, benjuí y pimienta negra. Fondo: Vainilla suave, sándalo y madera de cachemira.", image: "https://placehold.co/600x600/18181b/D4AF37?text=Honor+%26+Glory" },
+            { id: 1740000012, name: "Khamrah (Black) Lattafa 100ml", category: "Perfumes Árabes de Hombre", price: 50000, notes: "Salida: Canela intensa, nuez moscada y bergamota. Corazón: Dátiles dulces, praliné y flores blancas. Fondo: Vainilla, haba tonka y mirra.", image: "https://placehold.co/600x600/18181b/D4AF37?text=Khamrah+Black" },
+            { id: 1740000013, name: "Asad Bourbon Lattafa 100ml", category: "Perfumes Árabes de Hombre", price: 60000, notes: "Salida: Acordes de bourbon, pimienta y especias cálidas. Corazón: Hojas de tabaco, iris y café tostado. Fondo: Vainilla oscura y maderas ambarinas.", image: "https://placehold.co/600x600/18181b/D4AF37?text=Asad+Bourbon" },
+            { id: 1740000014, name: "Vulcan Feu French Avenue 100ml", category: "Perfumes Árabes de Hombre", price: 70000, notes: "Salida: Mango maduro, limón, jengibre y ruibarbo. Corazón: Pimienta rosa, jazmín y praliné. Fondo: Haba tonka, cedro y ámbar gris.", image: "https://placehold.co/600x600/18181b/D4AF37?text=Vulcan+Feu" },
+            { id: 1740000015, name: "Precieux I Club de Nuit Armaf", category: "Perfumes Árabes de Hombre", price: 90000, notes: "Salida: Bergamota, limón cítrico, piña y pimienta rosa. Corazón: Notas amaderadas intensas y jazmín. Fondo: Ambroxan, cedro, almizcle y cuero.", image: "https://placehold.co/600x600/18181b/D4AF37?text=Precieux+I" },
+            { id: 1740000016, name: "Hawas Malibu Rasasi 100ml", category: "Perfumes Árabes de Hombre", price: 70000, notes: "Salida: Cítricos veraniegos vibrantes y agua de coco. Corazón: Frutas tropicales y brisa marina. Fondo: Almizcle y ámbar claro.", image: "https://placehold.co/600x600/18181b/D4AF37?text=Hawas+Malibu" },
+            { id: 1740000017, name: "Hawas Verde Rasasi 100ml", category: "Perfumes Árabes de Hombre", price: 80000, notes: "Salida: Notas verdes, manzana crisp y lima fresca. Corazón: Cardamomo y acordes acuáticos. Fondo: Madera de cedro, almizcle y musgo.", image: "https://placehold.co/600x600/18181b/D4AF37?text=Hawas+Verde" },
+            { id: 1740000018, name: "Hawas Tropical Rasasi 100ml", category: "Perfumes Árabes de Hombre", price: 70000, notes: "Salida: Maracuyá, piña jugosa y cítricos. Corazón: Flores exóticas, crema de coco. Fondo: Almizcle blanco y maderas tropicales.", image: "https://placehold.co/600x600/18181b/D4AF37?text=Hawas+Tropical" },
+            { id: 1740000019, name: "Hawas Kobra Rasasi 100ml", category: "Perfumes Árabes de Hombre", price: 75000, notes: "Salida: Especias orientales picantes, bergamota y menta. Corazón: Cuero, flor de iris y lavanda. Fondo: Sándalo profundo, haba tonka y ámbar oscuro.", image: "https://placehold.co/600x600/18181b/D4AF37?text=Hawas+Kobra" },
+            { id: 1740000020, name: "Fakhar Platin Lattafa 100ml", category: "Perfumes Árabes de Hombre", price: 45000, notes: "Salida: Manzana, bergamota y jengibre chispeante. Corazón: Lavanda aromática, salvia y enebro. Fondo: Haba tonka, ámbar, cedro y vetiver.", image: "https://placehold.co/600x600/18181b/D4AF37?text=Fakhar+Platin" },
+            { id: 1740000021, name: "Bahamas Odyssey Armaf 100ml", category: "Perfumes Árabes de Hombre", price: 50000, notes: "Salida: Cóctel de frutas tropicales, ananá y lima. Corazón: Notas oceánicas y coco dulce. Fondo: Almizcle y maderas claras secas.", image: "https://placehold.co/600x600/18181b/D4AF37?text=Odyssey+Bahamas" },
+            { id: 1740000022, name: "The Kingdom Blanco Lattafa 100ml", category: "Perfumes Árabes de Hombre", price: 55000, notes: "Salida: Lavanda limpia y hojas de menta. Corazón: Iris empolvado, vainilla dulce y tonka. Fondo: Maderas ambarinas y cedro blanco.", image: "https://placehold.co/600x600/18181b/D4AF37?text=The+Kingdom" },
+            { id: 1740000023, name: "Khamrah Qahwa Lattafa 100ml", category: "Perfumes Árabes de Hombre", price: 50000, notes: "Salida: Canela, cardamomo y jengibre. Corazón: Café arábigo tostado, dátiles y praliné. Fondo: Vainilla intensa, haba tonka y almizcle.", image: "https://placehold.co/600x600/18181b/D4AF37?text=Khamrah+Qahwa" },
+            { id: 1740000024, name: "Urban Man Elixir Club de Nuit Armaf 105ml", category: "Perfumes Árabes de Hombre", price: 65000, notes: "Salida: Bergamota, pimienta negra y elemí. Corazón: Lavanda silvestre, geranio y especias. Fondo: Ambroxan, cedro y pachulí oscuro.", image: "https://placehold.co/600x600/18181b/D4AF37?text=Urban+Man" },
+            { id: 1740000025, name: "Liquid Brun French Avenue 100ml", category: "Perfumes Árabes de Hombre", price: 80000, notes: "Salida: Canela, cardamomo y flor de naranjo. Corazón: Vainilla bourbon rica y resinas. Fondo: Almizcle suave, praliné y sándalo.", image: "https://placehold.co/600x600/18181b/D4AF37?text=Liquid+Brun" },
+            { id: 1740000026, name: "Salvo Elixir Maison Alhambra 60ml", category: "Perfumes Árabes de Hombre", price: 40000, notes: "Salida: Nuez moscada, canela picante y pomelo. Corazón: Lavanda silvestre de gran intensidad. Fondo: Regaliz, sándalo, ámbar y vetiver haitiano.", image: "https://placehold.co/600x600/18181b/D4AF37?text=Salvo+Elixir" },
+            { id: 1740000027, name: "9pm Rebel Afnan 100ml", category: "Perfumes Árabes de Hombre", price: 70000, notes: "Salida: Manzana verde ácida, bergamota y mandarina. Corazón: Madera de cedro, iris y lavanda. Fondo: Vainilla cálida, haba tonka y ámbar gris.", image: "https://placehold.co/600x600/18181b/D4AF37?text=9pm+Rebel" },
+            { id: 1740000028, name: "Untold Club de Nuit Armaf 105ml", category: "Perfumes Árabes de Hombre", price: 70000, notes: "Salida: Azafrán ardiente y jazmín egipcio. Corazón: Madera de ámbar y toques de ámbar gris. Fondo: Resina de abeto y madera de cedro profunda.", image: "https://placehold.co/600x600/18181b/D4AF37?text=Club+De+Nuit+Untold" },
+            { id: 1740000029, name: "Philos Pura Maison Alhambra 100ml", category: "Perfumes Árabes de Hombre", price: 45000, notes: "Salida: Naranja siciliana, bergamota de Calabria y limón. Corazón: Cesta de frutas dulces y jugosas. Fondo: Almizcle blanco, vainilla de Madagascar y ámbar.", image: "https://placehold.co/600x600/18181b/D4AF37?text=Philos+Pura" },
+            { id: 1740000030, name: "Sceptre Malachite Maison Alhambra 100ml", category: "Perfumes Árabes de Hombre", price: 45000, notes: "Salida: Notas verdes frescas, bergamota y mandarina. Corazón: Especias orientales aromáticas, cardamomo y jazmín. Fondo: Ámbar, vainilla cremosa y almizcle.", image: "https://placehold.co/600x600/18181b/D4AF37?text=Sceptre+Malachite" },
+            { id: 1740000031, name: "Aqua Dubai Amber Oud Al Haramain 100ml", category: "Perfumes Árabes de Hombre", price: 90000, notes: "Salida: Notas acuáticas marinas, bergamota y mandarina. Corazón: Frutas exóticas tropicales y jazmín. Fondo: Almizcle, ámbar gris terroso y maderas.", image: "https://placehold.co/600x600/18181b/D4AF37?text=Aqua+Dubai" },
+            { id: 1740000032, name: "Mandarin Sky Elixir Odyssey Armaf 100ml", category: "Perfumes Árabes de Hombre", price: 80000, notes: "Salida: Mandarina intensa, azafrán picante y naranja sanguina. Corazón: Caramelo fundido gourmand y haba tonka tostada. Fondo: Ambroxan, sándalo y maderas ambarinas.", image: "https://placehold.co/600x600/18181b/D4AF37?text=Mandarin+Sky+Elixir" },
+            { id: 1740000033, name: "Odyssey Aqua Armaf 100ml", category: "Perfumes Árabes de Hombre", price: 60000, notes: "Salida: Notas marinas ozónicas, toronja y mandarina. Corazón: Hojas de violeta verdes y geranio. Fondo: Madera de guayaco, ámbar gris y musgo de roble.", image: "https://placehold.co/600x600/18181b/D4AF37?text=Odyssey+Aqua" },
+            { id: 1740000034, name: "9pm Night Out 9pm Afnan 100ml", category: "Perfumes Árabes de Hombre", price: 100000, notes: "Salida: Canela intensa, manzana ácida y lavanda nocturna. Corazón: Flor de azahar dulce y cuero ahumado. Fondo: Vainilla oscura pura, haba tonka y ámbar seco.", image: "https://placehold.co/600x600/18181b/D4AF37?text=9pm+Night+Out" },
+            { id: 1740000035, name: "Asad Black Lattafa 100ml", category: "Perfumes Árabes de Hombre", price: 55000, notes: "Salida: Pimienta negra audaz, piña madura y hojas de tabaco. Corazón: Granos de café tostados, pachulí e iris polvoso. Fondo: Ámbar profundo, vainilla y maderas oscuras.", image: "https://placehold.co/600x600/18181b/D4AF37?text=Asad+Black" },
+            { id: 1740000036, name: "Hawas Fire Rasasi 100ml", category: "Perfumes Árabes de Hombre", price: 60000, notes: "Salida: Canela, pimienta negra ardiente y cítricos radiantes. Corazón: Lavanda limpia y azahar de naranjo. Fondo: Cuero intenso, ámbar resinoso y haba tonka.", image: "https://placehold.co/600x600/18181b/D4AF37?text=Hawas+Fire" },
+            { id: 1740000037, name: "Badee Al Oud For Glory Black Lattafa 100ml", category: "Perfumes Árabes de Hombre", price: 40000, notes: "Salida: Azafrán puro, nuez moscada y lavanda aromática. Corazón: Madera de oud rica y pachulí terroso. Fondo: Almizcle denso, oud ahumado y pachulí oscuro.", image: "https://placehold.co/600x600/18181b/D4AF37?text=For+Glory" },
+            { id: 1740000038, name: "Beach Party Armaf 100ml", category: "Perfumes Árabes de Hombre", price: 65000, notes: "Salida: Cítricos solares vibrantes, notas marinas saladas y coco. Corazón: Flores blancas luminosas y frutas exóticas. Fondo: Almizcle limpio y ámbar cálido de atardecer.", image: "https://placehold.co/600x600/18181b/D4AF37?text=Beach+Party" },
+            { id: 1740000039, name: "You EDT Armani 100ml", category: "Perfumes de Diseñador de Hombre", price: 150000, notes: "Salida: Cardamomo especiado, pimienta rosa y hojas de violeta. Corazón: Salvia, melón jugoso y piña dulce. Fondo: Vainilla pura, castaña glaseada y madera de gaiac.", image: "https://placehold.co/600x600/18181b/D4AF37?text=Stronger+With+You" },
+            { id: 1740000040, name: "Scandal JPG 100ml", category: "Perfumes de Diseñador de Hombre", price: 150000, notes: "Salida: Esclarea herbácea y mandarina brillante. Corazón: Caramelo fundido gourmand y haba tonka cremosa. Fondo: Vetiver terroso y robusto.", image: "https://placehold.co/600x600/18181b/D4AF37?text=Scandal+Hombre" },
+            { id: 1740000041, name: "Sauvage EDT Dior 100ml", category: "Perfumes de Diseñador de Hombre", price: 180000, notes: "Salida: Bergamota de Calabria fresca y pimienta chispeante. Corazón: Pimienta de Sichuan, lavanda, pachulí, geranio y vetiver. Fondo: Ambroxan puro, cedro y ládano.", image: "https://placehold.co/600x600/18181b/D4AF37?text=Sauvage+EDT" },
+            { id: 1740000042, name: "The Most Wanted Parfum Azzaro 100ml", category: "Perfumes de Diseñador de Hombre", price: 150000, notes: "Salida: Jengibre rojo ardiente y vibrante. Corazón: Notas amaderadas incandescentes y acordes fougère modernos. Fondo: Bourbon vainilla rica, oscura y envolvente.", image: "https://placehold.co/600x600/18181b/D4AF37?text=The+Most+Wanted" },
+            { id: 1740000043, name: "You Intensely Armani 100ml", category: "Perfumes de Diseñador de Hombre", price: 175000, notes: "Salida: Pimienta rosa picante, enebro de Virginia y violeta polvosa. Corazón: Tofe dulce, canela, lavanda y salvia. Fondo: Vainilla intensa, haba tonka, ámbar y gamuza suave.", image: "https://placehold.co/600x600/18181b/D4AF37?text=You+Intensely" },
+            { id: 1740000044, name: "Sauvage EDP Dior 100ml", category: "Perfumes de Diseñador de Hombre", price: 220000, notes: "Salida: Bergamota de Calabria intensa y jugosa. Corazón: Pimienta de Sichuan, lavanda pura, anís estrellado y nuez moscada. Fondo: Ambroxan y absoluto de vainilla de Papúa Nueva Guinea.", image: "https://placehold.co/600x600/18181b/D4AF37?text=Sauvage+EDP" },
+            { id: 1740000045, name: "One Million EDT Paco Rabanne 100ml", category: "Perfumes de Diseñador de Hombre", price: 120000, notes: "Salida: Mandarina roja jugosa, toronja chispeante y menta fresca. Corazón: Canela especiada, extracto de rosa y notas de especias orientales. Fondo: Ámbar, cuero rubio y pachulí indio.", image: "https://placehold.co/600x600/18181b/D4AF37?text=1+Million" },
+            { id: 1740000046, name: "Uomo Born in Roma EDT Valentino 100ml", category: "Perfumes de Diseñador de Hombre", price: 210000, notes: "Salida: Notas minerales saladas, hojas de violeta absolutas y sal. Corazón: Jengibre fresco y esclarea aromática. Fondo: Notas amaderadas ahumadas y vetiver terroso vibrante.", image: "https://placehold.co/600x600/18181b/D4AF37?text=Born+In+Roma" },
+            { id: 1740000047, name: "212 NYC Carolina Herrera 100ml", category: "Perfumes de Diseñador de Hombre", price: 130000, notes: "Salida: Notas verdes de pasto cortado, toronja, bergamota y petit grain. Corazón: Jengibre especiado, gardenia, pimienta verde y salvia. Fondo: Almizcle transparente, sándalo, incienso y madera de gaiac.", image: "https://placehold.co/600x600/18181b/D4AF37?text=212+NYC" },
+            { id: 1740000048, name: "Le Male Elixir Parfum Jean Paul Gaultier 125ml", category: "Perfumes de Diseñador de Hombre", price: 185000, notes: "Salida: Lavanda intensa y menta refrescante de gran impacto. Corazón: Resina de benjuí y vainilla cálida. Fondo: Miel dorada, haba tonka cremosa y hoja de tabaco rubio.", image: "https://placehold.co/600x600/18181b/D4AF37?text=Le+Male+Elixir" },
+            { id: 1740000049, name: "Light Blue Dolce Gabbana EDT 100ml", category: "Perfumes de Diseñador de Hombre", price: 115000, notes: "Salida: Mandarina siciliana, enebro de Virginia, pomelo helado y bergamota. Corazón: Romero, madera de palo de rosa brasileño y pimienta de Sichuan. Fondo: Almizcle, incienso ahumado y musgo de roble.", image: "https://placehold.co/600x600/18181b/D4AF37?text=Light+Blue" },
+            { id: 1740000050, name: "Eros Versace EDT 100ml", category: "Perfumes de Diseñador de Hombre", price: 130000, notes: "Salida: Aceite de menta, manzana verde italiana y limón vibrante. Corazón: Haba tonka venezolana, ambroxan sensual y flores de geranio. Fondo: Vainilla de Madagascar, cedro de Virginia y vetiver robusto.", image: "https://placehold.co/600x600/18181b/D4AF37?text=Eros+EDT" },
+            { id: 1740000051, name: "Yara Rosa Lattafa 100ml", category: "Perfumes Árabes de Mujer", price: 50000, notes: "Salida: Orquídea delicada, heliotropo y tangerina vibrante. Corazón: Acorde gourmand dulce y frutas tropicales jugosas. Fondo: Vainilla batida, almizcle blanco y sándalo cremoso.", image: "https://placehold.co/600x600/18181b/D4AF37?text=Yara+Rosa" },
+            { id: 1740000052, name: "Yum Yum Armaf 100ml", category: "Perfumes Árabes de Mujer", price: 75000, notes: "Salida: Frutas rojas jugosas y cítricos confitados dulces. Corazón: Azúcar glass, malvavisco tostado y flores blancas suaves. Fondo: Vainilla cremosa batida, almizcle azucarado y sándalo.", image: "https://placehold.co/600x600/18181b/D4AF37?text=Yum+Yum" },
+            { id: 1740000053, name: "Noble Blush Rosa Lattafa 100ml", category: "Perfumes Árabes de Mujer", price: 45000, notes: "Salida: Rosas frescas de rocío y notas frutales rosadas y chispeantes. Corazón: Peonía romántica, flor de jazmín y crema batida. Fondo: Vainilla suave empolvada y almizcle blanco brillante.", image: "https://placehold.co/600x600/18181b/D4AF37?text=Noble+Blush" },
+            { id: 1740000054, name: "Sublime Lattafa 100ml", category: "Perfumes Árabes de Mujer", price: 45000, notes: "Salida: Manzana crujiente verde y lichi jugoso exótico. Corazón: Rosa aterciopelada y ciruela dulce y oscura. Fondo: Vainilla profunda, musgo de roble y pachulí seductor.", image: "https://placehold.co/600x600/18181b/D4AF37?text=Badee+Al+Oud" },
+            { id: 1740000055, name: "Untold Club de Nuit Armaf 105ml", category: "Perfumes Árabes de Mujer", price: 70000, notes: "Salida: Azafrán rojo radiante y jazmín egipcio de floración nocturna. Corazón: Madera de ámbar cálida y toques ricos de ámbar gris. Fondo: Resina de abeto pura y madera de cedro profunda.", image: "https://placehold.co/600x600/18181b/D4AF37?text=Club+De+Nuit+Untold" },
+            { id: 1740000056, name: "Eclaire Lattafa 100ml", category: "Perfumes Árabes de Mujer", price: 65000, notes: "Salida: Caramelo líquido dorado, leche caliente y azúcar glas. Corazón: Miel silvestre dorada y delicadas flores blancas. Fondo: Vainilla bourbon, praliné crujiente y almizcle algodonoso.", image: "https://placehold.co/600x600/18181b/D4AF37?text=Eclaire" },
+            { id: 1740000057, name: "Mayar Cherry Intense Lattafa 100ml", category: "Perfumes Árabes de Mujer", price: 45000, notes: "Salida: Cereza negra alicorada, frutos rojos explosivos y almendras amargas. Corazón: Jazmín sambac, rosa y orquídea negra. Fondo: Vainilla cálida, haba tonka, sándalo y almizcle sensual.", image: "https://placehold.co/600x600/18181b/D4AF37?text=Mayar+Cherry" },
+            { id: 1740000058, name: "Mayar Rosa Lattafa 100ml", category: "Perfumes Árabes de Mujer", price: 40000, notes: "Salida: Frutos rojos escarchados, frambuesa jugosa y lichi dulce. Corazón: Rosa damascena radiante y jazmín floral delicado. Fondo: Almizcle cremoso limpio y vainilla amaderada suave.", image: "https://placehold.co/600x600/18181b/D4AF37?text=Mayar+Rosa" },
+            { id: 1740000059, name: "Yara Elixir Lattafa 100ml", category: "Perfumes Árabes de Mujer", price: 55000, notes: "Salida: Licor de frutas dulces, néctar de coco y ámbar brillante. Corazón: Flores blancas intensas luminosas y misteriosa orquídea negra. Fondo: Vainilla bourbon de Madagascar, almizcle y sándalo.", image: "https://placehold.co/600x600/18181b/D4AF37?text=Yara+Elixir" },
+            { id: 1740000060, name: "Maleka Club de Nuit 105ml", category: "Perfumes Árabes de Mujer", price: 65000, notes: "Salida: Cítricos radiantes chispeantes y frutas jugosas exuberantes. Corazón: Rosa turca majestuosa, jazmín y flor de lirio. Fondo: Almizcle puro, vainilla en vaina y toques de ámbar gris.", image: "https://placehold.co/600x600/18181b/D4AF37?text=Maleka" },
+            { id: 1740000061, name: "Angham Lattafa 100ml", category: "Perfumes Árabes de Mujer", price: 45000, notes: "Salida: Pimienta rosa picante, jengibre fresco vibrante y mandarina dulce. Corazón: Praliné azucarado, lavanda moderna empolvada y cacao cálido. Fondo: Vainilla cremosa, ámbar dorado rico y sándalo envolvente.", image: "https://placehold.co/600x600/18181b/D4AF37?text=Angham" },
+            { id: 1740000062, name: "The Kingdom Fem Lattafa 100ml", category: "Perfumes Árabes de Mujer", price: 50000, notes: "Salida: Bergamota italiana luminosa y jugosos frutos silvestres de bosque. Corazón: Jazmín sambac floral radiante, flor de azahar y exuberantes nardos. Fondo: Vainilla pura delicada, almizcle sedoso y cedro blanco.", image: "https://placehold.co/600x600/18181b/D4AF37?text=The+Kingdom+Fem" },
+            { id: 1740000063, name: "Candee Odyssey Armaf 100ml", category: "Perfumes Árabes de Mujer", price: 40000, notes: "Salida: Dulces caramelos frutales de azúcar espolvoreado, frutas tropicales exóticas. Corazón: Flores blancas cremosas de textura mantecosa. Fondo: Vainilla esponjosa y rica, almizcle reconfortante y sándalo liso.", image: "https://placehold.co/600x600/18181b/D4AF37?text=Candee+Odyssey" },
+            { id: 1740000064, name: "Hawas Diva Rasasi 100ml", category: "Perfumes Árabes de Mujer", price: 65000, notes: "Salida: Frutas de agua jugosas frescas, pera madura y mandarina alegre. Corazón: Flores blancas deslumbrantes como jazmín y rosa matutina. Fondo: Vainilla sensual, almizcle blanco elegante y trazas de ámbar suave.", image: "https://placehold.co/600x600/18181b/D4AF37?text=Hawas+Diva" },
+            { id: 1740000065, name: "Badee Al Oud Amethyst", category: "Perfumes Árabes de Mujer", price: 40000, notes: "Salida: Pimienta rosa picante estimulante y bergamota vibrante radiante. Corazón: Rosa turca intensa, rosa de Bulgaria romántica y absoluto de jazmín. Fondo: Oud amaderado oriental exótico, ámbar dorado cálido y vainilla dulce.", image: "https://placehold.co/600x600/18181b/D4AF37?text=Amethyst" },
+            { id: 1740000066, name: "Body Splash Victoria's Secret Velvet Petals 250ml", category: "Body Splash y Cremas", price: 32000, notes: "Aroma: Floral cálido intenso. Mezcla perfecta de flores exuberantes aterciopeladas y glaseado suave de almendras azucaradas. Un toque frutal-floral gourmand altamente seductor.", image: "https://placehold.co/600x600/18181b/D4AF37?text=Velvet+Petals" },
+            { id: 1740000067, name: "Body Splash Victoria's Secret Shimmer Velvet Petals 250ml", category: "Body Splash y Cremas", price: 32000, notes: "Aroma: Floral cálido con destellos. Flores exuberantes y glaseado suave de almendras azucaradas combinadas con partículas iluminadoras de brillo para una piel perfumada y destellante.", image: "https://placehold.co/600x600/18181b/D4AF37?text=Velvet+Petals+Shimmer" },
+            { id: 1740000068, name: "Body Splash Victoria's Secret Coconut Passion 250ml", category: "Body Splash y Cremas", price: 32000, notes: "Aroma: Gourmand cálido e isleño. Una fusión irresistible de néctar de coco tropical rico y profundo con suave y reconfortante vainilla cálida pura. Relajante y deliciosamente playero.", image: "https://placehold.co/600x600/18181b/D4AF37?text=Coconut+Passion" },
+            { id: 1740000069, name: "Body Splash Victoria's Secret Shimmer Coconut Passion 250ml", category: "Body Splash y Cremas", price: 32000, notes: "Aroma: Gourmand luminoso e isleño. La icónica mezcla de néctar de coco rico y suave vainilla cálida, infundida de partículas brillantes para lograr una piel dorada espectacular a la vista.", image: "https://placehold.co/600x600/18181b/D4AF37?text=Coconut+Passion+Shimmer" },
+            { id: 1740000070, name: "Body Splash Victoria's Secret Amber Romance 250ml", category: "Body Splash y Cremas", price: 32000, notes: "Aroma: Gourmand cálido embriagador. Mezcla profunda de ámbar oriental oscuro sensual mezclado exquisitamente con toques deliciosos de crème anglaise sedosa, vainilla rica y cereza negra. Envolvente.", image: "https://placehold.co/600x600/18181b/D4AF37?text=Amber+Romance" },
+            { id: 1740000071, name: "Crema Karseell 500ml", category: "Body Splash y Cremas", price: 20000, notes: "Propiedades: Tratamiento capilar profesional reconstructor profundo formulado con una rica combinación de colágeno puro y nutritivo aceite de argán marroquí garantizando hidratación, suavidad y brillo extremo.", image: "https://placehold.co/600x600/18181b/D4AF37?text=Maca+Power" }
+        ];
+
+        const defaultLogoSVG = "https://placehold.co/140x140/111/D4AF37?text=Black+Import";
+
+        let defaultSettings = {
+            brandName: "Black Perfumes",
+            logoImage: defaultLogoSVG,
+            whatsappNumber: "5491100000000",
+            heroTitle: "Perfumes originales, <br/><span class='text-transparent bg-clip-text bg-gradient-to-r from-gold-light via-gold to-gold-dark italic'>sin gastar de más</span>",
+            heroSub: "+100 clientes | Villa Urquiza, CABA",
+            primaryColor: "#D4AF37",
+            instagram: "https://instagram.com",
+            facebook: "https://facebook.com",
+            tiktok: "https://tiktok.com",
+            adminPassword: "admin123",
+            sections: [
+                {
+                    id: "garantia",
+                    title: "Garantía",
+                    subtitle: "Compra 100% Segura",
+                    cards: [
+                        { title: "Garantía oficial", text: "Productos originales, nuevos, sellados y con garantía.", emoji: "🛡️" },
+                        { title: "Importadores directos", text: "Somos importadores directos y tenemos stock real fotografiado por nosotros.", emoji: "📦" },
+                        { title: "Acompañamiento", text: "Ante cualquier problema con tu pedido, te acompañamos por WhatsApp hasta resolverlo.", emoji: "💬" }
+                    ]
+                },
+                {
+                    id: "pagos",
+                    title: "Formas de pago",
+                    subtitle: "Elegí la que más te convenga",
+                    cards: [
+                        { title: "Efectivo", text: "Dólares o pesos en efectivo al retirar o recibir.", emoji: "💵" },
+                        { title: "USDT", text: "Criptomonedas estables (USDT) de forma directa.", emoji: "🪙" },
+                        { title: "Transferencia", text: "Transferencia bancaria rápida y segura.", emoji: "🏦" }
+                    ]
+                },
+                {
+                    id: "envios",
+                    title: "Envíos",
+                    subtitle: "A todo el país",
+                    cards: [
+                        { title: "Envíos nacionales", text: "Envíos nacionales al país por correo, a domicilio o sucursal.", emoji: "🚚" },
+                        { title: "Despacho rápido", text: "Despacho rápido dentro de las 24hs hábiles de confirmado.", emoji: "⚡" },
+                        { title: "CABA y GBA", text: "Contamos con motomensajería de confianza dentro del AMBA.", emoji: "🛵" }
+                    ]
+                },
+                {
+                    id: "revendedores",
+                    title: "Revendedores",
+                    subtitle: "Trabajá con nosotros",
+                    cards: [
+                        { title: "¿Querés revender?", text: "¿Querés revender y acceder a mejores precios? Escribinos por WhatsApp!", emoji: "💼" }
+                    ]
+                }
+            ]
+        };
+
+        let settings = JSON.parse(localStorage.getItem('bp_settings_v10')) || defaultSettings;
+        let products = JSON.parse(localStorage.getItem('bp_products_v10')) || defaultProducts;
+        let cart = JSON.parse(localStorage.getItem('bp_cart_v10')) || [];
+        let currentCategory = 'Todas';
+        let currentSearch = '';
+        let currentSort = 'relevancia';
+        let tempSections = [];
+        let tempLogoUrl = "";
+
+        let db = null;
+        let appId = "black-perfumes-bd";
+
+        window.onload = async function() {
+            renderSite();
+            await initFirebaseRealtime();
+        };
+
+        async function initFirebaseRealtime() {
+            try {
+                const app = initializeApp(myFirebaseConfig);
+                db = getFirestore(app);
+                const auth = getAuth(app);
+                await signInAnonymously(auth);
+
+                const stateRef = doc(db, 'artifacts', appId, 'store_state', 'main');
+                onSnapshot(stateRef, (docSnap) => {
+                    if (docSnap.exists()) {
+                        const cloudData = docSnap.data();
+                        let updated = false;
+                        if (cloudData.products && Array.isArray(cloudData.products)) {
+                            products = cloudData.products;
+                            localStorage.setItem('bp_products_v10', JSON.stringify(products));
+                            updated = true;
+                        }
+                        if (cloudData.settings && typeof cloudData.settings === 'object') {
+                            settings = { ...defaultSettings, ...cloudData.settings };
+                            localStorage.setItem('bp_settings_v10', JSON.stringify(settings));
+                            updated = true;
+                        }
+                        if (updated) {
+                            renderSite();
+                            if (!document.getElementById('admin-modal').classList.contains('hidden')) {
+                                renderAdminProducts();
+                            }
+                        }
+                    } else {
+                        setDoc(stateRef, { products, settings }, { merge: true }).catch(() => {});
+                    }
+                }, () => {});
+
+                let visitorId = sessionStorage.getItem('bp_visitor_id');
+                if (!visitorId) {
+                    visitorId = 'visitor_' + Math.random().toString(36).substring(2) + Date.now();
+                    sessionStorage.setItem('bp_visitor_id', visitorId);
+                }
+                const visitorRef = doc(db, 'artifacts', appId, 'active_visitors', visitorId);
+                const pingVisitor = async () => {
+                    try { if (db) await setDoc(visitorRef, { lastSeen: Date.now() }); } catch (e) {}
+                };
+                await pingVisitor();
+                setInterval(pingVisitor, 15000);
+
+                const visitorsCol = collection(db, 'artifacts', appId, 'active_visitors');
+                onSnapshot(query(visitorsCol), (snapshot) => {
+                    const now = Date.now();
+                    let activeCount = 0;
+                    snapshot.forEach(docSnap => {
+                        const data = docSnap.data();
+                        if (data.lastSeen && (now - data.lastSeen < 45000)) activeCount++;
+                    });
+                    const countEl = document.getElementById('live-visitors-count');
+                    if (countEl) countEl.innerText = Math.max(1, activeCount);
+                }, () => {});
+            } catch (e) {}
+        }
+
+        async function saveCloudState() {
+            localStorage.setItem('bp_products_v10', JSON.stringify(products));
+            localStorage.setItem('bp_settings_v10', JSON.stringify(settings));
+            try {
+                if (db) {
+                    const stateRef = doc(db, 'artifacts', appId, 'store_state', 'main');
+                    await setDoc(stateRef, { products, settings }, { merge: true });
+                }
+            } catch (e) {}
+        }
+
+        function applyDesignSettings() {
+            const root = document.documentElement;
+            if (settings.primaryColor) {
+                root.style.setProperty('--color-gold', settings.primaryColor);
+            }
+        }
+
+        function renderSite() {
+            applyDesignSettings();
+            renderHeader();
+            renderHero();
+            renderSections();
+            renderFooter();
+            renderCategories();
+            renderCatalog();
+            updateCartUI();
+        }
+
+        function renderHeader() {
+            const logoImg = document.getElementById('brand-logo-img');
+            const logoText = document.getElementById('brand-title');
+            logoImg.src = settings.logoImage || defaultLogoSVG;
+            logoText.innerText = settings.brandName || "Black Perfumes";
+        }
+
+        function renderHero() {
+            document.getElementById('hero-heading').innerHTML = settings.heroTitle;
+            document.getElementById('hero-whatsapp-btn').href = `https://wa.me/${settings.whatsappNumber}?text=Hola,%20quiero%20consultar%20por%20el%20stock%20de%20perfumes`;
+            document.getElementById('floating-whatsapp-btn').href = `https://wa.me/${settings.whatsappNumber}?text=Hola,%20quiero%20consultar%20por%20perfumes`;
+            document.title = settings.brandName;
+        }
+
+        function renderSections() {
+            const container = document.getElementById('info-blocks-container');
+            if (!settings.sections || settings.sections.length === 0) {
+                container.innerHTML = '';
+                return;
+            }
+            container.innerHTML = settings.sections.map(sec => `
+                <div id="bloque-${sec.id}" class="scroll-mt-28 space-y-10">
+                    <div class="text-center space-y-3">
+                        ${sec.subtitle ? `<span class="text-xs font-bold uppercase tracking-widest text-gold bg-gold/10 px-4 py-1.5 rounded-full border border-gold/20 shadow-sm">${sec.subtitle}</span>` : ''}
+                        <h2 class="font-serif-custom text-3xl md:text-4xl font-bold text-zinc-100 text-center">${sec.title}</h2>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        ${sec.cards.map(card => `
+                            <div class="bg-zinc-900/60 border border-zinc-800/80 hover:border-gold/50 p-8 rounded-3xl transition-all shadow-xl flex flex-col items-center text-center group">
+                                <div class="w-16 h-16 bg-gold/10 rounded-2xl flex items-center justify-center text-3xl mb-6 border border-gold/20 group-hover:scale-110 transition-transform shadow-inner">
+                                    ${card.emoji || '✨'}
+                                </div>
+                                <h3 class="font-serif-custom font-bold text-xl text-zinc-100 mb-3 text-center">${card.title}</h3>
+                                <p class="text-zinc-400 text-sm leading-relaxed text-center">${card.text}</p>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function renderCategories() {
+            const categoriesContainer = document.getElementById('category-filters');
+            if (!categoriesContainer) return;
+            const categories = ['Todas', ...new Set(products.map(p => p.category))];
+            categoriesContainer.innerHTML = categories.map(cat => `
+                <button onclick="filterCategory('${cat}')" class="px-4 py-2 rounded-xl text-xs font-semibold transition-all cursor-pointer ${currentCategory === cat ? 'bg-gold text-zinc-950 shadow-md shadow-gold/20 font-bold' : 'bg-zinc-900 text-zinc-300 hover:bg-zinc-800'}">
+                    ${cat}
+                </button>
+            `).join('');
+        }
+
+        function filterCategory(cat) {
+            currentCategory = cat;
+            renderCategories();
+            renderCatalog();
+        }
+
+        function handleSearch() {
+            currentSearch = document.getElementById('search-input').value.toLowerCase();
+            renderCatalog();
+        }
+
+        function handleSort() {
+            currentSort = document.getElementById('sort-select').value;
+            renderCatalog();
+        }
+
+        function renderCatalog() {
+            const grid = document.getElementById('product-grid');
+            if (!grid) return;
+
+            let filtered = products.filter(p => {
+                const matchesCat = currentCategory === 'Todas' || p.category === currentCategory;
+                const matchesSearch = p.name.toLowerCase().includes(currentSearch) || (p.notes && p.notes.toLowerCase().includes(currentSearch));
+                return matchesCat && matchesSearch;
+            });
+
+            if (currentSort === 'menor') filtered.sort((a, b) => a.price - b.price);
+            if (currentSort === 'mayor') filtered.sort((a, b) => b.price - a.price);
+
+            if (filtered.length === 0) {
+                grid.innerHTML = `<div class="col-span-full py-16 text-center text-zinc-500"><i class="fa-solid fa-magnifying-glass text-3xl mb-3 text-zinc-700"></i><p>No se encontraron productos.</p></div>`;
+                return;
+            }
+
+            grid.innerHTML = filtered.map(p => `
+                <div class="bg-zinc-900 border border-zinc-800 rounded-3xl overflow-hidden shadow-xl hover:border-gold/40 transition-all flex flex-col group">
+                    <div onclick="openProductDetail(${p.id})" class="h-64 bg-zinc-950 overflow-hidden relative p-4 flex items-center justify-center cursor-pointer">
+                        <img src="${p.image}" alt="${p.name}" class="max-h-full max-w-full object-contain group-hover:scale-105 transition-transform duration-500">
+                        <span class="absolute top-3 left-3 bg-zinc-900/90 text-gold text-[10px] font-bold px-3 py-1 rounded-full border border-gold/20 uppercase tracking-wider">${p.category}</span>
+                    </div>
+                    <div class="p-6 flex flex-col flex-grow justify-between">
+                        <div onclick="openProductDetail(${p.id})" class="cursor-pointer">
+                            <h3 class="font-serif-custom font-bold text-lg text-zinc-100 mb-1 hover:text-gold transition-colors">${p.name}</h3>
+                            <p class="text-xs text-zinc-400 line-clamp-2 mb-4">${p.notes || ''}</p>
+                        </div>
+                        <div class="flex items-center justify-between pt-4 border-t border-zinc-800/80">
+                            <span class="font-bold text-gold text-lg">$${p.price.toLocaleString('es-AR')}</span>
+                            <button onclick="addToCart(${p.id})" class="bg-gold hover:bg-gold-light text-zinc-950 px-4 py-2.5 rounded-xl text-xs font-bold transition-all flex items-center gap-2 shadow-md shadow-gold/20 cursor-pointer">
+                                <i class="fa-solid fa-cart-plus"></i> Agregar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function openProductDetail(productId) {
+            const p = products.find(prod => prod.id === productId);
+            if (!p) return;
+
+            const allImages = [p.image, ...(p.images || [])];
+
+            const content = document.getElementById('product-detail-content');
+            content.innerHTML = `
+                <div class="lg:col-span-6 space-y-4">
+                    <div class="bg-zinc-950 border border-zinc-800 rounded-2xl overflow-hidden h-96 flex items-center justify-center p-4">
+                        <img id="main-detail-img" src="${allImages[0]}" class="max-h-full max-w-full object-contain">
+                    </div>
+                    ${allImages.length > 1 ? `
+                        <div class="flex gap-3 overflow-x-auto pb-2">
+                            ${allImages.map((img, idx) => `
+                                <button onclick="document.getElementById('main-detail-img').src='${img}'" class="w-20 h-20 bg-zinc-950 border border-zinc-700 hover:border-gold rounded-xl overflow-hidden shrink-0 p-1 cursor-pointer transition-all">
+                                    <img src="${img}" class="w-full h-full object-cover rounded-lg">
+                                </button>
+                            `).join('')}
+                        </div>
+                    ` : ''}
+                </div>
+                <div class="lg:col-span-6 space-y-6">
+                    <div>
+                        <span class="text-xs font-bold uppercase tracking-widest text-gold bg-gold/10 px-3.5 py-1.5 rounded-full border border-gold/20">${p.category}</span>
+                        <h2 class="font-serif-custom text-3xl sm:text-4xl font-bold text-zinc-100 mt-3 mb-2">${p.name}</h2>
+                        <span class="text-3xl font-bold text-gold block">$${p.price.toLocaleString('es-AR')}</span>
+                    </div>
+                    <div class="bg-zinc-950 p-5 rounded-2xl border border-zinc-800 space-y-2">
+                        <h4 class="font-bold text-xs uppercase tracking-wider text-zinc-400"><i class="fa-solid fa-feather text-gold"></i> Notas Olfativas / Descripción</h4>
+                        <p class="text-zinc-300 text-sm leading-relaxed">${p.notes || 'Sin especificaciones detalladas.'}</p>
+                    </div>
+                    <div class="flex gap-4 pt-4">
+                        <button onclick="addToCart(${p.id}); closeProductDetail();" class="flex-grow bg-gold hover:bg-gold-light text-zinc-950 font-bold py-4 px-6 rounded-xl transition-all shadow-xl shadow-gold/20 flex items-center justify-center gap-3 text-base cursor-pointer">
+                            <i class="fa-solid fa-bag-shopping"></i> Agregar al Carrito
+                        </button>
+                    </div>
+                </div>
+            `;
+            document.getElementById('product-detail-modal').classList.remove('hidden');
+        }
+
+        function closeProductDetail() {
+            document.getElementById('product-detail-modal').classList.add('hidden');
+        }
+
+        function renderFooter() {
+            const socialContainer = document.getElementById('social-icons-container');
+            if (socialContainer) {
+                let html = '';
+                if (settings.instagram) html += `<a href="${settings.instagram}" target="_blank" class="w-14 h-14 bg-pink-500/10 text-pink-500 hover:bg-pink-500 hover:text-white rounded-2xl flex items-center justify-center text-2xl transition-all border border-pink-500/20 shadow-lg"><i class="fa-brands fa-instagram"></i></a>`;
+                if (settings.facebook) html += `<a href="${settings.facebook}" target="_blank" class="w-14 h-14 bg-blue-500/10 text-blue-500 hover:bg-blue-500 hover:text-white rounded-2xl flex items-center justify-center text-2xl transition-all border border-blue-500/20 shadow-lg"><i class="fa-brands fa-facebook"></i></a>`;
+                if (settings.tiktok) html += `<a href="${settings.tiktok}" target="_blank" class="w-14 h-14 bg-zinc-800 text-white hover:bg-white hover:text-zinc-950 rounded-2xl flex items-center justify-center text-2xl transition-all border border-zinc-700 shadow-lg"><i class="fa-brands fa-tiktok"></i></a>`;
+                socialContainer.innerHTML = html;
+            }
+
+            const footerWaBtn = document.getElementById('footer-whatsapp-btn');
+            if (footerWaBtn) footerWaBtn.href = `https://wa.me/${settings.whatsappNumber}?text=Hola,%20quiero%20hacer%20una%20consulta`;
+            
+            const footerBrand = document.getElementById('footer-brand');
+            if (footerBrand) footerBrand.innerText = settings.brandName;
+        }
+
+        function toggleCart() { document.getElementById('cart-drawer').classList.toggle('hidden'); }
+
+        function addToCart(productId) {
+            const product = products.find(p => p.id === productId);
+            const existing = cart.find(item => item.id === productId);
+            if (existing) existing.qty += 1;
+            else cart.push({ ...product, qty: 1 });
+            saveCart(); updateCartUI(); toggleCart();
+        }
+
+        function updateQty(productId, delta) {
+            const item = cart.find(i => i.id === productId);
+            if (item) {
+                item.qty += delta;
+                if (item.qty <= 0) cart = cart.filter(i => i.id !== productId);
+            }
+            saveCart(); updateCartUI();
+        }
+
+        function saveCart() { localStorage.setItem('bp_cart_v10', JSON.stringify(cart)); }
+
+        function updateCartUI() {
+            const totalItems = cart.reduce((sum, i) => sum + i.qty, 0);
+            document.getElementById('cart-counter').innerText = totalItems;
+            const container = document.getElementById('cart-items-container');
+            const totalPriceEl = document.getElementById('cart-total-price');
+
+            if (cart.length === 0) {
+                container.innerHTML = `<div class="py-12 text-center text-zinc-500"><i class="fa-solid fa-basket-shopping text-3xl mb-2 text-zinc-700"></i><p class="text-sm">Tu carrito está vacío.</p></div>`;
+                totalPriceEl.innerText = "$0"; return;
+            }
+
+            let total = 0;
+            container.innerHTML = cart.map(item => {
+                const subtotal = item.price * item.qty;
+                total += subtotal;
+                return `
+                    <div class="py-4 flex items-center justify-between gap-4">
+                        <div class="flex items-center space-x-3">
+                            <img src="${item.image}" class="w-14 h-14 object-cover rounded-xl border border-zinc-800 bg-zinc-950" alt="">
+                            <div>
+                                <h4 class="font-serif-custom font-bold text-sm text-zinc-100">${item.name}</h4>
+                                <span class="text-xs text-gold font-semibold">$${item.price.toLocaleString('es-AR')} x u.</span>
+                            </div>
+                        </div>
+                        <div class="flex items-center space-x-3">
+                            <div class="flex items-center border border-zinc-700 rounded-lg bg-zinc-950">
+                                <button onclick="updateQty(${item.id}, -1)" class="px-2.5 py-1 text-zinc-400 hover:text-zinc-100 cursor-pointer">-</button>
+                                <span class="text-sm px-2 font-semibold">${item.qty}</span>
+                                <button onclick="updateQty(${item.id}, 1)" class="px-2.5 py-1 text-zinc-400 hover:text-zinc-100 cursor-pointer">+</button>
+                            </div>
+                        </div>
+                    </div>`;
+            }).join('');
+            totalPriceEl.innerText = `$${total.toLocaleString('es-AR')}`;
+        }
+
+        function checkoutWhatsApp() {
+            if (cart.length === 0) return;
+            let message = "Hola! Quiero realizar el siguiente pedido desde la web:\n\n";
+            let total = 0;
+            cart.forEach(item => {
+                const sub = item.price * item.qty;
+                total += sub;
+                message += `• ${item.qty}x ${item.name} ($${sub.toLocaleString('es-AR')})\n`;
+            });
+            message += `\n*Total Estimado: $${total.toLocaleString('es-AR')}*\n\n¿Me confirman para coordinar?`;
+            window.open(`https://wa.me/${settings.whatsappNumber}?text=${encodeURIComponent(message)}`, '_blank');
+        }
+
+        window.showCustomAlert = function(message) {
+            return new Promise((resolve) => {
+                document.getElementById('custom-modal-message').innerText = message;
+                const actions = document.getElementById('custom-modal-actions');
+                actions.innerHTML = `<button id="custom-modal-ok" class="bg-gold hover:bg-gold-light text-zinc-950 font-bold px-6 py-2.5 rounded-xl transition-all shadow-lg cursor-pointer">Aceptar</button>`;
+                document.getElementById('custom-modal-overlay').classList.replace('hidden', 'flex');
+                document.getElementById('custom-modal-ok').onclick = () => {
+                    document.getElementById('custom-modal-overlay').classList.replace('flex', 'hidden');
+                    resolve();
+                };
+            });
+        };
+
+        window.showCustomConfirm = function(message) {
+            return new Promise((resolve) => {
+                document.getElementById('custom-modal-message').innerText = message;
+                const actions = document.getElementById('custom-modal-actions');
+                actions.innerHTML = `
+                    <button id="custom-modal-cancel" class="bg-zinc-800 hover:bg-zinc-700 text-zinc-300 font-bold px-5 py-2.5 rounded-xl transition-all cursor-pointer">Cancelar</button>
+                    <button id="custom-modal-confirm" class="bg-red-500 hover:bg-red-400 text-white font-bold px-5 py-2.5 rounded-xl transition-all shadow-lg cursor-pointer">Confirmar</button>
+                `;
+                document.getElementById('custom-modal-overlay').classList.replace('hidden', 'flex');
+                document.getElementById('custom-modal-cancel').onclick = () => {
+                    document.getElementById('custom-modal-overlay').classList.replace('flex', 'hidden');
+                    resolve(false);
+                };
+                document.getElementById('custom-modal-confirm').onclick = () => {
+                    document.getElementById('custom-modal-overlay').classList.replace('flex', 'hidden');
+                    resolve(true);
+                };
+            });
+        };
+
+        // File-to-ObjectURL converter to generate clean lightweight URLs without touching Base64
+        window.handleNewImageFile = function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const objectUrl = URL.createObjectURL(file);
+                document.getElementById('new-image-url').value = objectUrl;
+            }
+        };
+
+        window.newExtraUrls = [];
+        window.handleNewExtraFiles = function(e) {
+            const files = e.target.files;
+            for (let i = 0; i < files.length; i++) {
+                const objectUrl = URL.createObjectURL(files[i]);
+                window.newExtraUrls.push(objectUrl);
+            }
+            renderNewExtraPreviews();
+        };
+
+        function renderNewExtraPreviews() {
+            const container = document.getElementById('new-extra-urls-preview');
+            container.innerHTML = window.newExtraUrls.map((url, idx) => `
+                <div class="relative w-12 h-12 bg-zinc-950 border border-zinc-700 rounded-lg overflow-hidden group">
+                    <img src="${url}" class="w-full h-full object-cover">
+                    <button type="button" onclick="window.newExtraUrls.splice(${idx},1); renderNewExtraPreviews();" class="absolute inset-0 bg-red-500/80 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer">
+                        <i class="fa-solid fa-trash text-[10px]"></i>
+                    </button>
+                </div>
+            `).join('');
+        }
+
+        window.handleEditImageFile = function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const objectUrl = URL.createObjectURL(file);
+                document.getElementById('edit-image-url').value = objectUrl;
+            }
+        };
+
+        window.editExtraUrls = [];
+        window.handleEditExtraFiles = function(e) {
+            const files = e.target.files;
+            for (let i = 0; i < files.length; i++) {
+                const objectUrl = URL.createObjectURL(files[i]);
+                window.editExtraUrls.push(objectUrl);
+            }
+            renderEditExtraThumbs();
+        };
+
+        function openAdminAuth() {
+            document.getElementById('admin-password-input').value = '';
+            document.getElementById('auth-error-msg').classList.add('hidden');
+            document.getElementById('admin-auth-modal').classList.remove('hidden');
+        }
+        function closeAdminAuth() { document.getElementById('admin-auth-modal').classList.add('hidden'); }
+        
+        function handleAdminLogin(e) {
+            e.preventDefault();
+            const currentPass = settings.adminPassword || 'admin123';
+            if (document.getElementById('admin-password-input').value === currentPass) {
+                closeAdminAuth(); toggleAdminPanel();
+            } else {
+                document.getElementById('auth-error-msg').classList.remove('hidden');
+            }
+        }
+
+        function toggleAdminPanel() {
+            const modal = document.getElementById('admin-modal');
+            modal.classList.toggle('hidden');
+            if (!modal.classList.contains('hidden')) {
+                renderAdminProducts(); loadSettingsForm();
+            }
+        }
+
+        function switchAdminTab(tabName) {
+            document.querySelectorAll('.admin-tab-content').forEach(el => el.classList.add('hidden'));
+            document.querySelectorAll('.admin-tab-btn').forEach(el => {
+                el.classList.remove('bg-gold', 'text-zinc-950'); el.classList.add('bg-zinc-800', 'text-zinc-300');
+            });
+            document.getElementById(`admin-tab-${tabName}`).classList.remove('hidden');
+            const btn = document.getElementById(`tab-btn-${tabName}`);
+            btn.classList.remove('bg-zinc-800', 'text-zinc-300'); btn.classList.add('bg-gold', 'text-zinc-950');
+        }
+
+        function renderAdminProducts() {
+            const list = document.getElementById('admin-product-list');
+            list.innerHTML = products.map(p => {
+                const totalImgs = 1 + (p.images ? p.images.length : 0);
+                return `
+                <div class="bg-zinc-950 border border-zinc-800 p-4 rounded-2xl flex flex-col sm:flex-row items-center justify-between gap-4">
+                    <div class="flex items-center space-x-3 w-full sm:w-auto">
+                        <img src="${p.image}" class="w-12 h-12 object-contain rounded-xl bg-zinc-900" alt="">
+                        <div>
+                            <h4 class="font-serif-custom font-bold text-sm text-zinc-100">${p.name}</h4>
+                            <p class="text-xs text-gold">${p.category} — $${p.price.toLocaleString('es-AR')}</p>
+                            <p class="text-[10px] text-zinc-500 mt-0.5"><i class="fa-solid fa-images"></i> ${totalImgs} fotos en total</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center space-x-2 w-full sm:w-auto justify-end shrink-0">
+                        <button type="button" onclick="openEditModal(${p.id})" class="bg-gold/10 hover:bg-gold text-gold hover:text-zinc-950 px-3 py-1.5 rounded-xl text-xs font-semibold transition-all cursor-pointer"><i class="fa-solid fa-pen"></i> Editar</button>
+                        <button type="button" onclick="deleteProduct(${p.id})" class="bg-red-500/10 hover:bg-red-500 text-red-400 hover:text-zinc-950 px-3 py-1.5 rounded-xl text-xs font-semibold transition-all cursor-pointer"><i class="fa-solid fa-trash"></i> Borrar</button>
+                    </div>
+                </div>
+                `;
+            }).join('');
+        }
+
+        async function handleAddNewProduct(e) {
+            e.preventDefault();
+            const mainImgUrl = document.getElementById('new-image-url').value;
+
+            products.push({
+                id: Date.now(),
+                name: document.getElementById('new-name').value,
+                category: document.getElementById('new-category').value,
+                price: Number(document.getElementById('new-price').value),
+                image: mainImgUrl || "https://placehold.co/600x600/18181b/D4AF37?text=Perfume",
+                images: window.newExtraUrls || [],
+                notes: document.getElementById('new-notes').value || ''
+            });
+            
+            window.newExtraUrls = [];
+            await saveCloudState();
+            await window.showCustomAlert("Producto creado exitosamente.");
+            document.getElementById('add-product-form').reset();
+            document.getElementById('new-extra-urls-preview').innerHTML = '';
+            document.getElementById('new-image-url').value = "https://placehold.co/600x600/18181b/D4AF37?text=Perfume";
+            renderAdminProducts(); renderSite(); switchAdminTab('productos');
+        }
+
+        function openEditModal(id) {
+            const p = products.find(prod => prod.id === id);
+            if (!p) return;
+            document.getElementById('edit-id').value = p.id;
+            document.getElementById('edit-name').value = p.name;
+            document.getElementById('edit-category').value = p.category;
+            document.getElementById('edit-price').value = p.price;
+            document.getElementById('edit-notes').value = p.notes || '';
+            document.getElementById('edit-image-url').value = p.image;
+            document.getElementById('edit-image-file').value = '';
+            document.getElementById('edit-extra-files').value = '';
+            
+            window.editExtraUrls = p.images ? [...p.images] : [];
+            renderEditExtraThumbs();
+
+            document.getElementById('edit-modal').classList.remove('hidden');
+        }
+
+        function renderEditExtraThumbs() {
+            const container = document.getElementById('edit-extra-thumbs');
+            if (!window.editExtraUrls || window.editExtraUrls.length === 0) {
+                container.innerHTML = '<span class="text-xs text-zinc-500 italic">No hay fotos adicionales cargadas.</span>';
+                return;
+            }
+            container.innerHTML = window.editExtraUrls.map((imgUrl, index) => `
+                <div class="relative w-16 h-16 bg-zinc-950 border border-zinc-700 rounded-lg overflow-hidden group">
+                    <img src="${imgUrl}" class="w-full h-full object-cover">
+                    <button type="button" onclick="removeEditExtraImage(${index})" class="absolute inset-0 bg-red-500/80 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer">
+                        <i class="fa-solid fa-trash"></i>
+                    </button>
+                </div>
+            `).join('');
+        }
+
+        window.removeEditExtraImage = function(index) {
+            window.editExtraUrls.splice(index, 1);
+            renderEditExtraThumbs();
+        };
+
+        function closeEditModal() { document.getElementById('edit-modal').classList.add('hidden'); }
+
+        async function handleSaveEditedProduct(e) {
+            e.preventDefault();
+            const p = products.find(prod => prod.id === Number(document.getElementById('edit-id').value));
+            if (!p) return;
+            
+            p.name = document.getElementById('edit-name').value;
+            p.category = document.getElementById('edit-category').value;
+            p.price = Number(document.getElementById('edit-price').value);
+            p.notes = document.getElementById('edit-notes').value;
+            p.image = document.getElementById('edit-image-url').value;
+            p.images = window.editExtraUrls;
+
+            await saveCloudState();
+            await window.showCustomAlert("Cambios guardados correctamente.");
+            closeEditModal(); renderAdminProducts(); renderSite();
+        }
+
+        async function deleteProduct(id) {
+            const confirmed = await window.showCustomConfirm("¿Estás seguro de eliminar este producto?");
+            if (confirmed) {
+                products = products.filter(p => p.id !== id);
+                await saveCloudState();
+                renderAdminProducts(); renderSite();
+            }
+        }
+
+        function loadSettingsForm() {
+            document.getElementById('setting-brand').value = settings.brandName || '';
+            document.getElementById('setting-whatsapp').value = settings.whatsappNumber || '';
+            document.getElementById('setting-hero-title').value = settings.heroTitle || '';
+            document.getElementById('setting-hero-sub').value = settings.heroSub || '';
+
+            document.getElementById('setting-color').value = settings.primaryColor || '#D4AF37';
+            document.getElementById('setting-color-text').value = settings.primaryColor || '#D4AF37';
+            tempLogoUrl = settings.logoImage || "";
+            updateLogoPreview();
+
+            document.getElementById('setting-ig').value = settings.instagram || '';
+            document.getElementById('setting-fb').value = settings.facebook || '';
+            document.getElementById('setting-tk').value = settings.tiktok || '';
+
+            tempSections = JSON.parse(JSON.stringify(settings.sections || []));
+            renderAdminSectionsList();
+        }
+
+        async function handleLogoUpload(e) {
+            if (e.target.files[0]) {
+                tempLogoUrl = URL.createObjectURL(e.target.files[0]);
+                updateLogoPreview();
+            }
+        }
+        function removeLogo() {
+            tempLogoUrl = ""; document.getElementById('setting-logo-file').value = ""; updateLogoPreview();
+        }
+        function updateLogoPreview() {
+            const preview = document.getElementById('admin-logo-preview');
+            const removeBtn = document.getElementById('admin-logo-remove');
+            if (tempLogoUrl && tempLogoUrl !== defaultLogoSVG) { 
+                preview.src = tempLogoUrl; preview.classList.remove('hidden'); removeBtn.classList.remove('hidden'); 
+            } else { 
+                preview.classList.add('hidden'); removeBtn.classList.add('hidden'); 
+            }
+        }
+
+        function renderAdminSectionsList() {
+            const list = document.getElementById('admin-sections-list');
+            list.innerHTML = tempSections.map((sec, sIdx) => `
+                <div class="bg-zinc-900 p-5 rounded-2xl border border-zinc-800 space-y-4">
+                    <div class="flex justify-between items-center border-b border-zinc-800 pb-3">
+                        <span class="text-xs font-bold uppercase tracking-wider text-gold">Sección #${sIdx + 1}</span>
+                        <button type="button" onclick="removeAdminSection(${sIdx})" class="text-red-400 text-xs hover:underline cursor-pointer"><i class="fa-solid fa-trash"></i> Eliminar Sección</button>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                        <div><label class="text-[10px] text-zinc-400">ID (ej: garantia)</label><input type="text" value="${sec.id}" onchange="tempSections[${sIdx}].id = this.value" class="w-full bg-zinc-950 border border-zinc-800 rounded px-3 py-1.5 text-xs text-zinc-100 outline-none"></div>
+                        <div><label class="text-[10px] text-zinc-400">Título Principal</label><input type="text" value="${sec.title}" onchange="tempSections[${sIdx}].title = this.value" class="w-full bg-zinc-950 border border-zinc-800 rounded px-3 py-1.5 text-xs text-zinc-100 outline-none"></div>
+                        <div><label class="text-[10px] text-zinc-400">Badge Superior</label><input type="text" value="${sec.subtitle || ''}" onchange="tempSections[${sIdx}].subtitle = this.value" class="w-full bg-zinc-950 border border-zinc-800 rounded px-3 py-1.5 text-xs text-zinc-100 outline-none"></div>
+                    </div>
+                    <div class="space-y-3 pt-2">
+                        <div class="flex justify-between items-center">
+                            <span class="text-xs font-medium text-zinc-400">Tarjetas de la Grilla</span>
+                            <button type="button" onclick="addAdminCard(${sIdx})" class="text-[10px] bg-zinc-800 px-2 py-1 rounded text-zinc-300 hover:bg-zinc-700 cursor-pointer">+ Añadir Tarjeta</button>
+                        </div>
+                        <div class="space-y-2">
+                            ${sec.cards.map((card, cIdx) => `
+                                <div class="bg-zinc-950 p-3 rounded-xl border border-zinc-800 grid grid-cols-1 sm:grid-cols-12 gap-2 items-center">
+                                    <div class="sm:col-span-3"><input type="text" value="${card.title}" placeholder="Título" onchange="tempSections[${sIdx}].cards[${cIdx}].title = this.value" class="w-full bg-zinc-900 border border-zinc-800 rounded px-2 py-1 text-xs text-zinc-100 outline-none"></div>
+                                    <div class="sm:col-span-6"><input type="text" value="${card.text}" placeholder="Descripción" onchange="tempSections[${sIdx}].cards[${cIdx}].text = this.value" class="w-full bg-zinc-900 border border-zinc-800 rounded px-2 py-1 text-xs text-zinc-100 outline-none"></div>
+                                    <div class="sm:col-span-2"><input type="text" value="${card.emoji || '✨'}" placeholder="Emoji" onchange="tempSections[${sIdx}].cards[${cIdx}].emoji = this.value" class="w-full bg-zinc-900 border border-zinc-800 rounded px-2 py-1 text-xs text-zinc-100 outline-none text-center"></div>
+                                    <div class="sm:col-span-1 text-right"><button type="button" onclick="removeAdminCard(${sIdx}, ${cIdx})" class="text-red-400 hover:text-red-300 text-xs cursor-pointer"><i class="fa-solid fa-xmark"></i></button></div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function addAdminSection() {
+            tempSections.push({ id: "nueva-seccion", title: "Título de Sección", subtitle: "Badge", cards: [{ title: "Tarjeta 1", text: "Descripción...", emoji: "✨" }] });
+            renderAdminSectionsList();
+        }
+        function removeAdminSection(index) {
+            tempSections.splice(index, 1); renderAdminSectionsList();
+        }
+        function addAdminCard(sIdx) {
+            tempSections[sIdx].cards.push({ title: "Nueva Tarjeta", text: "Descripción...", emoji: "⭐" });
+            renderAdminSectionsList();
+        }
+        function removeAdminCard(sIdx, cIdx) {
+            tempSections[sIdx].cards.splice(cIdx, 1); renderAdminSectionsList();
+        }
+
+        async function saveSiteSettings() {
+            settings.brandName = document.getElementById('setting-brand').value;
+            settings.whatsappNumber = document.getElementById('setting-whatsapp').value;
+            settings.heroTitle = document.getElementById('setting-hero-title').value;
+            settings.heroSub = document.getElementById('setting-hero-sub').value;
+            settings.primaryColor = document.getElementById('setting-color').value;
+            settings.logoImage = tempLogoUrl || settings.logoImage || defaultLogoSVG;
+            settings.instagram = document.getElementById('setting-ig').value;
+            settings.facebook = document.getElementById('setting-fb').value;
+            settings.tiktok = document.getElementById('setting-tk').value;
+            settings.sections = tempSections;
+
+            await saveCloudState();
+            await window.showCustomAlert("¡Configuración guardada y sincronizada en tiempo real!");
+            renderSite(); toggleAdminPanel();
+        }
+
+        document.getElementById('setting-color').addEventListener('input', (e) => {
+            document.getElementById('setting-color-text').value = e.target.value.toUpperCase();
+        });
+
+        async function handlePasswordChange(e) {
+            e.preventDefault();
+            const p1 = document.getElementById('new-admin-password').value;
+            const p2 = document.getElementById('confirm-admin-password').value;
+            if (p1 !== p2) {
+                await window.showCustomAlert("Las contraseñas no coinciden.");
+                return;
+            }
+            if (p1.length < 4) {
+                await window.showCustomAlert("La contraseña debe tener al menos 4 caracteres.");
+                return;
+            }
+            settings.adminPassword = p1;
+            await saveCloudState();
+            await window.showCustomAlert("¡Contraseña de administrador actualizada y sincronizada en la nube!");
+            document.getElementById('new-admin-password').value = '';
+            document.getElementById('confirm-admin-password').value = '';
+        }
+
+        function exportBackupJSON() {
+            const backupData = { products: products, settings: settings, exportDate: new Date().toISOString() };
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(backupData, null, 2));
+            const downloadAnchor = document.createElement('a');
+            downloadAnchor.setAttribute("href", dataStr);
+            downloadAnchor.setAttribute("download", "black_perfumes_respaldo.json");
+            document.body.appendChild(downloadAnchor); downloadAnchor.click(); downloadAnchor.remove();
+        }
+
+        function importBackupJSON(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+            const fileReader = new FileReader();
+            fileReader.onload = async function(event) {
+                try {
+                    const rawContent = event.target.result;
+                    const parsed = JSON.parse(rawContent);
+                    if (Array.isArray(parsed)) products = parsed;
+                    else if (typeof parsed === 'object' && parsed !== null) {
+                        if (Array.isArray(parsed.products)) products = parsed.products;
+                        if (typeof parsed.settings === 'object' && parsed.settings !== null) {
+                            settings = { ...defaultSettings, ...parsed.settings };
+                        }
+                    }
+                    await saveCloudState();
+                    await window.showCustomAlert("¡Respaldo importado y sincronizado correctamente con la nube!");
+                    renderSite(); renderAdminProducts(); loadSettingsForm();
+                } catch (err) {
+                    await window.showCustomAlert("Error: El archivo no tiene un formato JSON válido.");
+                }
+                e.target.value = '';
+            };
+            fileReader.readAsText(file, "UTF-8");
+        }
+
+        window.filterCategory = filterCategory;
+        window.handleSearch = handleSearch;
+        window.handleSort = handleSort;
+        window.addToCart = addToCart;
+        window.updateQty = updateQty;
+        window.checkoutWhatsApp = checkoutWhatsApp;
+        window.toggleCart = toggleCart;
+        window.openProductDetail = openProductDetail;
+        window.closeProductDetail = closeProductDetail;
+        window.openAdminAuth = openAdminAuth;
+        window.closeAdminAuth = closeAdminAuth;
+        window.handleAdminLogin = handleAdminLogin;
+        window.toggleAdminPanel = toggleAdminPanel;
+        window.switchAdminTab = switchAdminTab;
+        window.handleAddNewProduct = handleAddNewProduct;
+        window.openEditModal = openEditModal;
+        window.closeEditModal = closeEditModal;
+        window.handleSaveEditedProduct = handleSaveEditedProduct;
+        window.deleteProduct = deleteProduct;
+        window.handleLogoUpload = handleLogoUpload;
+        window.removeLogo = removeLogo;
+        window.addAdminSection = addAdminSection;
+        window.removeAdminSection = removeAdminSection;
+        window.addAdminCard = addAdminCard;
+        window.removeAdminCard = removeAdminCard;
+        window.saveSiteSettings = saveSiteSettings;
+        window.exportBackupJSON = exportBackupJSON;
+        window.importBackupJSON = importBackupJSON;
+        window.handlePasswordChange = handlePasswordChange;
+        window.resetDefaultData = async function() {
+            const confirmed = await window.showCustomConfirm("¿Restaurar todos los productos y configuraciones originales de fábrica?");
+            if (confirmed) {
+                products = defaultProducts;
+                settings = defaultSettings;
+                await saveCloudState();
+                renderSite(); renderAdminProducts(); loadSettingsForm();
+            }
+        };
+    </script>
+</body>
+</html>
