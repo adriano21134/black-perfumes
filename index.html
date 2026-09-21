@@ -230,7 +230,7 @@
                 <div class="flex justify-between items-center pb-6 border-b border-zinc-800 mb-6">
                     <div>
                         <h2 class="font-serif-custom font-bold text-2xl text-gold">Panel de Administración CMS</h2>
-                        <p class="text-sm text-zinc-400">100% Gratuito (Plan Spark) con URLs externas.</p>
+                        <p class="text-sm text-zinc-400">Control total con URLs de imágenes optimizadas para Firebase.</p>
                     </div>
                     <div class="flex items-center gap-4">
                         <div class="bg-zinc-950 border border-gold/30 px-4 py-2 rounded-xl flex items-center gap-3 shadow-inner">
@@ -261,7 +261,7 @@
                 <!-- Admin Tab: Productos -->
                 <div id="admin-tab-productos" class="admin-tab-content space-y-4 max-h-[60vh] overflow-y-auto pr-2">
                     <div class="flex justify-between items-center">
-                        <h3 class="text-sm font-semibold uppercase tracking-wider text-zinc-400">Lista actual de productos</h3>
+                        <h3 class="text-sm font-semibold uppercase tracking-wider text-zinc-400">Lista actual de productos (ordená usando las flechas)</h3>
                         <button onclick="resetDefaultData()" class="text-xs text-red-400 hover:underline cursor-pointer"><i class="fa-solid fa-rotate-right"></i> Restaurar fábrica</button>
                     </div>
                     <div id="admin-product-list" class="space-y-3"></div>
@@ -269,7 +269,7 @@
 
                 <!-- Admin Tab: Nuevo Producto -->
                 <div id="admin-tab-nuevo" class="admin-tab-content space-y-4 hidden max-h-[60vh] overflow-y-auto pr-2">
-                    <h3 class="text-sm font-semibold uppercase tracking-wider text-zinc-400">Crear nuevo producto (con URL externa)</h3>
+                    <h3 class="text-sm font-semibold uppercase tracking-wider text-zinc-400">Crear nuevo producto (Carga archivo -> URL optimizada)</h3>
                     <form id="add-product-form" onsubmit="handleAddNewProduct(event)" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>
                             <label class="block text-xs font-medium text-zinc-400 mb-1">Nombre del Perfume</label>
@@ -284,12 +284,14 @@
                             <input type="number" id="new-price" required class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-4 py-2.5 text-sm focus:border-gold outline-none text-zinc-100">
                         </div>
                         <div>
-                            <label class="block text-xs font-medium text-zinc-400 mb-1">URL de la Foto Principal</label>
-                            <input type="url" id="new-image-url" required placeholder="https://ejemplo.com/imagen.jpg" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-4 py-2.5 text-sm focus:border-gold outline-none text-zinc-100">
+                            <label class="block text-xs font-medium text-zinc-400 mb-1">Foto Principal (Subir Archivo -> URL)</label>
+                            <input type="file" id="new-image-file" accept="image/*" onchange="handleNewImageFile(event)" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-4 py-2 text-xs text-zinc-400 focus:border-gold outline-none file:mr-4 file:py-1 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-gold file:text-zinc-950 cursor-pointer">
+                            <input type="hidden" id="new-image-url" required value="https://placehold.co/600x600/18181b/D4AF37?text=Perfume">
                         </div>
                         <div class="sm:col-span-2">
-                            <label class="block text-xs font-medium text-zinc-400 mb-1">URLs de Fotos Adicionales (separadas por coma o una por línea, opcional)</label>
-                            <textarea id="new-extra-urls" rows="2" placeholder="https://url1.com/foto1.jpg, https://url2.com/foto2.jpg" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-4 py-2.5 text-sm focus:border-gold outline-none text-zinc-100"></textarea>
+                            <label class="block text-xs font-medium text-zinc-400 mb-1">Fotos Adicionales (Subir Archivos -> URLs)</label>
+                            <input type="file" id="new-extra-files" accept="image/*" multiple onchange="handleNewExtraFiles(event)" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-4 py-2 text-xs text-zinc-400 focus:border-gold outline-none file:mr-4 file:py-1 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-zinc-800 file:text-zinc-300 cursor-pointer">
+                            <div id="new-extra-urls-preview" class="flex flex-wrap gap-2 mt-2"></div>
                         </div>
                         <div class="sm:col-span-2">
                             <label class="block text-xs font-medium text-zinc-400 mb-1">Notas Olfativas / Descripción</label>
@@ -307,10 +309,11 @@
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 bg-zinc-950/50 p-6 rounded-2xl border border-zinc-800">
                         <div class="space-y-4">
                             <div>
-                                <label class="block text-xs font-medium text-zinc-400 mb-2">URL del Logo (Imagen externa)</label>
-                                <input type="url" id="setting-logo-url" placeholder="https://ejemplo.com/logo.png" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-4 py-2.5 text-sm text-zinc-100 focus:border-gold outline-none mb-2">
+                                <label class="block text-xs font-medium text-zinc-400 mb-2">Subir Logo de tu Negocio (Archivo -> URL)</label>
+                                <input type="file" id="setting-logo-file" accept="image/*" onchange="handleLogoUpload(event)" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-4 py-2 text-xs text-zinc-400 focus:border-gold outline-none file:mr-4 file:py-1 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-zinc-800 file:text-white cursor-pointer">
                                 <div class="mt-3 flex items-center gap-4">
                                     <img id="admin-logo-preview" src="" class="h-12 w-12 object-cover rounded-full hidden bg-zinc-900 p-1 border border-zinc-800">
+                                    <button type="button" onclick="removeLogo()" id="admin-logo-remove" class="text-red-400 text-xs hidden hover:underline cursor-pointer"><i class="fa-solid fa-trash"></i> Quitar logo</button>
                                 </div>
                             </div>
                         </div>
@@ -355,7 +358,7 @@
                 <div id="admin-tab-bloques" class="admin-tab-content space-y-6 max-h-[65vh] overflow-y-auto pr-2 hidden">
                     <div class="bg-zinc-950/50 p-6 rounded-2xl border border-zinc-800">
                         <div class="flex justify-between items-center mb-4">
-                            <h3 class="text-sm font-semibold uppercase tracking-wider text-zinc-400">Secciones y Tarjetas Estilo Grilla</h3>
+                            <h3 class="text-sm font-semibold uppercase tracking-wider text-zinc-400">Secciones y Tarjetas (Reordenables)</h3>
                             <button type="button" onclick="addAdminSection()" class="text-xs bg-zinc-800 hover:bg-zinc-700 px-3 py-1.5 rounded-lg text-zinc-200 cursor-pointer"><i class="fa-solid fa-plus"></i> Añadir Sección</button>
                         </div>
                         <div id="admin-sections-list" class="space-y-6"></div>
@@ -446,19 +449,24 @@
                         <input type="number" id="edit-price" required class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-4 py-2 text-sm focus:border-gold outline-none text-zinc-100">
                     </div>
                     <div>
-                        <label class="block text-xs font-medium text-zinc-400 mb-1">URL de Foto Principal</label>
-                        <input type="url" id="edit-image-url" required class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-4 py-2 text-sm focus:border-gold outline-none text-zinc-100">
+                        <label class="block text-xs font-medium text-zinc-400 mb-1">URL de Foto Principal (O subir archivo para convertir)</label>
+                        <input type="text" id="edit-image-url" required class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-4 py-2 text-sm focus:border-gold outline-none text-zinc-100 mb-2">
+                        <input type="file" id="edit-image-file" accept="image/*" onchange="handleEditImageFile(event)" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-4 py-2 text-xs text-zinc-400 focus:border-gold outline-none file:mr-4 file:py-1 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-zinc-800 file:text-zinc-300 cursor-pointer">
                     </div>
                     <div>
-                        <label class="block text-xs font-medium text-zinc-400 mb-1">URLs de Fotos Adicionales (separadas por coma)</label>
-                        <textarea id="edit-extra-urls" rows="2" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-4 py-2 text-sm focus:border-gold outline-none text-zinc-100"></textarea>
+                        <label class="block text-xs font-medium text-zinc-400 mb-1">Agregar más Fotos (Subir Archivo -> URLs)</label>
+                        <input type="file" id="edit-extra-files" accept="image/*" multiple onchange="handleEditExtraFiles(event)" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-4 py-2 text-xs text-zinc-400 focus:border-gold outline-none file:mr-4 file:py-1 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-zinc-800 file:text-zinc-300 cursor-pointer">
+                    </div>
+                    <div id="edit-current-extra-preview" class="space-y-2">
+                        <label class="block text-xs font-medium text-zinc-400">Fotos adicionales cargadas actualmente</label>
+                        <div id="edit-extra-thumbs" class="flex flex-wrap gap-2"></div>
                     </div>
                     <div>
                         <label class="block text-xs font-medium text-zinc-400 mb-1">Notas Olfativas</label>
                         <input type="text" id="edit-notes" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-4 py-2 text-sm focus:border-gold outline-none text-zinc-100">
                     </div>
                     <div class="pt-4">
-                        <button type="submit" id="btn-submit-edit" class="w-full bg-gold hover:bg-gold-light text-zinc-950 font-bold py-3 rounded-xl transition-all shadow-lg shadow-gold/20 cursor-pointer">Guardar Cambios</button>
+                        <button type="submit" class="w-full bg-gold hover:bg-gold-light text-zinc-950 font-bold py-3 rounded-xl transition-all shadow-lg shadow-gold/20 cursor-pointer">Guardar Cambios</button>
                     </div>
                 </form>
             </div>
@@ -616,13 +624,14 @@
             ]
         };
 
-        let settings = JSON.parse(localStorage.getItem('bp_settings_v11')) || defaultSettings;
-        let products = JSON.parse(localStorage.getItem('bp_products_v11')) || defaultProducts;
-        let cart = JSON.parse(localStorage.getItem('bp_cart_v11')) || [];
+        let settings = JSON.parse(localStorage.getItem('bp_settings_v10')) || defaultSettings;
+        let products = JSON.parse(localStorage.getItem('bp_products_v10')) || defaultProducts;
+        let cart = JSON.parse(localStorage.getItem('bp_cart_v10')) || [];
         let currentCategory = 'Todas';
         let currentSearch = '';
         let currentSort = 'relevancia';
         let tempSections = [];
+        let tempLogoUrl = "";
 
         let db = null;
         let appId = "black-perfumes-bd";
@@ -646,12 +655,12 @@
                         let updated = false;
                         if (cloudData.products && Array.isArray(cloudData.products)) {
                             products = cloudData.products;
-                            localStorage.setItem('bp_products_v11', JSON.stringify(products));
+                            localStorage.setItem('bp_products_v10', JSON.stringify(products));
                             updated = true;
                         }
                         if (cloudData.settings && typeof cloudData.settings === 'object') {
                             settings = { ...defaultSettings, ...cloudData.settings };
-                            localStorage.setItem('bp_settings_v11', JSON.stringify(settings));
+                            localStorage.setItem('bp_settings_v10', JSON.stringify(settings));
                             updated = true;
                         }
                         if (updated) {
@@ -692,8 +701,8 @@
         }
 
         async function saveCloudState() {
-            localStorage.setItem('bp_products_v11', JSON.stringify(products));
-            localStorage.setItem('bp_settings_v11', JSON.stringify(settings));
+            localStorage.setItem('bp_products_v10', JSON.stringify(products));
+            localStorage.setItem('bp_settings_v10', JSON.stringify(settings));
             try {
                 if (db) {
                     const stateRef = doc(db, 'artifacts', appId, 'store_state', 'main');
@@ -910,7 +919,7 @@
             saveCart(); updateCartUI();
         }
 
-        function saveCart() { localStorage.setItem('bp_cart_v11', JSON.stringify(cart)); }
+        function saveCart() { localStorage.setItem('bp_cart_v10', JSON.stringify(cart)); }
 
         function updateCartUI() {
             const totalItems = cart.reduce((sum, i) => sum + i.qty, 0);
@@ -994,41 +1003,53 @@
             });
         };
 
-        // Guardado de nuevo producto con URLs externas
-        async function handleAddNewProduct(e) {
-            e.preventDefault();
-            try {
-                const mainImgUrl = document.getElementById('new-image-url').value.trim();
-                const extraUrlsRaw = document.getElementById('new-extra-urls').value.trim();
-                
-                let extraImages = [];
-                if (extraUrlsRaw) {
-                    extraImages = extraUrlsRaw.split(/[\n,]+/).map(url => url.trim()).filter(url => url.length > 0);
-                }
-
-                const newProd = {
-                    id: Date.now(),
-                    name: document.getElementById('new-name').value.trim(),
-                    category: document.getElementById('new-category').value.trim(),
-                    price: Number(document.getElementById('new-price').value),
-                    image: mainImgUrl || "https://placehold.co/600x600/18181b/D4AF37?text=Perfume",
-                    images: extraImages,
-                    notes: document.getElementById('new-notes').value.trim() || ''
-                };
-
-                products.push(newProd);
-                await saveCloudState();
-                await window.showCustomAlert("¡Producto creado y guardado exitosamente!");
-                
-                document.getElementById('add-product-form').reset();
-                renderAdminProducts(); 
-                renderSite(); 
-                switchAdminTab('productos');
-            } catch (error) {
-                console.error("Error al guardar:", error);
-                await window.showCustomAlert("Hubo un error al guardar el producto en la base de datos.");
+        window.handleNewImageFile = function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const objectUrl = URL.createObjectURL(file);
+                document.getElementById('new-image-url').value = objectUrl;
             }
+        };
+
+        window.newExtraUrls = [];
+        window.handleNewExtraFiles = function(e) {
+            const files = e.target.files;
+            for (let i = 0; i < files.length; i++) {
+                const objectUrl = URL.createObjectURL(files[i]);
+                window.newExtraUrls.push(objectUrl);
+            }
+            renderNewExtraPreviews();
+        };
+
+        function renderNewExtraPreviews() {
+            const container = document.getElementById('new-extra-urls-preview');
+            container.innerHTML = window.newExtraUrls.map((url, idx) => `
+                <div class="relative w-12 h-12 bg-zinc-950 border border-zinc-700 rounded-lg overflow-hidden group">
+                    <img src="${url}" class="w-full h-full object-cover">
+                    <button type="button" onclick="window.newExtraUrls.splice(${idx},1); renderNewExtraPreviews();" class="absolute inset-0 bg-red-500/80 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer">
+                        <i class="fa-solid fa-trash text-[10px]"></i>
+                    </button>
+                </div>
+            `).join('');
         }
+
+        window.handleEditImageFile = function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const objectUrl = URL.createObjectURL(file);
+                document.getElementById('edit-image-url').value = objectUrl;
+            }
+        };
+
+        window.editExtraUrls = [];
+        window.handleEditExtraFiles = function(e) {
+            const files = e.target.files;
+            for (let i = 0; i < files.length; i++) {
+                const objectUrl = URL.createObjectURL(files[i]);
+                window.editExtraUrls.push(objectUrl);
+            }
+            renderEditExtraThumbs();
+        };
 
         function openAdminAuth() {
             document.getElementById('admin-password-input').value = '';
@@ -1056,6 +1077,9 @@
         }
 
         function switchAdminTab(tabName) {
+            if (tabName === 'bloques') {
+                syncUIValuesToTempSections();
+            }
             document.querySelectorAll('.admin-tab-content').forEach(el => el.classList.add('hidden'));
             document.querySelectorAll('.admin-tab-btn').forEach(el => {
                 el.classList.remove('bg-gold', 'text-zinc-950'); el.classList.add('bg-zinc-800', 'text-zinc-300');
@@ -1063,15 +1087,22 @@
             document.getElementById(`admin-tab-${tabName}`).classList.remove('hidden');
             const btn = document.getElementById(`tab-btn-${tabName}`);
             btn.classList.remove('bg-zinc-800', 'text-zinc-300'); btn.classList.add('bg-gold', 'text-zinc-950');
+            if (tabName === 'bloques') {
+                renderAdminSectionsList();
+            }
         }
 
         function renderAdminProducts() {
             const list = document.getElementById('admin-product-list');
-            list.innerHTML = products.map(p => {
+            list.innerHTML = products.map((p, index) => {
                 const totalImgs = 1 + (p.images ? p.images.length : 0);
                 return `
                 <div class="bg-zinc-950 border border-zinc-800 p-4 rounded-2xl flex flex-col sm:flex-row items-center justify-between gap-4">
                     <div class="flex items-center space-x-3 w-full sm:w-auto">
+                        <div class="flex flex-col gap-1 mr-2">
+                            <button type="button" onclick="moveProduct(${index}, -1)" ${index === 0 ? 'disabled class="text-zinc-700 cursor-not-allowed"' : 'class="text-zinc-400 hover:text-gold cursor-pointer"'}><i class="fa-solid fa-chevron-up text-xs"></i></button>
+                            <button type="button" onclick="moveProduct(${index}, 1)" ${index === products.length - 1 ? 'disabled class="text-zinc-700 cursor-not-allowed"' : 'class="text-zinc-400 hover:text-gold cursor-pointer"'}><i class="fa-solid fa-chevron-down text-xs"></i></button>
+                        </div>
                         <img src="${p.image}" class="w-12 h-12 object-contain rounded-xl bg-zinc-900" alt="">
                         <div>
                             <h4 class="font-serif-custom font-bold text-sm text-zinc-100">${p.name}</h4>
@@ -1088,6 +1119,40 @@
             }).join('');
         }
 
+        async function moveProduct(index, direction) {
+            const targetIndex = index + direction;
+            if (targetIndex < 0 || targetIndex >= products.length) return;
+            const temp = products[index];
+            products[index] = products[targetIndex];
+            products[targetIndex] = temp;
+            await saveCloudState();
+            renderAdminProducts();
+            renderSite();
+        }
+
+        async function handleAddNewProduct(e) {
+            e.preventDefault();
+            const mainImgUrl = document.getElementById('new-image-url').value;
+
+            products.push({
+                id: Date.now(),
+                name: document.getElementById('new-name').value,
+                category: document.getElementById('new-category').value,
+                price: Number(document.getElementById('new-price').value),
+                image: mainImgUrl || "https://placehold.co/600x600/18181b/D4AF37?text=Perfume",
+                images: window.newExtraUrls || [],
+                notes: document.getElementById('new-notes').value || ''
+            });
+            
+            window.newExtraUrls = [];
+            await saveCloudState();
+            await window.showCustomAlert("Producto creado exitosamente.");
+            document.getElementById('add-product-form').reset();
+            document.getElementById('new-extra-urls-preview').innerHTML = '';
+            document.getElementById('new-image-url').value = "https://placehold.co/600x600/18181b/D4AF37?text=Perfume";
+            renderAdminProducts(); renderSite(); switchAdminTab('productos');
+        }
+
         function openEditModal(id) {
             const p = products.find(prod => prod.id === id);
             if (!p) return;
@@ -1097,10 +1162,35 @@
             document.getElementById('edit-price').value = p.price;
             document.getElementById('edit-notes').value = p.notes || '';
             document.getElementById('edit-image-url').value = p.image;
-            document.getElementById('edit-extra-urls').value = p.images ? p.images.join(', ') : '';
+            document.getElementById('edit-image-file').value = '';
+            document.getElementById('edit-extra-files').value = '';
+            
+            window.editExtraUrls = p.images ? [...p.images] : [];
+            renderEditExtraThumbs();
 
             document.getElementById('edit-modal').classList.remove('hidden');
         }
+
+        function renderEditExtraThumbs() {
+            const container = document.getElementById('edit-extra-thumbs');
+            if (!window.editExtraUrls || window.editExtraUrls.length === 0) {
+                container.innerHTML = '<span class="text-xs text-zinc-500 italic">No hay fotos adicionales cargadas.</span>';
+                return;
+            }
+            container.innerHTML = window.editExtraUrls.map((imgUrl, index) => `
+                <div class="relative w-16 h-16 bg-zinc-950 border border-zinc-700 rounded-lg overflow-hidden group">
+                    <img src="${imgUrl}" class="w-full h-full object-cover">
+                    <button type="button" onclick="removeEditExtraImage(${index})" class="absolute inset-0 bg-red-500/80 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer">
+                        <i class="fa-solid fa-trash"></i>
+                    </button>
+                </div>
+            `).join('');
+        }
+
+        window.removeEditExtraImage = function(index) {
+            window.editExtraUrls.splice(index, 1);
+            renderEditExtraThumbs();
+        };
 
         function closeEditModal() { document.getElementById('edit-modal').classList.add('hidden'); }
 
@@ -1113,14 +1203,8 @@
             p.category = document.getElementById('edit-category').value;
             p.price = Number(document.getElementById('edit-price').value);
             p.notes = document.getElementById('edit-notes').value;
-            p.image = document.getElementById('edit-image-url').value.trim();
-            
-            const extraUrlsRaw = document.getElementById('edit-extra-urls').value.trim();
-            if (extraUrlsRaw) {
-                p.images = extraUrlsRaw.split(/[\n,]+/).map(url => url.trim()).filter(url => url.length > 0);
-            } else {
-                p.images = [];
-            }
+            p.image = document.getElementById('edit-image-url').value;
+            p.images = window.editExtraUrls;
 
             await saveCloudState();
             await window.showCustomAlert("Cambios guardados correctamente.");
@@ -1144,10 +1228,8 @@
 
             document.getElementById('setting-color').value = settings.primaryColor || '#D4AF37';
             document.getElementById('setting-color-text').value = settings.primaryColor || '#D4AF37';
-            
-            const logoUrlInput = document.getElementById('setting-logo-url');
-            logoUrlInput.value = (settings.logoImage && settings.logoImage !== defaultLogoSVG) ? settings.logoImage : '';
-            updateLogoPreview(logoUrlInput.value);
+            tempLogoUrl = settings.logoImage || "";
+            updateLogoPreview();
 
             document.getElementById('setting-ig').value = settings.instagram || '';
             document.getElementById('setting-fb').value = settings.facebook || '';
@@ -1157,45 +1239,86 @@
             renderAdminSectionsList();
         }
 
-        document.getElementById('setting-logo-url').addEventListener('input', (e) => {
-            updateLogoPreview(e.target.value.trim());
-        });
-
-        function updateLogoPreview(url) {
-            const preview = document.getElementById('admin-logo-preview');
-            if (url) { 
-                preview.src = url; 
-                preview.classList.remove('hidden'); 
-            } else { 
-                preview.classList.add('hidden'); 
+        async function handleLogoUpload(e) {
+            if (e.target.files[0]) {
+                tempLogoUrl = URL.createObjectURL(e.target.files[0]);
+                updateLogoPreview();
             }
+        }
+        function removeLogo() {
+            tempLogoUrl = ""; document.getElementById('setting-logo-file').value = ""; updateLogoPreview();
+        }
+        function updateLogoPreview() {
+            const preview = document.getElementById('admin-logo-preview');
+            const removeBtn = document.getElementById('admin-logo-remove');
+            if (tempLogoUrl && tempLogoUrl !== defaultLogoSVG) { 
+                preview.src = tempLogoUrl; preview.classList.remove('hidden'); removeBtn.classList.remove('hidden'); 
+            } else { 
+                preview.classList.add('hidden'); removeBtn.classList.add('hidden'); 
+            }
+        }
+
+        function syncUIValuesToTempSections() {
+            const listContainer = document.getElementById('admin-sections-list');
+            if (!listContainer) return;
+            const secBlocks = listContainer.querySelectorAll('.admin-sec-block');
+            secBlocks.forEach((secBlock, sIdx) => {
+                if (tempSections[sIdx]) {
+                    const idInput = secBlock.querySelector('.sec-id-input');
+                    const titleInput = secBlock.querySelector('.sec-title-input');
+                    const subInput = secBlock.querySelector('.sec-sub-input');
+                    if (idInput) tempSections[sIdx].id = idInput.value;
+                    if (titleInput) tempSections[sIdx].title = titleInput.value;
+                    if (subInput) tempSections[sIdx].subtitle = subInput.value;
+
+                    const cardRows = secBlock.querySelectorAll('.admin-card-row');
+                    const newCards = [];
+                    cardRows.forEach((cardRow) => {
+                        const cTitle = cardRow.querySelector('.card-title-input').value;
+                        const cText = cardRow.querySelector('.card-text-input').value;
+                        const cEmoji = cardRow.querySelector('.card-emoji-input').value;
+                        newCards.push({ title: cTitle, text: cText, emoji: cEmoji });
+                    });
+                    tempSections[sIdx].cards = newCards;
+                }
+            });
         }
 
         function renderAdminSectionsList() {
             const list = document.getElementById('admin-sections-list');
             list.innerHTML = tempSections.map((sec, sIdx) => `
-                <div class="bg-zinc-900 p-5 rounded-2xl border border-zinc-800 space-y-4">
+                <div class="admin-sec-block bg-zinc-900 p-5 rounded-2xl border border-zinc-800 space-y-4">
                     <div class="flex justify-between items-center border-b border-zinc-800 pb-3">
-                        <span class="text-xs font-bold uppercase tracking-wider text-gold">Sección #${sIdx + 1}</span>
+                        <div class="flex items-center gap-2">
+                            <span class="text-xs font-bold uppercase tracking-wider text-gold">Sección #${sIdx + 1}</span>
+                            <div class="flex items-center gap-1 bg-zinc-950 px-2 py-0.5 rounded border border-zinc-800">
+                                <button type="button" onclick="moveSection(${sIdx}, -1)" ${sIdx === 0 ? 'disabled class="text-zinc-700 cursor-not-allowed"' : 'class="text-zinc-300 hover:text-gold cursor-pointer"'}><i class="fa-solid fa-arrow-up text-[10px]"></i></button>
+                                <button type="button" onclick="moveSection(${sIdx}, 1)" ${sIdx === tempSections.length - 1 ? 'disabled class="text-zinc-700 cursor-not-allowed"' : 'class="text-zinc-300 hover:text-gold cursor-pointer"'}><i class="fa-solid fa-arrow-down text-[10px]"></i></button>
+                            </div>
+                        </div>
                         <button type="button" onclick="removeAdminSection(${sIdx})" class="text-red-400 text-xs hover:underline cursor-pointer"><i class="fa-solid fa-trash"></i> Eliminar Sección</button>
                     </div>
                     <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                        <div><label class="text-[10px] text-zinc-400">ID (ej: garantia)</label><input type="text" value="${sec.id}" onchange="tempSections[${sIdx}].id = this.value" class="w-full bg-zinc-950 border border-zinc-800 rounded px-3 py-1.5 text-xs text-zinc-100 outline-none"></div>
-                        <div><label class="text-[10px] text-zinc-400">Título Principal</label><input type="text" value="${sec.title}" onchange="tempSections[${sIdx}].title = this.value" class="w-full bg-zinc-950 border border-zinc-800 rounded px-3 py-1.5 text-xs text-zinc-100 outline-none"></div>
-                        <div><label class="text-[10px] text-zinc-400">Badge Superior</label><input type="text" value="${sec.subtitle || ''}" onchange="tempSections[${sIdx}].subtitle = this.value" class="w-full bg-zinc-950 border border-zinc-800 rounded px-3 py-1.5 text-xs text-zinc-100 outline-none"></div>
+                        <div><label class="text-[10px] text-zinc-400">ID (ej: garantia)</label><input type="text" value="${sec.id}" class="sec-id-input w-full bg-zinc-950 border border-zinc-800 rounded px-3 py-1.5 text-xs text-zinc-100 outline-none"></div>
+                        <div><label class="text-[10px] text-zinc-400">Título Principal</label><input type="text" value="${sec.title}" class="sec-title-input w-full bg-zinc-950 border border-zinc-800 rounded px-3 py-1.5 text-xs text-zinc-100 outline-none"></div>
+                        <div><label class="text-[10px] text-zinc-400">Badge Superior</label><input type="text" value="${sec.subtitle || ''}" class="sec-sub-input w-full bg-zinc-950 border border-zinc-800 rounded px-3 py-1.5 text-xs text-zinc-100 outline-none"></div>
                     </div>
                     <div class="space-y-3 pt-2">
                         <div class="flex justify-between items-center">
-                            <span class="text-xs font-medium text-zinc-400">Tarjetas de la Grilla</span>
+                            <span class="text-xs font-medium text-zinc-400">Tarjetas de la Grilla (Ordenables)</span>
                             <button type="button" onclick="addAdminCard(${sIdx})" class="text-[10px] bg-zinc-800 px-2 py-1 rounded text-zinc-300 hover:bg-zinc-700 cursor-pointer">+ Añadir Tarjeta</button>
                         </div>
                         <div class="space-y-2">
                             ${sec.cards.map((card, cIdx) => `
-                                <div class="bg-zinc-950 p-3 rounded-xl border border-zinc-800 grid grid-cols-1 sm:grid-cols-12 gap-2 items-center">
-                                    <div class="sm:col-span-3"><input type="text" value="${card.title}" placeholder="Título" onchange="tempSections[${sIdx}].cards[${cIdx}].title = this.value" class="w-full bg-zinc-900 border border-zinc-800 rounded px-2 py-1 text-xs text-zinc-100 outline-none"></div>
-                                    <div class="sm:col-span-6"><input type="text" value="${card.text}" placeholder="Descripción" onchange="tempSections[${sIdx}].cards[${cIdx}].text = this.value" class="w-full bg-zinc-900 border border-zinc-800 rounded px-2 py-1 text-xs text-zinc-100 outline-none"></div>
-                                    <div class="sm:col-span-2"><input type="text" value="${card.emoji || '✨'}" placeholder="Emoji" onchange="tempSections[${sIdx}].cards[${cIdx}].emoji = this.value" class="w-full bg-zinc-900 border border-zinc-800 rounded px-2 py-1 text-xs text-zinc-100 outline-none text-center"></div>
-                                    <div class="sm:col-span-1 text-right"><button type="button" onclick="removeAdminCard(${sIdx},${cIdx})" class="text-red-400 hover:text-red-300 text-xs cursor-pointer"><i class="fa-solid fa-xmark"></i></button></div>
+                                <div class="admin-card-row bg-zinc-950 p-3 rounded-xl border border-zinc-800 grid grid-cols-1 sm:grid-cols-12 gap-2 items-center">
+                                    <div class="sm:col-span-1 flex items-center justify-center gap-1 bg-zinc-900 p-1 rounded border border-zinc-800">
+                                        <button type="button" onclick="moveCard(${sIdx}, ${cIdx}, -1)" ${cIdx === 0 ? 'disabled class="text-zinc-700 cursor-not-allowed"' : 'class="text-zinc-300 hover:text-gold cursor-pointer"'}><i class="fa-solid fa-chevron-up text-[9px]"></i></button>
+                                        <button type="button" onclick="moveCard(${sIdx}, ${cIdx}, 1)" ${cIdx === sec.cards.length - 1 ? 'disabled class="text-zinc-700 cursor-not-allowed"' : 'class="text-zinc-300 hover:text-gold cursor-pointer"'}><i class="fa-solid fa-chevron-down text-[9px]"></i></button>
+                                    </div>
+                                    <div class="sm:col-span-3"><input type="text" value="${card.title}" placeholder="Título" class="card-title-input w-full bg-zinc-900 border border-zinc-800 rounded px-2 py-1 text-xs text-zinc-100 outline-none"></div>
+                                    <div class="sm:col-span-5"><input type="text" value="${card.text}" placeholder="Descripción" class="card-text-input w-full bg-zinc-900 border border-zinc-800 rounded px-2 py-1 text-xs text-zinc-100 outline-none"></div>
+                                    <div class="sm:col-span-2"><input type="text" value="${card.emoji || '✨'}" placeholder="Emoji" class="card-emoji-input w-full bg-zinc-900 border border-zinc-800 rounded px-2 py-1 text-xs text-zinc-100 outline-none text-center"></div>
+                                    <div class="sm:col-span-1 text-right"><button type="button" onclick="removeAdminCard(${sIdx}, ${cIdx})" class="text-red-400 hover:text-red-300 text-xs cursor-pointer"><i class="fa-solid fa-xmark"></i></button></div>
                                 </div>
                             `).join('')}
                         </div>
@@ -1204,31 +1327,55 @@
             `).join('');
         }
 
+        function moveSection(sIdx, direction) {
+            syncUIValuesToTempSections();
+            const target = sIdx + direction;
+            if (target < 0 || target >= tempSections.length) return;
+            const tmp = tempSections[sIdx];
+            tempSections[sIdx] = tempSections[target];
+            tempSections[target] = tmp;
+            renderAdminSectionsList();
+        }
+
+        function moveCard(sIdx, cIdx, direction) {
+            syncUIValuesToTempSections();
+            const target = cIdx + direction;
+            if (target < 0 || target >= tempSections[sIdx].cards.length) return;
+            const tmp = tempSections[sIdx].cards[cIdx];
+            tempSections[sIdx].cards[cIdx] = tempSections[sIdx].cards[target];
+            tempSections[sIdx].cards[target] = tmp;
+            renderAdminSectionsList();
+        }
+
         function addAdminSection() {
+            syncUIValuesToTempSections();
             tempSections.push({ id: "nueva-seccion", title: "Título de Sección", subtitle: "Badge", cards: [{ title: "Tarjeta 1", text: "Descripción...", emoji: "✨" }] });
             renderAdminSectionsList();
         }
         function removeAdminSection(index) {
-            tempSections.splice(index, 1); renderAdminSectionsList();
+            syncUIValuesToTempSections();
+            tempSections.splice(index, 1); 
+            renderAdminSectionsList();
         }
         function addAdminCard(sIdx) {
+            syncUIValuesToTempSections();
             tempSections[sIdx].cards.push({ title: "Nueva Tarjeta", text: "Descripción...", emoji: "⭐" });
             renderAdminSectionsList();
         }
         function removeAdminCard(sIdx, cIdx) {
-            tempSections[sIdx].cards.splice(cIdx, 1); renderAdminSectionsList();
+            syncUIValuesToTempSections();
+            tempSections[sIdx].cards.splice(cIdx, 1); 
+            renderAdminSectionsList();
         }
 
         async function saveSiteSettings() {
+            syncUIValuesToTempSections();
             settings.brandName = document.getElementById('setting-brand').value;
             settings.whatsappNumber = document.getElementById('setting-whatsapp').value;
             settings.heroTitle = document.getElementById('setting-hero-title').value;
             settings.heroSub = document.getElementById('setting-hero-sub').value;
             settings.primaryColor = document.getElementById('setting-color').value;
-            
-            const customLogo = document.getElementById('setting-logo-url').value.trim();
-            settings.logoImage = customLogo || defaultLogoSVG;
-
+            settings.logoImage = tempLogoUrl || settings.logoImage || defaultLogoSVG;
             settings.instagram = document.getElementById('setting-ig').value;
             settings.facebook = document.getElementById('setting-fb').value;
             settings.tiktok = document.getElementById('setting-tk').value;
@@ -1316,10 +1463,15 @@
         window.closeEditModal = closeEditModal;
         window.handleSaveEditedProduct = handleSaveEditedProduct;
         window.deleteProduct = deleteProduct;
+        window.moveProduct = moveProduct;
+        window.handleLogoUpload = handleLogoUpload;
+        window.removeLogo = removeLogo;
         window.addAdminSection = addAdminSection;
         window.removeAdminSection = removeAdminSection;
+        window.moveSection = moveSection;
         window.addAdminCard = addAdminCard;
         window.removeAdminCard = removeAdminCard;
+        window.moveCard = moveCard;
         window.saveSiteSettings = saveSiteSettings;
         window.exportBackupJSON = exportBackupJSON;
         window.importBackupJSON = importBackupJSON;
