@@ -450,15 +450,16 @@
                     </div>
                     <div>
                         <label class="block text-xs font-medium text-zinc-400 mb-1">URL de Foto Principal (O subir archivo)</label>
-                        <input type="text" id="edit-image-url" required class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-4 py-2 text-sm focus:border-gold outline-none text-zinc-100 mb-2">
+                        <input type="text" id="edit-image-url" required class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-4 py-2 text-sm focus:border-gold outline-none text-zinc-100 mb-2" placeholder="https://ejemplo.com/imagen.jpg">
                         <input type="file" id="edit-image-file" accept="image/*" onchange="handleEditImageFile(event)" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-4 py-2 text-xs text-zinc-400 focus:border-gold outline-none file:mr-4 file:py-1 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-zinc-800 file:text-zinc-300 cursor-pointer">
                     </div>
                     <div>
-                        <label class="block text-xs font-medium text-zinc-400 mb-1">Agregar más Fotos (Subir Archivo -> URLs)</label>
+                        <label class="block text-xs font-medium text-zinc-400 mb-1">Fotos Adicionales (Pegar URLs separadas por comas/líneas o Subir Archivos)</label>
+                        <textarea id="edit-extra-urls-text" rows="2" placeholder="https://ejemplo.com/foto1.jpg, https://ejemplo.com/foto2.jpg" oninput="renderEditExtraThumbs()" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-4 py-2 text-xs focus:border-gold outline-none text-zinc-100 mb-2"></textarea>
                         <input type="file" id="edit-extra-files" accept="image/*" multiple onchange="handleEditExtraFiles(event)" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-4 py-2 text-xs text-zinc-400 focus:border-gold outline-none file:mr-4 file:py-1 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-zinc-800 file:text-zinc-300 cursor-pointer">
                     </div>
                     <div id="edit-current-extra-preview" class="space-y-2">
-                        <label class="block text-xs font-medium text-zinc-400">Fotos adicionales cargadas actualmente</label>
+                        <label class="block text-xs font-medium text-zinc-400">Fotos adicionales cargadas / vista previa</label>
                         <div id="edit-extra-thumbs" class="flex flex-wrap gap-2"></div>
                     </div>
                     <div>
@@ -1340,6 +1341,9 @@
             document.getElementById('edit-image-url').value = p.image;
             document.getElementById('edit-image-file').value = '';
             document.getElementById('edit-extra-files').value = '';
+            if (document.getElementById('edit-extra-urls-text')) {
+                document.getElementById('edit-extra-urls-text').value = '';
+            }
             
             window.editExtraUrls = p.images ? [...p.images] : [];
             renderEditExtraThumbs();
@@ -1349,18 +1353,33 @@
 
         function renderEditExtraThumbs() {
             const container = document.getElementById('edit-extra-thumbs');
-            if (!window.editExtraUrls || window.editExtraUrls.length === 0) {
+            if (!container) return;
+
+            const textVal = document.getElementById('edit-extra-urls-text') ? document.getElementById('edit-extra-urls-text').value : '';
+            const pastedUrls = textVal.split(/[\n,]+/).map(u => u.trim()).filter(u => u.length > 0);
+
+            const allExtra = [...(window.editExtraUrls || []), ...pastedUrls];
+
+            if (allExtra.length === 0) {
                 container.innerHTML = '<span class="text-xs text-zinc-500 italic">No hay fotos adicionales cargadas.</span>';
                 return;
             }
-            container.innerHTML = window.editExtraUrls.map((imgUrl, index) => `
-                <div class="relative w-16 h-16 bg-zinc-950 border border-zinc-700 rounded-lg overflow-hidden group">
-                    <img src="${imgUrl}" class="w-full h-full object-cover">
-                    <button type="button" onclick="removeEditExtraImage(${index})" class="absolute inset-0 bg-red-500/80 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer">
-                        <i class="fa-solid fa-trash"></i>
-                    </button>
-                </div>
-            `).join('');
+
+            container.innerHTML = allExtra.map((imgUrl, index) => {
+                const isFromList = index < (window.editExtraUrls || []).length;
+                return `
+                    <div class="relative w-16 h-16 bg-zinc-950 border border-zinc-700 rounded-lg overflow-hidden group">
+                        <img src="${imgUrl}" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/100x100/18181b/D4AF37?text=Error'">
+                        ${isFromList ? `
+                            <button type="button" onclick="removeEditExtraImage(${index})" class="absolute inset-0 bg-red-500/80 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer" title="Eliminar foto">
+                                <i class="fa-solid fa-trash"></i>
+                            </button>
+                        ` : `
+                            <span class="absolute bottom-0 inset-x-0 bg-zinc-950/80 text-[8px] text-zinc-400 text-center truncate px-0.5">Nueva</span>
+                        `}
+                    </div>
+                `;
+            }).join('');
         }
 
         window.removeEditExtraImage = function(index) {
@@ -1398,11 +1417,17 @@
             p.price = Number(document.getElementById('edit-price').value);
             p.notes = document.getElementById('edit-notes').value;
             p.image = document.getElementById('edit-image-url').value;
-            p.images = window.editExtraUrls;
+
+            const textVal = document.getElementById('edit-extra-urls-text') ? document.getElementById('edit-extra-urls-text').value : '';
+            const pastedUrls = textVal.split(/[\n,]+/).map(u => u.trim()).filter(u => u.length > 0);
+
+            p.images = [...(window.editExtraUrls || []), ...pastedUrls];
 
             await saveCloudState();
             await window.showCustomAlert("Cambios guardados correctamente.");
-            closeEditModal(); renderAdminProducts(); renderSite();
+            closeEditModal(); 
+            renderAdminProducts(); 
+            renderSite();
         }
 
         async function deleteProduct(id) {
@@ -1659,6 +1684,7 @@
         window.openEditModal = openEditModal;
         window.closeEditModal = closeEditModal;
         window.handleSaveEditedProduct = handleSaveEditedProduct;
+        window.renderEditExtraThumbs = renderEditExtraThumbs;
         window.deleteProduct = deleteProduct;
         window.handleAdminDragStart = handleAdminDragStart;
         window.handleAdminDragOver = handleAdminDragOver;
