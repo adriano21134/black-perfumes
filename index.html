@@ -140,7 +140,7 @@
         <div class="fixed inset-0 bg-zinc-950/85 backdrop-blur-md transition-opacity" onclick="closeProductDetail()"></div>
         <div class="min-h-screen px-4 text-center flex items-center justify-center">
             <div class="inline-block w-full max-w-5xl p-6 sm:p-10 my-8 text-left align-middle transition-all transform bg-zinc-900 border border-gold/40 rounded-3xl shadow-2xl relative">
-                <button onclick="closeProductDetail()" class="absolute top-6 right-6 text-zinc-400 hover:text-zinc-100 bg-zinc-800 p-3 rounded-xl z-10 hover:bg-zinc-700 transition-all cursor-pointer">
+                <button onclick="closeProductDetail()" class="absolute top-6 right-6 text-zinc-400 hover:text-zinc-100 bg-zinc-800 p-3 rounded-xl z-10 hover:bg-zinc-700 transition-all cursor-pointer" title="Cerrar (Esc)">
                     <i class="fa-solid fa-xmark text-xl"></i>
                 </button>
                 <div id="product-detail-content" class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center"></div>
@@ -172,7 +172,6 @@
         </div>
     </footer>
 
-    <!-- Shopping Cart Drawer -->
     <div id="cart-drawer" class="fixed inset-0 z-50 overflow-hidden hidden">
         <div class="absolute inset-0 bg-zinc-950/80 backdrop-blur-sm transition-opacity" onclick="toggleCart()"></div>
         <div class="absolute inset-y-0 right-0 max-w-full flex pl-10">
@@ -198,7 +197,6 @@
         </div>
     </div>
 
-    <!-- Floating WhatsApp Button -->
     <a id="floating-whatsapp-btn" href="#" target="_blank" class="fixed bottom-6 right-6 z-40 bg-green-500 hover:bg-green-600 text-white w-14 h-14 rounded-full flex items-center justify-center shadow-2xl shadow-green-500/30 transition-transform transform hover:scale-110" title="Contactar por WhatsApp">
         <i class="fa-brands fa-whatsapp text-3xl"></i>
     </a>
@@ -225,7 +223,6 @@
         </div>
     </div>
 
-    <!-- Admin Panel Modal -->
     <div id="admin-modal" class="fixed inset-0 z-50 overflow-y-auto hidden">
         <div class="fixed inset-0 bg-zinc-950/85 backdrop-blur-md transition-opacity" onclick="toggleAdminPanel()"></div>
         <div class="min-h-screen px-4 text-center flex items-center justify-center">
@@ -283,20 +280,22 @@
                             <input type="text" id="new-name" required class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-4 py-2.5 text-sm focus:border-gold outline-none text-zinc-100">
                         </div>
                         <div>
-                            <label class="block text-xs font-medium text-zinc-400 mb-1">Categoría</label>
-                            <input type="text" id="new-category" required class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-4 py-2.5 text-sm focus:border-gold outline-none text-zinc-100">
+                            <label class="block text-xs font-medium text-zinc-400 mb-1">Categoría (Seleccioná o escribí una nueva)</label>
+                            <input type="text" id="new-category" list="category-options" required placeholder="Seleccioná o escribí la categoría..." class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-4 py-2.5 text-sm focus:border-gold outline-none text-zinc-100">
+                            <datalist id="category-options"></datalist>
                         </div>
                         <div>
                             <label class="block text-xs font-medium text-zinc-400 mb-1">Precio ($ ARS)</label>
                             <input type="number" id="new-price" required class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-4 py-2.5 text-sm focus:border-gold outline-none text-zinc-100">
                         </div>
                         <div>
-                            <label class="block text-xs font-medium text-zinc-400 mb-1">Foto Principal (Subir Archivo -> URL)</label>
+                            <label class="block text-xs font-medium text-zinc-400 mb-1">Foto Principal (Pegar URL o Subir Archivo)</label>
+                            <input type="url" id="new-image-url" placeholder="https://ejemplo.com/imagen.jpg" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-4 py-2 text-xs focus:border-gold outline-none text-zinc-100 mb-2">
                             <input type="file" id="new-image-file" accept="image/*" onchange="handleNewImageFile(event)" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-4 py-2 text-xs text-zinc-400 focus:border-gold outline-none file:mr-4 file:py-1 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-gold file:text-zinc-950 cursor-pointer">
-                            <input type="hidden" id="new-image-url" required value="https://placehold.co/600x600/18181b/D4AF37?text=Perfume">
                         </div>
                         <div class="sm:col-span-2">
-                            <label class="block text-xs font-medium text-zinc-400 mb-1">Fotos Adicionales (Subir Archivos -> URLs)</label>
+                            <label class="block text-xs font-medium text-zinc-400 mb-1">Fotos Adicionales (Pegar URLs separadas por comas/líneas o Subir Archivos)</label>
+                            <textarea id="new-extra-urls-text" rows="2" placeholder="https://ejemplo.com/foto1.jpg, https://ejemplo.com/foto2.jpg" oninput="renderNewExtraPreviews()" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-4 py-2 text-xs focus:border-gold outline-none text-zinc-100 mb-2"></textarea>
                             <input type="file" id="new-extra-files" accept="image/*" multiple onchange="handleNewExtraFiles(event)" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-4 py-2 text-xs text-zinc-400 focus:border-gold outline-none file:mr-4 file:py-1 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-zinc-800 file:text-zinc-300 cursor-pointer">
                             <div id="new-extra-urls-preview" class="flex flex-wrap gap-2 mt-2"></div>
                         </div>
@@ -310,13 +309,12 @@
                     </form>
                 </div>
 
-                <!-- Admin Tab: Apariencia -->
                 <div id="admin-tab-apariencia" class="admin-tab-content space-y-6 hidden">
                     <h3 class="text-sm font-semibold uppercase tracking-wider text-zinc-400">Apariencia y Logo</h3>
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 bg-zinc-950/50 p-6 rounded-2xl border border-zinc-800">
                         <div class="space-y-4">
                             <div>
-                                <label class="block text-xs font-medium text-zinc-400 mb-2">Subir Logo de tu Negocio (Archivo -> URL)</label>
+                                <label class="block text-xs font-medium text-zinc-400 mb-2">Subir Logo de tu Negocio</label>
                                 <input type="file" id="setting-logo-file" accept="image/*" onchange="handleLogoUpload(event)" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-4 py-2 text-xs text-zinc-400 focus:border-gold outline-none file:mr-4 file:py-1 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-zinc-800 file:text-white cursor-pointer">
                                 <div class="mt-3 flex items-center gap-4">
                                     <img id="admin-logo-preview" src="" class="h-12 w-12 object-cover rounded-full hidden bg-zinc-900 p-1 border border-zinc-800">
@@ -337,7 +335,6 @@
                     <button onclick="saveSiteSettings()" class="w-full bg-gold hover:bg-gold-light text-zinc-950 font-bold py-3 rounded-xl transition-all shadow-lg shadow-gold/20 cursor-pointer">Guardar Apariencia</button>
                 </div>
 
-                <!-- Admin Tab: Textos -->
                 <div id="admin-tab-textos" class="admin-tab-content space-y-4 hidden">
                     <h3 class="text-sm font-semibold uppercase tracking-wider text-zinc-400">Textos Principales</h3>
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -361,7 +358,6 @@
                     <button onclick="saveSiteSettings()" class="w-full bg-gold hover:bg-gold-light text-zinc-950 font-bold py-3 rounded-xl transition-all shadow-lg shadow-gold/20 cursor-pointer">Guardar Textos</button>
                 </div>
 
-                <!-- Admin Tab: Bloques -->
                 <div id="admin-tab-bloques" class="admin-tab-content space-y-6 max-h-[65vh] overflow-y-auto pr-2 hidden">
                     <div class="bg-zinc-950/50 p-6 rounded-2xl border border-zinc-800">
                         <div class="flex justify-between items-center mb-4">
@@ -373,7 +369,6 @@
                     <button onclick="saveSiteSettings()" class="w-full bg-gold hover:bg-gold-light text-zinc-950 font-bold py-3 rounded-xl transition-all shadow-lg shadow-gold/20 sticky bottom-0 cursor-pointer">Guardar Todas las Secciones</button>
                 </div>
 
-                <!-- Admin Tab: Respaldo -->
                 <div id="admin-tab-respaldo" class="admin-tab-content space-y-6 hidden">
                     <h3 class="text-sm font-semibold uppercase tracking-wider text-zinc-400"><i class="fa-solid fa-database text-gold"></i> Respaldo de Base de Datos</h3>
                     <div class="bg-zinc-950 p-6 rounded-2xl border border-zinc-800 flex flex-col sm:flex-row gap-4 items-center justify-between">
@@ -394,7 +389,6 @@
                     </div>
                 </div>
 
-                <!-- Admin Tab: Redes Sociales -->
                 <div id="admin-tab-redes" class="admin-tab-content space-y-4 hidden">
                     <h3 class="text-sm font-semibold uppercase tracking-wider text-zinc-400">Links de Redes Sociales</h3>
                     <div class="space-y-4 max-w-lg">
@@ -414,7 +408,6 @@
                     <div class="pt-4"><button onclick="saveSiteSettings()" class="w-full bg-gold hover:bg-gold-light text-zinc-950 font-bold py-3 rounded-xl transition-all shadow-lg shadow-gold/20 cursor-pointer">Guardar Redes</button></div>
                 </div>
 
-                <!-- Admin Tab: Seguridad -->
                 <div id="admin-tab-seguridad" class="admin-tab-content space-y-4 hidden">
                     <h3 class="text-sm font-semibold uppercase tracking-wider text-zinc-400"><i class="fa-solid fa-key text-gold"></i> Cambiar Contraseña de Administrador</h3>
                     <form onsubmit="handlePasswordChange(event)" class="space-y-4 max-w-md">
@@ -433,7 +426,6 @@
         </div>
     </div>
 
-    <!-- Edit Product Modal -->
     <div id="edit-modal" class="fixed inset-0 z-50 overflow-y-auto hidden">
         <div class="fixed inset-0 bg-zinc-950/85 backdrop-blur-md transition-opacity" onclick="closeEditModal()"></div>
         <div class="min-h-screen px-4 text-center flex items-center justify-center">
@@ -457,7 +449,7 @@
                         <input type="number" id="edit-price" required class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-4 py-2 text-sm focus:border-gold outline-none text-zinc-100">
                     </div>
                     <div>
-                        <label class="block text-xs font-medium text-zinc-400 mb-1">URL de Foto Principal (O subir archivo para convertir)</label>
+                        <label class="block text-xs font-medium text-zinc-400 mb-1">URL de Foto Principal (O subir archivo)</label>
                         <input type="text" id="edit-image-url" required class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-4 py-2 text-sm focus:border-gold outline-none text-zinc-100 mb-2">
                         <input type="file" id="edit-image-file" accept="image/*" onchange="handleEditImageFile(event)" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-4 py-2 text-xs text-zinc-400 focus:border-gold outline-none file:mr-4 file:py-1 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-zinc-800 file:text-zinc-300 cursor-pointer">
                     </div>
@@ -481,7 +473,6 @@
         </div>
     </div>
 
-    <!-- Custom Modal Dialogs -->
     <div id="custom-modal-overlay" class="fixed inset-0 z-[100] bg-zinc-950/85 backdrop-blur-md hidden items-center justify-center">
         <div class="bg-zinc-900 border border-gold/40 rounded-3xl p-6 sm:p-8 max-w-sm w-full mx-4 shadow-2xl text-center space-y-6">
             <p id="custom-modal-message" class="text-zinc-100 text-base sm:text-lg"></p>
@@ -643,12 +634,17 @@
         let tempLogoUrl = "";
         let draggedProductId = null;
 
+        // Modal Carousel State attached to window for global access
+        window.currentDetailImages = [];
+        window.currentDetailIndex = 0;
+
         let db = null;
         let appId = "black-perfumes-bd";
 
         window.onload = async function() {
             renderSite();
             await initFirebaseRealtime();
+            setupKeyboardListeners();
         };
 
         async function initFirebaseRealtime() {
@@ -826,11 +822,27 @@
                 return;
             }
 
-            grid.innerHTML = filtered.map(p => `
-                <div class="bg-zinc-900 border border-zinc-800 rounded-3xl overflow-hidden shadow-xl hover:border-gold/40 transition-all flex flex-col group">
-                    <div onclick="openProductDetail(${p.id})" class="h-64 bg-zinc-950 overflow-hidden relative p-4 flex items-center justify-center cursor-pointer">
-                        <img src="${p.image}" alt="${p.name}" class="max-h-full max-w-full object-contain group-hover:scale-105 transition-transform duration-500">
-                        <span class="absolute top-3 left-3 bg-zinc-900/90 text-gold text-[10px] font-bold px-3 py-1 rounded-full border border-gold/20 uppercase tracking-wider">${p.category}</span>
+            grid.innerHTML = filtered.map(p => {
+                const allImages = [p.image, ...(p.images || [])].filter(Boolean);
+                const hasMultiple = allImages.length > 1;
+
+                return `
+                <div class="bg-zinc-900 border border-zinc-800 rounded-3xl overflow-hidden shadow-xl hover:border-gold/40 transition-all flex flex-col group relative">
+                    <div class="h-64 bg-zinc-950 overflow-hidden relative p-4 flex items-center justify-center cursor-pointer" onclick="openProductDetail(${p.id})">
+                        <img id="card-img-${p.id}" src="${allImages[0]}" data-index="0" alt="${p.name}" class="max-h-full max-w-full object-contain group-hover:scale-105 transition-transform duration-300">
+                        <span class="absolute top-3 left-3 bg-zinc-900/90 text-gold text-[10px] font-bold px-3 py-1 rounded-full border border-gold/20 uppercase tracking-wider z-10">${p.category}</span>
+                        
+                        ${hasMultiple ? `
+                            <button onclick="event.stopPropagation(); changeCardImage(${p.id}, -1)" class="absolute left-2 top-1/2 -translate-y-1/2 bg-zinc-900/80 hover:bg-gold hover:text-zinc-950 text-zinc-200 border border-gold/30 w-8 h-8 rounded-full flex items-center justify-center text-xs transition-all opacity-80 hover:opacity-100 shadow-md cursor-pointer z-20" title="Imagen anterior">
+                                <i class="fa-solid fa-chevron-left"></i>
+                            </button>
+                            <button onclick="event.stopPropagation(); changeCardImage(${p.id}, 1)" class="absolute right-2 top-1/2 -translate-y-1/2 bg-zinc-900/80 hover:bg-gold hover:text-zinc-950 text-zinc-200 border border-gold/30 w-8 h-8 rounded-full flex items-center justify-center text-xs transition-all opacity-80 hover:opacity-100 shadow-md cursor-pointer z-20" title="Siguiente imagen">
+                                <i class="fa-solid fa-chevron-right"></i>
+                            </button>
+                            <div id="card-dots-${p.id}" class="absolute bottom-2 left-1/2 -translate-x-1/2 flex gap-1 z-10">
+                                ${allImages.map((_, idx) => `<span class="w-1.5 h-1.5 rounded-full ${idx === 0 ? 'bg-gold' : 'bg-zinc-600'} transition-all"></span>`).join('')}
+                            </div>
+                        ` : ''}
                     </div>
                     <div class="p-6 flex flex-col flex-grow justify-between">
                         <div onclick="openProductDetail(${p.id})" class="cursor-pointer">
@@ -845,25 +857,66 @@
                         </div>
                     </div>
                 </div>
-            `).join('');
+            `;
+            }).join('');
         }
+
+        window.changeCardImage = function(productId, direction) {
+            const p = products.find(item => item.id === productId);
+            if (!p) return;
+            const allImages = [p.image, ...(p.images || [])].filter(Boolean);
+            if (allImages.length <= 1) return;
+
+            const imgEl = document.getElementById(`card-img-${productId}`);
+            if (!imgEl) return;
+
+            let currentIndex = parseInt(imgEl.getAttribute('data-index') || '0', 10);
+            currentIndex = (currentIndex + direction + allImages.length) % allImages.length;
+            imgEl.setAttribute('data-index', currentIndex);
+            imgEl.src = allImages[currentIndex];
+
+            const dotsContainer = document.getElementById(`card-dots-${productId}`);
+            if (dotsContainer) {
+                dotsContainer.innerHTML = allImages.map((_, idx) => 
+                    `<span class="w-1.5 h-1.5 rounded-full ${idx === currentIndex ? 'bg-gold' : 'bg-zinc-600'} transition-all"></span>`
+                ).join('');
+            }
+        };
 
         function openProductDetail(productId) {
             const p = products.find(prod => prod.id === productId);
             if (!p) return;
 
-            const allImages = [p.image, ...(p.images || [])];
+            window.currentDetailImages = [p.image, ...(p.images || [])].filter(Boolean);
+            window.currentDetailIndex = 0;
 
+            renderModalContent(p);
+            document.getElementById('product-detail-modal').classList.remove('hidden');
+        }
+
+        function renderModalContent(p) {
             const content = document.getElementById('product-detail-content');
             content.innerHTML = `
                 <div class="lg:col-span-6 space-y-4">
-                    <div class="bg-zinc-950 border border-zinc-800 rounded-2xl overflow-hidden h-96 flex items-center justify-center p-4">
-                        <img id="main-detail-img" src="${allImages[0]}" class="max-h-full max-w-full object-contain">
+                    <div class="relative bg-zinc-950 border border-zinc-800 rounded-2xl overflow-hidden h-96 flex items-center justify-center p-4 group select-none">
+                        <img id="main-detail-img" src="${window.currentDetailImages[0]}" class="max-h-full max-w-full object-contain transition-all duration-300">
+                        
+                        ${window.currentDetailImages.length > 1 ? `
+                            <button onclick="updateModalImage(window.currentDetailIndex - 1)" class="absolute left-3 top-1/2 -translate-y-1/2 bg-zinc-900/90 hover:bg-gold hover:text-zinc-950 text-zinc-100 border border-gold/40 w-11 h-11 rounded-full flex items-center justify-center text-lg transition-all shadow-xl cursor-pointer z-10" title="Anterior (Flecha Izquierda)">
+                                <i class="fa-solid fa-chevron-left"></i>
+                            </button>
+                            <button onclick="updateModalImage(window.currentDetailIndex + 1)" class="absolute right-3 top-1/2 -translate-y-1/2 bg-zinc-900/90 hover:bg-gold hover:text-zinc-950 text-zinc-100 border border-gold/40 w-11 h-11 rounded-full flex items-center justify-center text-lg transition-all shadow-xl cursor-pointer z-10" title="Siguiente (Flecha Derecha)">
+                                <i class="fa-solid fa-chevron-right"></i>
+                            </button>
+                            <span id="modal-img-counter" class="absolute bottom-3 right-3 bg-zinc-950/80 text-gold text-xs font-bold px-3 py-1 rounded-full border border-gold/30">
+                                1 / ${window.currentDetailImages.length}
+                            </span>
+                        ` : ''}
                     </div>
-                    ${allImages.length > 1 ? `
+                    ${window.currentDetailImages.length > 1 ? `
                         <div class="flex gap-3 overflow-x-auto pb-2">
-                            ${allImages.map((img) => `
-                                <button onclick="document.getElementById('main-detail-img').src='${img}'" class="w-20 h-20 bg-zinc-950 border border-zinc-700 hover:border-gold rounded-xl overflow-hidden shrink-0 p-1 cursor-pointer transition-all">
+                            ${window.currentDetailImages.map((img, idx) => `
+                                <button onclick="updateModalImage(${idx})" class="detail-thumb-btn w-20 h-20 bg-zinc-950 border ${idx === 0 ? 'border-gold ring-2 ring-gold/50' : 'border-zinc-700'} hover:border-gold rounded-xl overflow-hidden shrink-0 p-1 cursor-pointer transition-all">
                                     <img src="${img}" class="w-full h-full object-cover rounded-lg">
                                 </button>
                             `).join('')}
@@ -887,11 +940,49 @@
                     </div>
                 </div>
             `;
-            document.getElementById('product-detail-modal').classList.remove('hidden');
+        }
+
+        function updateModalImage(index) {
+            if (!window.currentDetailImages || window.currentDetailImages.length === 0) return;
+            window.currentDetailIndex = (index + window.currentDetailImages.length) % window.currentDetailImages.length;
+            
+            const imgEl = document.getElementById('main-detail-img');
+            if (imgEl) imgEl.src = window.currentDetailImages[window.currentDetailIndex];
+
+            const counterEl = document.getElementById('modal-img-counter');
+            if (counterEl) counterEl.innerText = `${window.currentDetailIndex + 1} / ${window.currentDetailImages.length}`;
+
+            const thumbs = document.querySelectorAll('.detail-thumb-btn');
+            thumbs.forEach((tb, i) => {
+                if (i === window.currentDetailIndex) {
+                    tb.classList.add('border-gold', 'ring-2', 'ring-gold/50');
+                    tb.classList.remove('border-zinc-700');
+                } else {
+                    tb.classList.remove('border-gold', 'ring-2', 'ring-gold/50');
+                    tb.classList.add('border-zinc-700');
+                }
+            });
         }
 
         function closeProductDetail() {
             document.getElementById('product-detail-modal').classList.add('hidden');
+        }
+
+        function setupKeyboardListeners() {
+            window.addEventListener('keydown', (e) => {
+                const modal = document.getElementById('product-detail-modal');
+                if (modal && !modal.classList.contains('hidden')) {
+                    if (e.key === 'ArrowRight') {
+                        e.preventDefault();
+                        updateModalImage(window.currentDetailIndex + 1);
+                    } else if (e.key === 'ArrowLeft') {
+                        e.preventDefault();
+                        updateModalImage(window.currentDetailIndex - 1);
+                    } else if (e.key === 'Escape') {
+                        closeProductDetail();
+                    }
+                }
+            });
         }
 
         function renderFooter() {
@@ -981,6 +1072,45 @@
             window.open(`https://wa.me/${settings.whatsappNumber}?text=${encodeURIComponent(message)}`, '_blank');
         }
 
+        function openAdminAuth() {
+            const pwdInput = document.getElementById('admin-password-input');
+            if (pwdInput) pwdInput.value = '';
+            const err = document.getElementById('auth-error-msg');
+            if (err) err.classList.add('hidden');
+            const modal = document.getElementById('admin-auth-modal');
+            if (modal) modal.classList.remove('hidden');
+        }
+
+        function closeAdminAuth() {
+            const modal = document.getElementById('admin-auth-modal');
+            if (modal) modal.classList.add('hidden');
+        }
+
+        function handleAdminLogin(e) {
+            if (e) e.preventDefault();
+            const input = document.getElementById('admin-password-input');
+            const pass = input ? input.value : '';
+            if (pass === settings.adminPassword) {
+                closeAdminAuth();
+                toggleAdminPanel();
+            } else {
+                const err = document.getElementById('auth-error-msg');
+                if (err) err.classList.remove('hidden');
+            }
+        }
+
+        function toggleAdminPanel() {
+            const modal = document.getElementById('admin-modal');
+            if (!modal) return;
+            if (modal.classList.contains('hidden')) {
+                loadSettingsForm();
+                renderAdminProducts();
+                modal.classList.remove('hidden');
+            } else {
+                modal.classList.add('hidden');
+            }
+        }
+
         window.showCustomAlert = function(message) {
             return new Promise((resolve) => {
                 document.getElementById('custom-modal-message').innerText = message;
@@ -1034,56 +1164,26 @@
 
         function renderNewExtraPreviews() {
             const container = document.getElementById('new-extra-urls-preview');
-            container.innerHTML = window.newExtraUrls.map((url, idx) => `
+            if (!container) return;
+            
+            const textVal = document.getElementById('new-extra-urls-text') ? document.getElementById('new-extra-urls-text').value : '';
+            const pastedUrls = textVal.split(/[\n,]+/).map(u => u.trim()).filter(u => u.length > 0);
+            
+            const allExtra = [...pastedUrls, ...window.newExtraUrls];
+
+            container.innerHTML = allExtra.map((url) => `
                 <div class="relative w-12 h-12 bg-zinc-950 border border-zinc-700 rounded-lg overflow-hidden group">
-                    <img src="${url}" class="w-full h-full object-cover">
-                    <button type="button" onclick="window.newExtraUrls.splice(${idx},1); renderNewExtraPreviews();" class="absolute inset-0 bg-red-500/80 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer">
-                        <i class="fa-solid fa-trash text-[10px]"></i>
-                    </button>
+                    <img src="${url}" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/100x100/18181b/D4AF37?text=URL'">
+                    <span class="absolute bottom-0 inset-x-0 bg-zinc-950/80 text-[8px] text-zinc-400 text-center truncate px-0.5">Vista previa</span>
                 </div>
             `).join('');
         }
 
-        window.handleEditImageFile = function(e) {
-            const file = e.target.files[0];
-            if (file) {
-                const objectUrl = URL.createObjectURL(file);
-                document.getElementById('edit-image-url').value = objectUrl;
-            }
-        };
-
-        window.editExtraUrls = [];
-        window.handleEditExtraFiles = function(e) {
-            const files = e.target.files;
-            for (let i = 0; i < files.length; i++) {
-                const objectUrl = URL.createObjectURL(files[i]);
-                window.editExtraUrls.push(objectUrl);
-            }
-            renderEditExtraThumbs();
-        };
-
-        function openAdminAuth() {
-            document.getElementById('admin-password-input').value = '';
-            document.getElementById('auth-error-msg').classList.add('hidden');
-            document.getElementById('admin-auth-modal').classList.remove('hidden');
-        }
-        function closeAdminAuth() { document.getElementById('admin-auth-modal').classList.add('hidden'); }
-        
-        function handleAdminLogin(e) {
-            e.preventDefault();
-            const currentPass = settings.adminPassword || 'admin123';
-            if (document.getElementById('admin-password-input').value === currentPass) {
-                closeAdminAuth(); toggleAdminPanel();
-            } else {
-                document.getElementById('auth-error-msg').classList.remove('hidden');
-            }
-        }
-
-        function toggleAdminPanel() {
-            const modal = document.getElementById('admin-modal');
-            modal.classList.toggle('hidden');
-            if (!modal.classList.contains('hidden')) {
-                renderAdminProducts(); loadSettingsForm();
+        function populateCategoryDatalist() {
+            const categories = [...new Set(products.map(p => p.category).filter(Boolean))];
+            const dl = document.getElementById('category-options');
+            if (dl) {
+                dl.innerHTML = categories.map(cat => `<option value="${cat}">`).join('');
             }
         }
 
@@ -1091,29 +1191,65 @@
             if (tabName === 'bloques') {
                 syncUIValuesToTempSections();
             }
+            if (tabName === 'nuevo') {
+                populateCategoryDatalist();
+            }
             document.querySelectorAll('.admin-tab-content').forEach(el => el.classList.add('hidden'));
             document.querySelectorAll('.admin-tab-btn').forEach(el => {
                 el.classList.remove('bg-gold', 'text-zinc-950'); el.classList.add('bg-zinc-800', 'text-zinc-300');
             });
             document.getElementById(`admin-tab-${tabName}`).classList.remove('hidden');
             const btn = document.getElementById(`tab-btn-${tabName}`);
-            btn.classList.remove('bg-zinc-800', 'text-zinc-300'); btn.classList.add('bg-gold', 'text-zinc-950');
+            if (btn) {
+                btn.classList.remove('bg-zinc-800', 'text-zinc-300'); 
+                btn.classList.add('bg-gold', 'text-zinc-950');
+            }
             if (tabName === 'bloques') {
                 renderAdminSectionsList();
             }
         }
+
+        async function handleAddNewProduct(e) {
+            e.preventDefault();
+            const mainImgUrl = document.getElementById('new-image-url').value.trim();
+
+            const textVal = document.getElementById('new-extra-urls-text') ? document.getElementById('new-extra-urls-text').value : '';
+            const pastedUrls = textVal.split(/[\n,]+/).map(u => u.trim()).filter(u => u.length > 0);
+            const combinedExtraImages = [...pastedUrls, ...(window.newExtraUrls || [])];
+
+            products.push({
+                id: Date.now(),
+                name: document.getElementById('new-name').value,
+                category: document.getElementById('new-category').value,
+                price: Number(document.getElementById('new-price').value),
+                image: mainImgUrl || "https://placehold.co/600x600/18181b/D4AF37?text=Perfume",
+                images: combinedExtraImages,
+                notes: document.getElementById('new-notes').value || ''
+            });
+            
+            window.newExtraUrls = [];
+            await saveCloudState();
+            await window.showCustomAlert("Producto creado exitosamente.");
+            document.getElementById('add-product-form').reset();
+            if (document.getElementById('new-extra-urls-text')) document.getElementById('new-extra-urls-text').value = '';
+            document.getElementById('new-extra-urls-preview').innerHTML = '';
+            document.getElementById('new-image-url').value = '';
+            renderAdminProducts(); renderSite(); switchAdminTab('productos');
+        }
+
+        window.renderNewExtraPreviews = renderNewExtraPreviews;
 
         function renderAdminProducts() {
             const list = document.getElementById('admin-product-list');
             if (!list) return;
 
             const searchInput = document.getElementById('admin-product-search');
-            const query = searchInput ? searchInput.value.toLowerCase().trim() : '';
+            const queryStr = searchInput ? searchInput.value.toLowerCase().trim() : '';
 
-            let filtered = products.filter(p => p.name.toLowerCase().includes(query) || (p.category && p.category.toLowerCase().includes(query)));
+            let filtered = products.filter(p => p.name.toLowerCase().includes(queryStr) || (p.category && p.category.toLowerCase().includes(queryStr)));
 
             if (filtered.length === 0) {
-                list.innerHTML = `<div class="py-8 text-center text-zinc-500 text-xs"><i class="fa-solid fa-magnifying-glass text-xl mb-2 text-zinc-700 block"></i>No se encontraron productos que coincidan con "${query}".</div>`;
+                list.innerHTML = `<div class="py-8 text-center text-zinc-500 text-xs"><i class="fa-solid fa-magnifying-glass text-xl mb-2 text-zinc-700 block"></i>No se encontraron productos que coincidan con "${queryStr}".</div>`;
                 return;
             }
 
@@ -1150,7 +1286,6 @@
             }).join('');
         }
 
-        /* Drag and Drop event handlers */
         function handleAdminDragStart(e, id) {
             draggedProductId = id;
             e.dataTransfer.effectAllowed = 'move';
@@ -1194,29 +1329,6 @@
             draggedProductId = null;
         }
 
-        async function handleAddNewProduct(e) {
-            e.preventDefault();
-            const mainImgUrl = document.getElementById('new-image-url').value;
-
-            products.push({
-                id: Date.now(),
-                name: document.getElementById('new-name').value,
-                category: document.getElementById('new-category').value,
-                price: Number(document.getElementById('new-price').value),
-                image: mainImgUrl || "https://placehold.co/600x600/18181b/D4AF37?text=Perfume",
-                images: window.newExtraUrls || [],
-                notes: document.getElementById('new-notes').value || ''
-            });
-            
-            window.newExtraUrls = [];
-            await saveCloudState();
-            await window.showCustomAlert("Producto creado exitosamente.");
-            document.getElementById('add-product-form').reset();
-            document.getElementById('new-extra-urls-preview').innerHTML = '';
-            document.getElementById('new-image-url').value = "https://placehold.co/600x600/18181b/D4AF37?text=Perfume";
-            renderAdminProducts(); renderSite(); switchAdminTab('productos');
-        }
-
         function openEditModal(id) {
             const p = products.find(prod => prod.id === id);
             if (!p) return;
@@ -1253,6 +1365,24 @@
 
         window.removeEditExtraImage = function(index) {
             window.editExtraUrls.splice(index, 1);
+            renderEditExtraThumbs();
+        };
+
+        window.handleEditImageFile = function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const objectUrl = URL.createObjectURL(file);
+                document.getElementById('edit-image-url').value = objectUrl;
+            }
+        };
+
+        window.handleEditExtraFiles = function(e) {
+            const files = e.target.files;
+            if (!window.editExtraUrls) window.editExtraUrls = [];
+            for (let i = 0; i < files.length; i++) {
+                const objectUrl = URL.createObjectURL(files[i]);
+                window.editExtraUrls.push(objectUrl);
+            }
             renderEditExtraThumbs();
         };
 
@@ -1350,6 +1480,7 @@
 
         function renderAdminSectionsList() {
             const list = document.getElementById('admin-sections-list');
+            if (!list) return;
             list.innerHTML = tempSections.map((sec, sIdx) => `
                 <div class="admin-sec-block bg-zinc-900 p-5 rounded-2xl border border-zinc-800 space-y-4">
                     <div class="flex justify-between items-center border-b border-zinc-800 pb-3">
@@ -1508,6 +1639,7 @@
             fileReader.readAsText(file, "UTF-8");
         }
 
+        // Global Event Bindings
         window.filterCategory = filterCategory;
         window.handleSearch = handleSearch;
         window.handleSort = handleSort;
@@ -1516,6 +1648,7 @@
         window.checkoutWhatsApp = checkoutWhatsApp;
         window.toggleCart = toggleCart;
         window.openProductDetail = openProductDetail;
+        window.updateModalImage = updateModalImage;
         window.closeProductDetail = closeProductDetail;
         window.openAdminAuth = openAdminAuth;
         window.closeAdminAuth = closeAdminAuth;
