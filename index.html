@@ -3,17 +3,49 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Black Perfumes</title>
+    <title>Black Perfumes | Perfumes árabes y de diseñador originales en CABA</title>
+    <meta name="description" content="Perfumes árabes y de diseñador 100% originales y sellados: Lattafa, Armaf, Rasasi, Al Haramain, Dior, Armani y más. Envíos a todo el país, retiro en Villa Urquiza (CABA) y pedidos por WhatsApp.">
+    <meta name="theme-color" content="#09090b">
+    <link rel="canonical" href="https://blackimportaciones.pages.dev/">
+    <link rel="icon" href="/favicon-64.png" type="image/png">
+    <link rel="apple-touch-icon" href="/icon-192.png">
+
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Black Perfumes">
+    <meta property="og:locale" content="es_AR">
+    <meta property="og:url" content="https://blackimportaciones.pages.dev/">
+    <meta property="og:title" content="Black Perfumes | Perfumes originales, sin gastar de más">
+    <meta property="og:description" content="Perfumes árabes y de diseñador originales y sellados. Envíos a todo el país y pedidos por WhatsApp.">
+    <meta property="og:image" content="https://blackimportaciones.pages.dev/og-image.jpg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta name="twitter:card" content="summary_large_image">
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Store",
+        "name": "Black Perfumes",
+        "description": "Perfumes árabes y de diseñador originales. Ventas mayoristas y minoristas por WhatsApp.",
+        "url": "https://blackimportaciones.pages.dev/",
+        "image": "https://blackimportaciones.pages.dev/og-image.jpg",
+        "telephone": "+54 9 11 2390-7762",
+        "address": { "@type": "PostalAddress", "addressLocality": "Villa Urquiza, Ciudad Autónoma de Buenos Aires", "addressCountry": "AR" },
+        "sameAs": ["https://instagram.com/black.perfumes1", "https://tiktok.com/@black.perfumes1", "https://www.facebook.com/profile.php?id=61585095980083"]
+    }
+    </script>
+
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
             theme: {
                 extend: {
                     colors: {
+                        // Formato rgb(... / alpha) para que funcionen clases como bg-gold/10 o border-gold/20.
                         gold: {
-                            DEFAULT: 'var(--color-gold)',
-                            light: 'var(--color-gold-light)',
-                            dark: 'var(--color-gold-dark)',
+                            DEFAULT: 'rgb(var(--gold-rgb) / <alpha-value>)',
+                            light: 'rgb(var(--gold-light-rgb) / <alpha-value>)',
+                            dark: 'rgb(var(--gold-dark-rgb) / <alpha-value>)',
                         }
                     }
                 }
@@ -27,94 +59,218 @@
             --color-gold: #D4AF37;
             --color-gold-light: #F3E5AB;
             --color-gold-dark: #AA8C2C;
+            --gold-rgb: 212 175 55;
+            --gold-light-rgb: 243 229 171;
+            --gold-dark-rgb: 170 140 44;
         }
         .font-sans-custom { font-family: 'Plus Jakarta Sans', sans-serif; }
         .font-serif-custom { font-family: 'Playfair Display', serif; }
         ::-webkit-scrollbar { width: 8px; }
         ::-webkit-scrollbar-track { background: #111; }
         ::-webkit-scrollbar-thumb { background: var(--color-gold); border-radius: 4px; }
+        .admin-input { width: 100%; background: #09090b; border: 1px solid #27272a; border-radius: .75rem; padding: .6rem 1rem; font-size: .875rem; color: #f4f4f5; outline: none; }
+        .admin-input:focus { border-color: var(--color-gold); }
+        .no-scrollbar { scrollbar-width: none; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .text-gold-gradient {
+            background: linear-gradient(90deg, var(--color-gold-light), var(--color-gold), var(--color-gold-dark));
+            -webkit-background-clip: text; background-clip: text; color: transparent;
+        }
+
+        /* Marco "de estudio" igual para todas las fotos de productos */
+        .product-frame {
+            position: relative; aspect-ratio: 1 / 1; overflow: hidden;
+            display: flex; align-items: center; justify-content: center; padding: 8%;
+            background: radial-gradient(120% 90% at 50% 35%, #ffffff 0%, #f4f4f5 62%, #e4e4e7 100%);
+        }
+        .product-frame img { width: 100%; height: 100%; object-fit: contain; mix-blend-mode: multiply; position: relative; z-index: 1; }
+        .product-frame::after {
+            content: ''; position: absolute; left: 18%; right: 18%; bottom: 5%; height: 7%;
+            background: radial-gradient(closest-side, rgba(0,0,0,.16), transparent); pointer-events: none;
+        }
+
+        /* Aparición al bajar */
+        .reveal { opacity: 0; transform: translateY(28px); transition: opacity .8s ease, transform .8s cubic-bezier(.2,.7,.2,1); }
+        .reveal.is-visible { opacity: 1; transform: none; }
+
+        /* Brillo dorado que cruza las tarjetas */
+        .shine { position: relative; overflow: hidden; isolation: isolate; }
+        .shine::after {
+            content: ''; position: absolute; inset: 0; z-index: 30; pointer-events: none;
+            background: linear-gradient(115deg, transparent 35%, rgba(243,229,171,.10) 45%, rgba(243,229,171,.28) 50%, rgba(243,229,171,.10) 55%, transparent 65%);
+            transform: translateX(-130%);
+        }
+        .shine:hover::after, .shine.is-touched::after { transform: translateX(130%); transition: transform 1s ease; }
+
+        /* Frascos flotando en la portada */
+        @keyframes float-bottle { 0%, 100% { transform: translateY(0) rotate(var(--tilt, 0deg)); } 50% { transform: translateY(-14px) rotate(var(--tilt, 0deg)); } }
+        .float-bottle { animation: float-bottle 6s ease-in-out infinite; }
+
+        /* Cinta de marcas */
+        @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+        .marquee-track { width: max-content; animation: marquee 45s linear infinite; }
+        .marquee:hover .marquee-track { animation-play-state: paused; }
+        .marquee { -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent); mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent); }
+
+        /* Pirámide olfativa */
+        @keyframes tier-in { from { opacity: 0; transform: translateY(14px) scale(.94); } to { opacity: 1; transform: none; } }
+        .pyramid-tier { animation: tier-in .6s cubic-bezier(.2,.7,.2,1) both; }
+
+        /* Carrito */
+        @keyframes bump { 0% { transform: scale(1); } 30% { transform: scale(1.35); } 60% { transform: scale(.9); } 100% { transform: scale(1); } }
+        .bump { animation: bump .5s ease; }
+        @keyframes cart-wiggle { 0%, 100% { transform: rotate(0); } 25% { transform: rotate(-10deg); } 50% { transform: rotate(8deg); } 75% { transform: rotate(-4deg); } }
+        .cart-wiggle { animation: cart-wiggle .5s ease; }
+        @keyframes toast-in { from { opacity: 0; transform: translate(-50%, 16px); } to { opacity: 1; transform: translate(-50%, 0); } }
+        .toast-in { animation: toast-in .3s ease forwards; }
+
+        /* Pantalla de carga */
+        #page-loader { transition: opacity .6s ease, visibility .6s ease; }
+        #page-loader.is-hidden { opacity: 0; visibility: hidden; }
+        @keyframes loader-pulse { 0%, 100% { transform: scale(1); filter: drop-shadow(0 0 0 rgba(212,175,55,0)); } 50% { transform: scale(1.06); filter: drop-shadow(0 0 24px rgba(212,175,55,.55)); } }
+        .loader-logo { animation: loader-pulse 1.6s ease-in-out infinite; }
+        @keyframes loader-shimmer { from { background-position: 200% 0; } to { background-position: -200% 0; } }
+        .loader-text {
+            background: linear-gradient(90deg, var(--color-gold-dark) 20%, var(--color-gold-light) 50%, var(--color-gold-dark) 80%);
+            background-size: 200% 100%; -webkit-background-clip: text; background-clip: text; color: transparent;
+            animation: loader-shimmer 2s linear infinite;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .reveal { opacity: 1; transform: none; transition: none; }
+            .float-bottle, .marquee-track, .loader-logo, .loader-text, .bump, .cart-wiggle, .pyramid-tier { animation: none; }
+            .shine::after { display: none; }
+        }
     </style>
 </head>
 <body class="bg-zinc-950 text-zinc-100 min-h-screen flex flex-col selection:bg-gold selection:text-zinc-950 font-sans-custom w-full">
 
+    <div id="page-loader" class="fixed inset-0 z-[200] bg-zinc-950 flex flex-col items-center justify-center gap-5" aria-hidden="true">
+        <img id="loader-logo-img" src="/logo.webp" alt="" class="loader-logo w-28 h-28 rounded-full object-cover">
+        <span class="loader-text font-serif-custom text-xl font-bold tracking-[0.35em] uppercase">Black Perfumes</span>
+    </div>
+    <script>
+        // Si algo tarda demasiado, la pantalla de carga se va igual.
+        setTimeout(() => document.getElementById('page-loader')?.classList.add('is-hidden'), 3500);
+    </script>
+
     <header class="sticky top-0 z-50 bg-zinc-950/90 backdrop-blur-md border-b border-gold/20">
-        <div id="header-container" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-24 flex items-center justify-between transition-all duration-300">
-            <div id="header-left" class="flex items-center space-x-3.5 transition-all shrink-0">
-                <div class="bg-gradient-to-tr from-gold-dark via-gold to-gold-light p-0.5 rounded-full overflow-hidden flex items-center justify-center shadow-xl shadow-gold/20">
+        <div id="header-container" class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 h-20 sm:h-24 flex items-center justify-between gap-2 transition-all duration-300">
+            <div id="header-left" class="flex items-center gap-2 sm:gap-3.5 transition-all min-w-0">
+                <div class="bg-gradient-to-tr from-gold-dark via-gold to-gold-light p-0.5 rounded-full overflow-hidden flex items-center justify-center shadow-xl shadow-gold/20 shrink-0">
                     <div class="bg-zinc-950 p-1 rounded-full flex items-center justify-center">
-                        <img id="brand-logo-img" src="" alt="Logo" class="h-16 w-16 sm:h-20 sm:w-20 object-cover rounded-full">
+                        <img id="brand-logo-img" src="" alt="Logo" class="h-11 w-11 sm:h-20 sm:w-20 object-cover rounded-full">
                     </div>
                 </div>
-                <div class="border border-gold/40 px-4 py-2.5 rounded-xl bg-zinc-900/50 shadow-inner">
-                    <span id="brand-title" class="font-serif-custom font-bold text-lg sm:text-2xl tracking-wider text-transparent bg-clip-text bg-gradient-to-r from-gold-light via-gold to-gold-dark uppercase block leading-tight">Black Perfumes</span>
-                    <span class="text-[10px] uppercase tracking-widest text-zinc-400 font-semibold block">Importados Originales</span>
+                <div class="max-[359px]:hidden border border-gold/40 px-2.5 py-1.5 sm:px-4 sm:py-2.5 rounded-xl bg-zinc-900/50 shadow-inner min-w-0">
+                    <span id="brand-title" class="font-serif-custom font-bold text-sm sm:text-2xl tracking-wide sm:tracking-wider whitespace-nowrap text-transparent bg-clip-text bg-gradient-to-r from-gold-light via-gold to-gold-dark uppercase block leading-tight">Black Perfumes</span>
+                    <span class="text-[8px] sm:text-[10px] uppercase tracking-widest text-zinc-400 font-semibold block whitespace-nowrap">Importados Originales</span>
                 </div>
             </div>
 
-            <nav id="header-nav" class="hidden lg:flex items-center justify-center gap-1.5 text-sm font-medium tracking-wide transition-all mx-4">
+            <nav id="header-nav" class="hidden xl:flex items-center justify-center gap-1.5 text-sm font-medium tracking-wide transition-all mx-4">
                 <a href="#catalogo" class="bg-gold text-zinc-950 px-4 py-2 rounded-full hover:bg-gold-light transition-all whitespace-nowrap font-bold shadow-sm shadow-gold/25">Catálogo</a>
                 <a href="#bloque-garantia" class="text-zinc-300 hover:text-gold hover:bg-zinc-900/80 px-4 py-2 rounded-full transition-all whitespace-nowrap">Garantía</a>
                 <a href="#bloque-pagos" class="text-zinc-300 hover:text-gold hover:bg-zinc-900/80 px-4 py-2 rounded-full transition-all whitespace-nowrap">Formas de pago</a>
                 <a href="#bloque-envios" class="text-zinc-300 hover:text-gold hover:bg-zinc-900/80 px-4 py-2 rounded-full transition-all whitespace-nowrap">Envíos</a>
-                <a href="#contacto" class="text-zinc-300 hover:text-gold hover:bg-zinc-900/80 px-4 py-2 rounded-full transition-all whitespace-nowrap">Contacto</a>
                 <a href="#bloque-revendedores" class="text-zinc-300 hover:text-gold hover:bg-zinc-900/80 px-4 py-2 rounded-full transition-all whitespace-nowrap">Revendedores</a>
+                <a href="#contacto" class="text-zinc-300 hover:text-gold hover:bg-zinc-900/80 px-4 py-2 rounded-full transition-all whitespace-nowrap">Contacto</a>
             </nav>
 
-            <div id="header-right" class="flex items-center space-x-4 transition-all shrink-0">
-                <button onclick="toggleCart()" class="relative bg-gold hover:bg-gold-light text-zinc-950 px-5 py-2.5 rounded-xl font-bold transition-all flex items-center gap-2.5 shadow-lg shadow-gold/20 cursor-pointer">
+            <div id="header-right" class="flex items-center gap-2 sm:gap-3 transition-all shrink-0">
+                <button id="cart-btn" onclick="toggleCart()" class="relative bg-gold hover:bg-gold-light text-zinc-950 px-4 sm:px-5 py-2.5 rounded-xl font-bold transition-all flex items-center gap-2.5 shadow-lg shadow-gold/20 cursor-pointer" aria-label="Abrir carrito">
                     <i class="fa-solid fa-bag-shopping"></i>
                     <span class="hidden sm:inline">Carrito</span>
                     <span id="cart-counter" class="absolute -top-2 -right-2 bg-zinc-100 text-zinc-950 text-xs font-bold w-5 h-5 rounded-full flex items-center justify-center border border-gold">0</span>
                 </button>
+                <button id="mobile-menu-btn" onclick="toggleMobileMenu()" class="xl:hidden bg-zinc-900 border border-zinc-800 hover:border-gold/50 text-zinc-200 w-10 h-10 sm:w-11 sm:h-11 rounded-xl flex items-center justify-center cursor-pointer" aria-label="Abrir menú" aria-expanded="false" aria-controls="mobile-menu">
+                    <i class="fa-solid fa-bars text-lg"></i>
+                </button>
             </div>
         </div>
+        <nav id="mobile-menu" class="xl:hidden hidden border-t border-zinc-800 bg-zinc-950/95 px-4 py-3">
+            <div class="max-w-7xl mx-auto grid grid-cols-2 gap-2 text-sm font-medium">
+                <a href="#catalogo" onclick="toggleMobileMenu(false)" class="bg-gold text-zinc-950 font-bold px-4 py-3 rounded-xl text-center">Catálogo</a>
+                <a href="#bloque-garantia" onclick="toggleMobileMenu(false)" class="bg-zinc-900 text-zinc-200 px-4 py-3 rounded-xl text-center">Garantía</a>
+                <a href="#bloque-pagos" onclick="toggleMobileMenu(false)" class="bg-zinc-900 text-zinc-200 px-4 py-3 rounded-xl text-center">Formas de pago</a>
+                <a href="#bloque-envios" onclick="toggleMobileMenu(false)" class="bg-zinc-900 text-zinc-200 px-4 py-3 rounded-xl text-center">Envíos</a>
+                <a href="#bloque-revendedores" onclick="toggleMobileMenu(false)" class="bg-zinc-900 text-zinc-200 px-4 py-3 rounded-xl text-center">Revendedores</a>
+                <a href="#contacto" onclick="toggleMobileMenu(false)" class="bg-zinc-900 text-zinc-200 px-4 py-3 rounded-xl text-center">Contacto</a>
+            </div>
+        </nav>
     </header>
 
-    <section class="relative bg-zinc-950 border-b border-gold/20 py-24 md:py-32 overflow-hidden flex flex-col items-center justify-center min-h-[60vh]">
-        <div class="absolute inset-0 opacity-10 bg-[radial-gradient(var(--color-gold)_1px,transparent_1px)] [background-size:24px_24px]"></div>
-        <div class="absolute inset-0 bg-gradient-to-b from-zinc-950 via-transparent to-zinc-950"></div>
-        
-        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center space-y-8">
-            <div id="hero-text-container" class="space-y-6">
-                <h1 id="hero-heading" class="font-serif-custom text-4xl sm:text-6xl md:text-7xl font-bold tracking-tight text-zinc-100 leading-tight drop-shadow-2xl">
+    <section id="inicio" class="relative bg-zinc-950 overflow-hidden">
+        <canvas id="hero-sparkles" class="absolute inset-0 w-full h-full pointer-events-none" aria-hidden="true"></canvas>
+        <div class="absolute -top-48 left-1/2 -translate-x-1/2 w-[720px] h-[720px] max-w-[150vw] rounded-full bg-gold/10 blur-3xl pointer-events-none"></div>
+        <div class="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-zinc-950 pointer-events-none"></div>
+
+        <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 pb-8 md:pt-20 md:pb-16 grid lg:grid-cols-2 gap-6 lg:gap-12 items-center">
+            <div id="hero-text-container" class="text-center lg:text-left space-y-5 md:space-y-7">
+                <div class="reveal inline-flex items-center gap-2 bg-zinc-900/85 backdrop-blur-sm px-4 py-2 rounded-full border border-gold/25 text-xs sm:text-sm text-zinc-300 font-medium">
+                    <i class="fa-solid fa-location-dot text-gold"></i> <span id="hero-badge-text">Villa Urquiza, CABA · Envíos a todo el país</span>
+                </div>
+                <h1 id="hero-heading" class="reveal font-serif-custom text-4xl sm:text-6xl lg:text-5xl xl:text-6xl font-bold tracking-tight text-zinc-100 leading-tight drop-shadow-2xl">
                     Perfumes originales, <br/>
                     <span class="text-transparent bg-clip-text bg-gradient-to-r from-gold-light via-gold to-gold-dark italic">sin gastar de más</span>
                 </h1>
-                
-                <div id="hero-subtext" class="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6 text-zinc-300 text-base md:text-lg font-medium tracking-wide">
-                    <div class="flex items-center gap-2 bg-zinc-900/85 backdrop-blur-sm px-5 py-2.5 rounded-full border border-zinc-800 shadow-lg">
-                        <i class="fa-solid fa-users text-gold"></i>
-                        <span>+100 clientes</span>
-                    </div>
-                    <div class="hidden sm:block w-1.5 h-1.5 rounded-full bg-gold"></div>
-                    <div class="flex items-center gap-2 bg-zinc-900/85 backdrop-blur-sm px-5 py-2.5 rounded-full border border-zinc-800 shadow-lg">
-                        <i class="fa-solid fa-location-dot text-gold"></i>
-                        <span>Villa Urquiza, CABA</span>
-                    </div>
+                <p id="hero-text" class="reveal text-zinc-400 text-base md:text-lg max-w-xl mx-auto lg:mx-0 leading-relaxed">
+                    Fragancias árabes y de diseñador, nuevas y selladas. Elegí las tuyas, mandanos el pedido por WhatsApp y te lo llevamos.
+                </p>
+
+                <div id="hero-buttons-container" class="reveal flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center lg:justify-start pt-1">
+                    <a id="hero-catalog-btn" href="#catalogo" class="bg-gradient-to-r from-gold to-gold-dark hover:from-gold-light hover:to-gold text-zinc-950 font-bold px-6 sm:px-8 py-4 rounded-full shadow-xl shadow-gold/25 transition-all transform hover:-translate-y-1 text-base sm:text-lg flex items-center justify-center gap-2 whitespace-nowrap">
+                        <i class="fa-solid fa-book-open"></i> Ver Catálogo Completo
+                    </a>
+                    <a id="hero-whatsapp-btn" href="#" target="_blank" class="bg-zinc-900/85 backdrop-blur-md border border-zinc-700 hover:border-gold hover:bg-zinc-800 text-zinc-100 font-semibold px-6 sm:px-8 py-4 rounded-full transition-all flex items-center justify-center gap-3 text-base sm:text-lg group whitespace-nowrap">
+                        <i class="fa-brands fa-whatsapp text-green-500 text-2xl group-hover:scale-110 transition-transform"></i> Hablar por WhatsApp
+                    </a>
                 </div>
             </div>
 
-            <div id="hero-buttons-container" class="flex flex-col sm:flex-row gap-4 justify-center pt-8">
-                <a id="hero-catalog-btn" href="#catalogo" class="bg-gradient-to-r from-gold to-gold-dark hover:from-gold-light hover:to-gold text-zinc-950 font-bold px-10 py-4 rounded-full shadow-xl shadow-gold/25 transition-all transform hover:-translate-y-1 text-lg flex items-center justify-center gap-2">
-                    <i class="fa-solid fa-book-open"></i> Ver Catálogo Completo
-                </a>
-                <a id="hero-whatsapp-btn" href="#" target="_blank" class="bg-zinc-900/85 backdrop-blur-md border border-zinc-700 hover:border-gold hover:bg-zinc-800 text-zinc-100 font-semibold px-10 py-4 rounded-full transition-all flex items-center justify-center gap-3 text-lg group">
-                    <i class="fa-brands fa-whatsapp text-green-500 text-2xl group-hover:scale-110 transition-transform"></i> Hablar por WhatsApp
-                </a>
+            <div id="hero-bottles" class="relative h-56 sm:h-80 lg:h-[440px]" aria-label="Perfumes destacados"></div>
+        </div>
+
+        <div id="stats-bar" class="relative z-10 border-t border-gold/15 bg-zinc-950/70 backdrop-blur-sm">
+            <div id="hero-stats" class="max-w-5xl mx-auto px-4 py-5 md:py-7 grid grid-cols-2 md:grid-cols-4 gap-y-5 gap-x-4 text-center"></div>
+        </div>
+    </section>
+
+    <section id="brand-marquee-section" class="border-y border-gold/20 bg-zinc-900/40 py-4 md:py-5" aria-label="Marcas">
+        <div class="marquee overflow-hidden">
+            <div id="brand-marquee" class="marquee-track flex items-center gap-8 md:gap-14"></div>
+        </div>
+    </section>
+
+    <section id="destacados" class="hidden max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 pt-12 md:pt-20 w-full">
+        <div class="reveal flex items-end justify-between gap-4 mb-6 md:mb-8">
+            <div>
+                <span class="text-xs font-bold uppercase tracking-widest text-gold bg-gold/10 px-3.5 py-1.5 rounded-full border border-gold/20" id="featured-badge">Los favoritos</span>
+                <h2 class="font-serif-custom text-3xl md:text-4xl font-bold text-zinc-100 mt-3" id="featured-title">Más vendidos</h2>
+            </div>
+            <div class="hidden sm:flex gap-2">
+                <button onclick="scrollFeatured(-1)" class="w-11 h-11 rounded-full bg-zinc-900 border border-zinc-800 hover:border-gold hover:text-gold text-zinc-300 transition-all cursor-pointer" aria-label="Anteriores"><i class="fa-solid fa-chevron-left"></i></button>
+                <button onclick="scrollFeatured(1)" class="w-11 h-11 rounded-full bg-zinc-900 border border-zinc-800 hover:border-gold hover:text-gold text-zinc-300 transition-all cursor-pointer" aria-label="Siguientes"><i class="fa-solid fa-chevron-right"></i></button>
             </div>
         </div>
+        <div id="featured-track" class="flex gap-3 sm:gap-6 overflow-x-auto snap-x snap-mandatory no-scrollbar pb-2 -mx-3 px-3 scroll-px-3 sm:mx-0 sm:px-0 sm:scroll-px-0 scroll-smooth"></div>
     </section>
 
-    <section class="bg-zinc-950 py-16 space-y-20 border-b border-zinc-900">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div id="info-blocks-container" class="space-y-24"></div>
+    <main id="catalogo" class="flex-grow max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-12 md:py-20 w-full scroll-mt-24">
+        <div class="reveal text-center mb-10">
+            <span class="text-xs font-bold uppercase tracking-widest text-gold bg-gold/10 px-3.5 py-1.5 rounded-full border border-gold/20" id="catalog-badge">Nuestra Tienda</span>
+            <h2 class="font-serif-custom text-3xl md:text-4xl font-bold text-zinc-100 mt-3" id="catalog-title">Catálogo de Fragancias</h2>
         </div>
-    </section>
 
-    <main id="catalogo" class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 w-full scroll-mt-24">
-        <div class="text-center mb-10">
-            <span class="text-xs font-bold uppercase tracking-widest text-gold bg-gold/10 px-3.5 py-1.5 rounded-full border border-gold/20">Nuestra Tienda</span>
-            <h2 class="font-serif-custom text-3xl md:text-4xl font-bold text-zinc-100 mt-3">Catálogo de Fragancias</h2>
+        <div class="mb-6">
+            <div class="flex items-start gap-3">
+                <span class="hidden sm:inline text-[11px] uppercase tracking-widest text-zinc-500 font-semibold shrink-0 pt-2.5">Marca</span>
+                <div class="relative min-w-0 flex-1">
+                    <!-- En celular las marcas se deslizan de costado; en pantallas grandes se muestran todas. -->
+                    <div id="brand-filters" class="flex gap-2 overflow-x-auto no-scrollbar pb-1 -mx-3 px-3 pr-10 sm:mx-0 sm:px-0 sm:flex-wrap sm:overflow-visible"></div>
+                    <div class="sm:hidden pointer-events-none absolute top-0 -right-3 bottom-1 w-12 bg-gradient-to-l from-zinc-950 to-transparent"></div>
+                </div>
+            </div>
         </div>
 
         <div class="flex flex-col md:flex-row justify-between items-center gap-6 mb-10 pb-6 border-b border-zinc-800">
@@ -133,8 +289,14 @@
             </div>
         </div>
 
-        <div id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"></div>
+        <div id="product-grid" class="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-6"></div>
     </main>
+
+    <section class="bg-zinc-950 py-16 border-t border-zinc-900">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div id="info-blocks-container" class="space-y-16 md:space-y-24"></div>
+        </div>
+    </section>
 
     <div id="product-detail-modal" class="fixed inset-0 z-50 overflow-y-auto hidden">
         <div class="fixed inset-0 bg-zinc-950/85 backdrop-blur-md transition-opacity" onclick="closeProductDetail()"></div>
@@ -148,15 +310,31 @@
         </div>
     </div>
 
+    <div id="lightbox" class="hidden fixed inset-0 z-[120] bg-zinc-950/95 backdrop-blur-sm flex flex-col" role="dialog" aria-label="Foto ampliada">
+        <div class="flex items-center justify-between px-4 py-3 shrink-0">
+            <span id="lightbox-counter" class="text-gold text-sm font-bold"></span>
+            <span class="text-xs text-zinc-400 hidden sm:inline">Clic en la foto para acercar o alejar</span>
+            <span class="text-xs text-zinc-400 sm:hidden">Tocá la foto para acercar</span>
+            <button onclick="closeLightbox()" class="text-zinc-300 hover:text-zinc-100 bg-zinc-800 w-11 h-11 rounded-xl cursor-pointer" aria-label="Cerrar"><i class="fa-solid fa-xmark text-xl"></i></button>
+        </div>
+        <div id="lightbox-stage" class="relative flex-1 min-h-0 overflow-auto flex p-2 sm:p-6">
+            <img id="lightbox-img" src="" alt="Foto ampliada del producto" onclick="toggleLightboxZoom(event)" class="m-auto max-w-full max-h-full object-contain rounded-xl bg-white cursor-zoom-in select-none">
+        </div>
+        <div class="flex items-center justify-center gap-4 py-4 shrink-0">
+            <button onclick="lightboxStep(-1)" class="lightbox-nav w-12 h-12 rounded-full bg-zinc-900 border border-gold/40 text-zinc-100 hover:bg-gold hover:text-zinc-950 transition-all cursor-pointer" aria-label="Foto anterior"><i class="fa-solid fa-chevron-left"></i></button>
+            <button onclick="lightboxStep(1)" class="lightbox-nav w-12 h-12 rounded-full bg-zinc-900 border border-gold/40 text-zinc-100 hover:bg-gold hover:text-zinc-950 transition-all cursor-pointer" aria-label="Foto siguiente"><i class="fa-solid fa-chevron-right"></i></button>
+        </div>
+    </div>
+
     <section id="contacto" class="bg-zinc-900/30 border-t border-zinc-800/80 py-20 scroll-mt-24">
         <div class="max-w-4xl mx-auto px-4 text-center">
-            <span class="text-xs font-bold uppercase tracking-widest text-gold bg-gold/10 px-3.5 py-1.5 rounded-full border border-gold/20">Atención Directa</span>
-            <h2 class="font-serif-custom text-3xl md:text-4xl font-bold text-zinc-100 mt-3 mb-8">Contacto y Redes Sociales</h2>
+            <span class="text-xs font-bold uppercase tracking-widest text-gold bg-gold/10 px-3.5 py-1.5 rounded-full border border-gold/20" id="contact-badge">Atención Directa</span>
+            <h2 class="font-serif-custom text-3xl md:text-4xl font-bold text-zinc-100 mt-3 mb-8" id="contact-title">Contacto y Redes Sociales</h2>
             
             <div id="social-icons-container" class="flex justify-center gap-6 mb-10"></div>
 
             <a id="footer-whatsapp-btn" href="#" target="_blank" class="inline-flex items-center justify-center gap-3 bg-green-500 hover:bg-green-600 text-white font-bold py-4 px-8 rounded-2xl shadow-xl shadow-green-500/20 transition-transform transform hover:-translate-y-1 text-lg w-full sm:w-auto">
-                <i class="fa-brands fa-whatsapp text-3xl"></i> Envianos mensaje por WhatsApp
+                <i class="fa-brands fa-whatsapp text-3xl"></i> <span id="contact-button-text">Envianos mensaje por WhatsApp</span>
             </a>
         </div>
     </section>
@@ -168,7 +346,7 @@
 
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
             <p>&copy; <span id="footer-year">2026</span> <span id="footer-brand">Black Perfumes</span>. Todos los derechos reservados.</p>
-            <p class="text-gold">Ventas Mayoristas y Minoristas por WhatsApp</p>
+            <p class="text-gold" id="footer-text">Ventas Mayoristas y Minoristas por WhatsApp</p>
         </div>
     </footer>
 
@@ -197,6 +375,12 @@
         </div>
     </div>
 
+    <div id="cart-toast" class="hidden fixed bottom-24 left-1/2 -translate-x-1/2 z-[60] w-[calc(100%-2rem)] max-w-md bg-zinc-900/95 backdrop-blur-md border border-gold/40 rounded-2xl shadow-2xl shadow-black/60 px-4 py-3 flex items-center gap-3" role="status" aria-live="polite">
+        <span class="w-8 h-8 shrink-0 rounded-full bg-emerald-400 text-zinc-950 flex items-center justify-center"><i class="fa-solid fa-check"></i></span>
+        <span id="cart-toast-text" class="text-sm text-zinc-200 flex-grow min-w-0 truncate"></span>
+        <button onclick="document.getElementById('cart-toast').classList.add('hidden'); toggleCart();" class="shrink-0 text-xs font-bold text-zinc-950 bg-gold hover:bg-gold-light px-3 py-2 rounded-xl cursor-pointer">Ver carrito</button>
+    </div>
+
     <a id="floating-whatsapp-btn" href="#" target="_blank" class="fixed bottom-6 right-6 z-40 bg-green-500 hover:bg-green-600 text-white w-14 h-14 rounded-full flex items-center justify-center shadow-2xl shadow-green-500/30 transition-transform transform hover:scale-110" title="Contactar por WhatsApp">
         <i class="fa-brands fa-whatsapp text-3xl"></i>
     </a>
@@ -211,12 +395,16 @@
                 </div>
                 <form onsubmit="handleAdminLogin(event)" class="space-y-4">
                     <div>
-                        <label class="block text-xs font-medium text-zinc-400 mb-1">Contraseña de Administrador</label>
-                        <input type="password" id="admin-password-input" required placeholder="Ingresá la clave..." class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-4 py-3 text-sm focus:border-gold outline-none text-zinc-100">
-                        <p id="auth-error-msg" class="text-red-400 text-xs mt-1 hidden">Contraseña incorrecta.</p>
+                        <label for="admin-email-input" class="block text-xs font-medium text-zinc-400 mb-1">Correo de Administrador</label>
+                        <input type="email" id="admin-email-input" required autocomplete="username" placeholder="tu-correo@ejemplo.com" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-4 py-3 text-sm focus:border-gold outline-none text-zinc-100">
+                    </div>
+                    <div>
+                        <label for="admin-password-input" class="block text-xs font-medium text-zinc-400 mb-1">Contraseña</label>
+                        <input type="password" id="admin-password-input" required autocomplete="current-password" placeholder="Ingresá la clave..." class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-4 py-3 text-sm focus:border-gold outline-none text-zinc-100">
+                        <p id="auth-error-msg" class="text-red-400 text-xs mt-1 hidden">Correo o contraseña incorrectos.</p>
                     </div>
                     <div class="pt-2">
-                        <button type="submit" class="w-full bg-gold hover:bg-gold-light text-zinc-950 font-bold py-3.5 rounded-xl transition-all shadow-lg shadow-gold/20 cursor-pointer">Ingresar al Panel</button>
+                        <button type="submit" id="admin-login-btn" class="w-full bg-gold hover:bg-gold-light text-zinc-950 font-bold py-3.5 rounded-xl transition-all shadow-lg shadow-gold/20 cursor-pointer disabled:opacity-60">Ingresar al Panel</button>
                     </div>
                 </form>
             </div>
@@ -243,6 +431,7 @@
                                 <span id="live-visitors-count" class="font-bold text-gold text-base">1</span>
                             </div>
                         </div>
+                        <button onclick="handleAdminLogout()" class="text-zinc-300 hover:text-zinc-100 bg-zinc-800 hover:bg-zinc-700 px-3 py-2.5 rounded-xl transition-all cursor-pointer text-xs font-semibold" title="Cerrar sesión"><i class="fa-solid fa-right-from-bracket"></i> Salir</button>
                         <button onclick="toggleAdminPanel()" class="text-zinc-400 hover:text-zinc-100 bg-zinc-800 p-2.5 rounded-xl transition-all cursor-pointer"><i class="fa-solid fa-xmark text-lg"></i></button>
                     </div>
                 </div>
@@ -251,7 +440,9 @@
                     <button onclick="switchAdminTab('productos')" id="tab-btn-productos" class="admin-tab-btn px-4 py-2 rounded-xl text-sm font-semibold bg-gold text-zinc-950 transition-all cursor-pointer">Productos</button>
                     <button onclick="switchAdminTab('nuevo')" id="tab-btn-nuevo" class="admin-tab-btn px-4 py-2 rounded-xl text-sm font-semibold bg-zinc-800 text-zinc-300 hover:text-zinc-100 transition-all cursor-pointer">Nuevo Prod.</button>
                     <button onclick="switchAdminTab('apariencia')" id="tab-btn-apariencia" class="admin-tab-btn px-4 py-2 rounded-xl text-sm font-semibold bg-zinc-800 text-zinc-300 hover:text-zinc-100 transition-all cursor-pointer">Logo & Estilos</button>
+                    <button onclick="switchAdminTab('fotos')" id="tab-btn-fotos" class="admin-tab-btn px-4 py-2 rounded-xl text-sm font-semibold bg-zinc-800 text-zinc-300 hover:text-zinc-100 transition-all cursor-pointer"><i class="fa-solid fa-images"></i> Fotos</button>
                     <button onclick="switchAdminTab('textos')" id="tab-btn-textos" class="admin-tab-btn px-4 py-2 rounded-xl text-sm font-semibold bg-zinc-800 text-zinc-300 hover:text-zinc-100 transition-all cursor-pointer">Textos</button>
+                    <button onclick="switchAdminTab('portada')" id="tab-btn-portada" class="admin-tab-btn px-4 py-2 rounded-xl text-sm font-semibold bg-zinc-800 text-zinc-300 hover:text-zinc-100 transition-all cursor-pointer">Portada y Secciones</button>
                     <button onclick="switchAdminTab('bloques')" id="tab-btn-bloques" class="admin-tab-btn px-4 py-2 rounded-xl text-sm font-semibold bg-zinc-800 text-zinc-300 hover:text-zinc-100 transition-all cursor-pointer">Secciones</button>
                     <button onclick="switchAdminTab('respaldo')" id="tab-btn-respaldo" class="admin-tab-btn px-4 py-2 rounded-xl text-sm font-semibold bg-zinc-800 text-zinc-300 hover:text-zinc-100 transition-all cursor-pointer"><i class="fa-solid fa-database"></i> Respaldo</button>
                     <button onclick="switchAdminTab('redes')" id="tab-btn-redes" class="admin-tab-btn px-4 py-2 rounded-xl text-sm font-semibold bg-zinc-800 text-zinc-300 hover:text-zinc-100 transition-all cursor-pointer">Redes</button>
@@ -265,7 +456,6 @@
                             <input type="text" id="admin-product-search" oninput="renderAdminProducts()" placeholder="Buscar producto por nombre en el panel..." class="w-full bg-zinc-900 border border-zinc-800 focus:border-gold text-zinc-100 px-4 py-2 pl-9 rounded-xl text-xs outline-none transition-all">
                             <i class="fa-solid fa-magnifying-glass absolute left-3 top-2.5 text-zinc-500 text-xs"></i>
                         </div>
-                        <button onclick="resetDefaultData()" class="text-xs text-red-400 hover:underline cursor-pointer shrink-0"><i class="fa-solid fa-rotate-right"></i> Restaurar fábrica</button>
                     </div>
                     <p class="text-[11px] text-zinc-400 flex items-center gap-1.5"><i class="fa-solid fa-hand text-gold"></i> <span>Arrastrá los productos desde el ícono de agarre para reordenarlos libremente.</span></p>
                     <div id="admin-product-list" class="space-y-3"></div>
@@ -288,17 +478,36 @@
                             <label class="block text-xs font-medium text-zinc-400 mb-1">Precio ($ ARS)</label>
                             <input type="number" id="new-price" required class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-4 py-2.5 text-sm focus:border-gold outline-none text-zinc-100">
                         </div>
+                        <div class="sm:col-span-2 space-y-2">
+                            <label class="block text-xs font-medium text-zinc-400">Fotos del producto <span class="text-zinc-500">· la primera es la principal · arrastralas o usá las flechas para ordenarlas</span></label>
+                            <div id="new-photos" ondragover="event.preventDefault()" ondrop="photoBoxDrop(event, 'new')" class="flex flex-wrap gap-3 min-h-[7.5rem] bg-zinc-950 border border-dashed border-zinc-700 rounded-xl p-3"></div>
+                            <div class="flex flex-col sm:flex-row gap-2">
+                                <input type="text" id="new-photo-url" placeholder="Pegá el link de una foto (o varios separados por coma)" class="admin-input !py-2 !text-xs" onkeydown="if (event.key === 'Enter') { event.preventDefault(); addPhotoUrls('new'); }">
+                                <button type="button" onclick="addPhotoUrls('new')" class="shrink-0 bg-zinc-800 hover:bg-zinc-700 text-zinc-100 text-xs font-semibold px-4 py-2 rounded-xl cursor-pointer"><i class="fa-solid fa-link"></i> Agregar link</button>
+                                <label class="shrink-0 bg-gold hover:bg-gold-light text-zinc-950 text-xs font-bold px-4 py-2 rounded-xl cursor-pointer text-center">
+                                    <i class="fa-solid fa-cloud-arrow-up"></i> Subir fotos
+                                    <input type="file" accept="image/*" multiple class="hidden" onchange="addPhotoFiles('new', this.files); this.value = '';">
+                                </label>
+                            </div>
+                            <p id="new-photo-status" class="text-[11px] text-zinc-500"></p>
+                        </div>
                         <div>
-                            <label class="block text-xs font-medium text-zinc-400 mb-1">Foto Principal (Pegar URL o Subir Archivo)</label>
-                            <input type="url" id="new-image-url" placeholder="https://ejemplo.com/imagen.jpg" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-4 py-2 text-xs focus:border-gold outline-none text-zinc-100 mb-2">
-                            <input type="file" id="new-image-file" accept="image/*" onchange="handleNewImageFile(event)" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-4 py-2 text-xs text-zinc-400 focus:border-gold outline-none file:mr-4 file:py-1 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-gold file:text-zinc-950 cursor-pointer">
+                            <label class="block text-xs font-medium text-zinc-400 mb-1">Marca (si la dejás vacía se detecta por el nombre)</label>
+                            <input type="text" id="new-brand" list="brand-options" placeholder="Ej: Lattafa" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-4 py-2.5 text-sm focus:border-gold outline-none text-zinc-100">
                         </div>
-                        <div class="sm:col-span-2">
-                            <label class="block text-xs font-medium text-zinc-400 mb-1">Fotos Adicionales (Pegar URLs separadas por comas/líneas o Subir Archivos)</label>
-                            <textarea id="new-extra-urls-text" rows="2" placeholder="https://ejemplo.com/foto1.jpg, https://ejemplo.com/foto2.jpg" oninput="renderNewExtraPreviews()" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-4 py-2 text-xs focus:border-gold outline-none text-zinc-100 mb-2"></textarea>
-                            <input type="file" id="new-extra-files" accept="image/*" multiple onchange="handleNewExtraFiles(event)" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-4 py-2 text-xs text-zinc-400 focus:border-gold outline-none file:mr-4 file:py-1 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-zinc-800 file:text-zinc-300 cursor-pointer">
-                            <div id="new-extra-urls-preview" class="flex flex-wrap gap-2 mt-2"></div>
+                        <div>
+                            <label class="block text-xs font-medium text-zinc-400 mb-1">Etiqueta</label>
+                            <select id="new-badge" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-4 py-2.5 text-sm focus:border-gold outline-none text-zinc-100 cursor-pointer"><option value="">Sin etiqueta</option><option>Nuevo</option><option>Más vendido</option><option>Oferta</option><option>Unisex</option><option>Últimas unidades</option></select>
                         </div>
+                        <div>
+                            <label class="block text-xs font-medium text-zinc-400 mb-1">Precio anterior (opcional, se muestra tachado)</label>
+                            <input type="number" id="new-old-price" min="0" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-4 py-2.5 text-sm focus:border-gold outline-none text-zinc-100">
+                        </div>
+                        <label class="flex items-center gap-3 bg-zinc-950 border border-zinc-800 rounded-xl px-4 py-2.5 cursor-pointer self-end">
+                            <input type="checkbox" id="new-featured" class="w-4 h-4 accent-[#D4AF37]">
+                            <span class="text-sm text-zinc-200"><i class="fa-solid fa-star text-gold"></i> Mostrar en “Más vendidos”</span>
+                        </label>
+                        <datalist id="brand-options"></datalist>
                         <div class="sm:col-span-2">
                             <label class="block text-xs font-medium text-zinc-400 mb-1">Notas Olfativas / Descripción</label>
                             <input type="text" id="new-notes" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-4 py-2.5 text-sm focus:border-gold outline-none text-zinc-100">
@@ -346,16 +555,140 @@
                             <label class="block text-xs font-medium text-zinc-400 mb-1">WhatsApp de Ventas (Ej: 5491100000000)</label>
                             <input type="text" id="setting-whatsapp" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-4 py-2.5 text-sm text-zinc-100 focus:border-gold outline-none">
                         </div>
-                        <div class="sm:col-span-2">
-                            <label class="block text-xs font-medium text-zinc-400 mb-1">Título Principal (Pantalla Inicio)</label>
-                            <input type="text" id="setting-hero-title" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-4 py-2.5 text-sm text-zinc-100 focus:border-gold outline-none">
-                        </div>
-                        <div class="sm:col-span-2">
-                            <label class="block text-xs font-medium text-zinc-400 mb-1">Subtítulo (Badges de clientes y ubicación)</label>
-                            <input type="text" id="setting-hero-sub" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-4 py-2.5 text-sm text-zinc-100 focus:border-gold outline-none">
-                        </div>
+                        <p class="sm:col-span-2 text-xs text-zinc-500"><i class="fa-solid fa-circle-info text-gold"></i> El título de la portada y el resto de los textos de la página se editan en la pestaña <b>Portada y Secciones</b>.</p>
                     </div>
                     <button onclick="saveSiteSettings()" class="w-full bg-gold hover:bg-gold-light text-zinc-950 font-bold py-3 rounded-xl transition-all shadow-lg shadow-gold/20 cursor-pointer">Guardar Textos</button>
+                </div>
+
+                <div id="admin-tab-portada" class="admin-tab-content space-y-6 max-h-[65vh] overflow-y-auto pr-2 hidden">
+                    <div class="bg-zinc-950/50 p-5 rounded-2xl border border-zinc-800 space-y-4">
+                        <h3 class="text-sm font-semibold uppercase tracking-wider text-gold"><i class="fa-solid fa-house"></i> Portada</h3>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-xs font-medium text-zinc-400 mb-1">Título (línea blanca)</label>
+                                <input type="text" id="layout-hero-line1" class="admin-input">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-medium text-zinc-400 mb-1">Título (línea dorada)</label>
+                                <input type="text" id="layout-hero-line2" class="admin-input">
+                            </div>
+                            <div class="sm:col-span-2">
+                                <label class="block text-xs font-medium text-zinc-400 mb-1">Etiqueta de arriba del título</label>
+                                <input type="text" id="layout-hero-badge" class="admin-input">
+                            </div>
+                            <div class="sm:col-span-2">
+                                <label class="block text-xs font-medium text-zinc-400 mb-1">Texto debajo del título</label>
+                                <textarea id="layout-hero-text" rows="2" class="admin-input"></textarea>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium text-zinc-400 mb-2">Los 3 perfumes que flotan en la portada</label>
+                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                                <select id="layout-hero-p1" class="admin-input layout-hero-product cursor-pointer"></select>
+                                <select id="layout-hero-p2" class="admin-input layout-hero-product cursor-pointer"></select>
+                                <select id="layout-hero-p3" class="admin-input layout-hero-product cursor-pointer"></select>
+                            </div>
+                            <p class="text-[11px] text-zinc-500 mt-1.5">El primero va en el centro, más grande. "Automático" usa los primeros de "Más vendidos".</p>
+                        </div>
+                    </div>
+
+                    <div class="bg-zinc-950/50 p-5 rounded-2xl border border-zinc-800 space-y-4">
+                        <div class="flex items-center justify-between gap-3">
+                            <h3 class="text-sm font-semibold uppercase tracking-wider text-gold"><i class="fa-solid fa-chart-simple"></i> Números</h3>
+                            <label class="flex items-center gap-2 text-xs text-zinc-300 cursor-pointer"><input type="checkbox" id="layout-show-stats" class="w-4 h-4 accent-[#D4AF37]"> Mostrar</label>
+                        </div>
+                        <div id="layout-stats-rows" class="space-y-2"></div>
+                        <p class="text-[11px] text-zinc-500">Si dejás el nombre vacío, ese número no se muestra. Podés escribir cosas como "+100", "24 hs" o "5 años".</p>
+                    </div>
+
+                    <div class="bg-zinc-950/50 p-5 rounded-2xl border border-zinc-800 space-y-4">
+                        <div class="flex items-center justify-between gap-3">
+                            <h3 class="text-sm font-semibold uppercase tracking-wider text-gold"><i class="fa-solid fa-star"></i> Más vendidos</h3>
+                            <label class="flex items-center gap-2 text-xs text-zinc-300 cursor-pointer"><input type="checkbox" id="layout-show-featured" class="w-4 h-4 accent-[#D4AF37]"> Mostrar</label>
+                        </div>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-xs font-medium text-zinc-400 mb-1">Etiqueta</label>
+                                <input type="text" id="layout-featured-badge" class="admin-input">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-medium text-zinc-400 mb-1">Título</label>
+                                <input type="text" id="layout-featured-title" class="admin-input">
+                            </div>
+                        </div>
+                        <p class="text-[11px] text-zinc-500"><i class="fa-solid fa-star text-gold"></i> Los perfumes de esta franja se eligen con la estrella en la pestaña Productos.</p>
+                    </div>
+
+                    <div class="bg-zinc-950/50 p-5 rounded-2xl border border-zinc-800 flex items-center justify-between gap-3">
+                        <div>
+                            <h3 class="text-sm font-semibold uppercase tracking-wider text-gold"><i class="fa-solid fa-arrows-left-right"></i> Cinta de marcas</h3>
+                            <p class="text-[11px] text-zinc-500 mt-1">Se arma sola con las marcas de tus productos.</p>
+                        </div>
+                        <label class="flex items-center gap-2 text-xs text-zinc-300 cursor-pointer shrink-0"><input type="checkbox" id="layout-show-marquee" class="w-4 h-4 accent-[#D4AF37]"> Mostrar</label>
+                    </div>
+
+                    <div class="bg-zinc-950/50 p-5 rounded-2xl border border-zinc-800 space-y-4">
+                        <h3 class="text-sm font-semibold uppercase tracking-wider text-gold"><i class="fa-solid fa-store"></i> Catálogo</h3>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-xs font-medium text-zinc-400 mb-1">Etiqueta</label>
+                                <input type="text" id="layout-catalog-badge" class="admin-input">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-medium text-zinc-400 mb-1">Título</label>
+                                <input type="text" id="layout-catalog-title" class="admin-input">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-zinc-950/50 p-5 rounded-2xl border border-zinc-800 space-y-4">
+                        <h3 class="text-sm font-semibold uppercase tracking-wider text-gold"><i class="fa-solid fa-address-book"></i> Contacto y pie de página</h3>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-xs font-medium text-zinc-400 mb-1">Etiqueta</label>
+                                <input type="text" id="layout-contact-badge" class="admin-input">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-medium text-zinc-400 mb-1">Título</label>
+                                <input type="text" id="layout-contact-title" class="admin-input">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-medium text-zinc-400 mb-1">Texto del botón de WhatsApp</label>
+                                <input type="text" id="layout-contact-button" class="admin-input">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-medium text-zinc-400 mb-1">Frase del pie de página</label>
+                                <input type="text" id="layout-footer-text" class="admin-input">
+                            </div>
+                        </div>
+                        <p class="text-[11px] text-zinc-500">Garantía, formas de pago, envíos y revendedores se editan en la pestaña Secciones.</p>
+                    </div>
+
+                    <button onclick="saveSiteSettings()" class="w-full bg-gold hover:bg-gold-light text-zinc-950 font-bold py-3 rounded-xl transition-all shadow-lg shadow-gold/20 sticky bottom-0 cursor-pointer">Guardar Portada y Secciones</button>
+                </div>
+
+                <div id="admin-tab-fotos" class="admin-tab-content space-y-5 max-h-[65vh] overflow-y-auto pr-2 hidden">
+                    <div class="bg-zinc-950/50 p-5 rounded-2xl border border-zinc-800 space-y-4">
+                        <div class="flex items-center justify-between gap-3 flex-wrap">
+                            <h3 class="text-sm font-semibold uppercase tracking-wider text-gold"><i class="fa-solid fa-cloud"></i> Guardar fotos en Cloudinary</h3>
+                            <span id="cloudinary-state" class="text-xs font-semibold px-3 py-1 rounded-full"></span>
+                        </div>
+                        <p class="text-xs text-zinc-400 leading-relaxed">
+                            Cloudinary guarda tus fotos gratis y las optimiza solas. Sin esto, las fotos que subís se guardan dentro de la base de datos de la página, que tiene poco espacio (fue lo que la llenó antes).
+                        </p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-xs font-medium text-zinc-400 mb-1">Cloud name</label>
+                                <input type="text" id="setting-cloud-name" placeholder="Ej: dxyz12345" class="admin-input" autocomplete="off">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-medium text-zinc-400 mb-1">Upload preset (sin firma / unsigned)</label>
+                                <input type="text" id="setting-upload-preset" placeholder="Ej: black_perfumes" class="admin-input" autocomplete="off">
+                            </div>
+                        </div>
+                        <p class="text-[11px] text-zinc-500">Los dos datos están en tu cuenta de Cloudinary. No son contraseñas: no pongas acá tu clave de Cloudinary ni el "API Secret".</p>
+                    </div>
+                    <button onclick="saveSiteSettings()" class="w-full bg-gold hover:bg-gold-light text-zinc-950 font-bold py-3 rounded-xl transition-all shadow-lg shadow-gold/20 cursor-pointer">Guardar configuración de fotos</button>
                 </div>
 
                 <div id="admin-tab-bloques" class="admin-tab-content space-y-6 max-h-[65vh] overflow-y-auto pr-2 hidden">
@@ -370,7 +703,18 @@
                 </div>
 
                 <div id="admin-tab-respaldo" class="admin-tab-content space-y-6 hidden">
-                    <h3 class="text-sm font-semibold uppercase tracking-wider text-zinc-400"><i class="fa-solid fa-database text-gold"></i> Respaldo de Base de Datos</h3>
+                    <div class="bg-zinc-950 p-5 sm:p-6 rounded-2xl border border-gold/30 space-y-4">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                            <div>
+                                <h4 class="font-bold text-zinc-100 text-sm"><i class="fa-solid fa-clock-rotate-left text-gold"></i> Historial de cambios</h4>
+                                <p class="text-xs text-zinc-500 mt-1">Cada vez que guardás, la página guarda una copia de cómo estaba antes (como máximo una cada 10 minutos, se conservan las últimas 40). Si algo sale mal, volvé a una copia anterior.</p>
+                            </div>
+                            <button onclick="createManualBackup()" class="shrink-0 bg-zinc-800 hover:bg-zinc-700 text-zinc-100 font-bold px-4 py-2.5 rounded-xl text-xs transition-all cursor-pointer border border-zinc-700"><i class="fa-solid fa-floppy-disk"></i> Crear copia ahora</button>
+                        </div>
+                        <div id="backup-list" class="space-y-2 max-h-72 overflow-y-auto pr-1"></div>
+                    </div>
+
+                    <h3 class="text-sm font-semibold uppercase tracking-wider text-zinc-400"><i class="fa-solid fa-database text-gold"></i> Respaldo en archivo</h3>
                     <div class="bg-zinc-950 p-6 rounded-2xl border border-zinc-800 flex flex-col sm:flex-row gap-4 items-center justify-between">
                         <div>
                             <h4 class="font-bold text-zinc-100 text-sm">Exportar Respaldo Actual</h4>
@@ -412,6 +756,10 @@
                     <h3 class="text-sm font-semibold uppercase tracking-wider text-zinc-400"><i class="fa-solid fa-key text-gold"></i> Cambiar Contraseña de Administrador</h3>
                     <form onsubmit="handlePasswordChange(event)" class="space-y-4 max-w-md">
                         <div>
+                            <label class="block text-xs font-medium text-zinc-400 mb-1">Contraseña Actual</label>
+                            <input type="password" id="current-admin-password" required autocomplete="current-password" placeholder="Tu clave actual..." class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-4 py-3 text-sm focus:border-gold outline-none text-zinc-100">
+                        </div>
+                        <div>
                             <label class="block text-xs font-medium text-zinc-400 mb-1">Nueva Contraseña</label>
                             <input type="password" id="new-admin-password" required placeholder="Ingresá la nueva clave..." class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-4 py-3 text-sm focus:border-gold outline-none text-zinc-100">
                         </div>
@@ -448,19 +796,36 @@
                         <label class="block text-xs font-medium text-zinc-400 mb-1">Precio ($ ARS)</label>
                         <input type="number" id="edit-price" required class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-4 py-2 text-sm focus:border-gold outline-none text-zinc-100">
                     </div>
-                    <div>
-                        <label class="block text-xs font-medium text-zinc-400 mb-1">URL de Foto Principal (O subir archivo)</label>
-                        <input type="text" id="edit-image-url" required class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-4 py-2 text-sm focus:border-gold outline-none text-zinc-100 mb-2" placeholder="https://ejemplo.com/imagen.jpg">
-                        <input type="file" id="edit-image-file" accept="image/*" onchange="handleEditImageFile(event)" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-4 py-2 text-xs text-zinc-400 focus:border-gold outline-none file:mr-4 file:py-1 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-zinc-800 file:text-zinc-300 cursor-pointer">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-medium text-zinc-400 mb-1">Fotos Adicionales (Pegar URLs separadas por comas/líneas o Subir Archivos)</label>
-                        <textarea id="edit-extra-urls-text" rows="2" placeholder="https://ejemplo.com/foto1.jpg, https://ejemplo.com/foto2.jpg" oninput="renderEditExtraThumbs()" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-4 py-2 text-xs focus:border-gold outline-none text-zinc-100 mb-2"></textarea>
-                        <input type="file" id="edit-extra-files" accept="image/*" multiple onchange="handleEditExtraFiles(event)" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-4 py-2 text-xs text-zinc-400 focus:border-gold outline-none file:mr-4 file:py-1 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-zinc-800 file:text-zinc-300 cursor-pointer">
-                    </div>
-                    <div id="edit-current-extra-preview" class="space-y-2">
-                        <label class="block text-xs font-medium text-zinc-400">Fotos adicionales cargadas / vista previa</label>
-                        <div id="edit-extra-thumbs" class="flex flex-wrap gap-2"></div>
+                        <div class="space-y-2">
+                            <label class="block text-xs font-medium text-zinc-400">Fotos del producto <span class="text-zinc-500">· la primera es la principal · arrastralas o usá las flechas para ordenarlas</span></label>
+                            <div id="edit-photos" ondragover="event.preventDefault()" ondrop="photoBoxDrop(event, 'edit')" class="flex flex-wrap gap-3 min-h-[7.5rem] bg-zinc-950 border border-dashed border-zinc-700 rounded-xl p-3"></div>
+                            <div class="flex flex-col sm:flex-row gap-2">
+                                <input type="text" id="edit-photo-url" placeholder="Pegá el link de una foto (o varios separados por coma)" class="admin-input !py-2 !text-xs" onkeydown="if (event.key === 'Enter') { event.preventDefault(); addPhotoUrls('edit'); }">
+                                <button type="button" onclick="addPhotoUrls('edit')" class="shrink-0 bg-zinc-800 hover:bg-zinc-700 text-zinc-100 text-xs font-semibold px-4 py-2 rounded-xl cursor-pointer"><i class="fa-solid fa-link"></i> Agregar link</button>
+                                <label class="shrink-0 bg-gold hover:bg-gold-light text-zinc-950 text-xs font-bold px-4 py-2 rounded-xl cursor-pointer text-center">
+                                    <i class="fa-solid fa-cloud-arrow-up"></i> Subir fotos
+                                    <input type="file" accept="image/*" multiple class="hidden" onchange="addPhotoFiles('edit', this.files); this.value = '';">
+                                </label>
+                            </div>
+                            <p id="edit-photo-status" class="text-[11px] text-zinc-500"></p>
+                        </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-medium text-zinc-400 mb-1">Marca (si la dejás vacía se detecta por el nombre)</label>
+                            <input type="text" id="edit-brand" list="brand-options" placeholder="Ej: Lattafa" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-4 py-2 text-sm focus:border-gold outline-none text-zinc-100">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium text-zinc-400 mb-1">Etiqueta</label>
+                            <select id="edit-badge" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-4 py-2 text-sm focus:border-gold outline-none text-zinc-100 cursor-pointer"><option value="">Sin etiqueta</option><option>Nuevo</option><option>Más vendido</option><option>Oferta</option><option>Unisex</option><option>Últimas unidades</option></select>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium text-zinc-400 mb-1">Precio anterior (opcional, se muestra tachado)</label>
+                            <input type="number" id="edit-old-price" min="0" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-4 py-2 text-sm focus:border-gold outline-none text-zinc-100">
+                        </div>
+                        <label class="flex items-center gap-3 bg-zinc-950 border border-zinc-800 rounded-xl px-4 py-2.5 cursor-pointer self-end">
+                            <input type="checkbox" id="edit-featured" class="w-4 h-4 accent-[#D4AF37]">
+                            <span class="text-sm text-zinc-200"><i class="fa-solid fa-star text-gold"></i> Mostrar en “Más vendidos”</span>
+                        </label>
                     </div>
                     <div>
                         <label class="block text-xs font-medium text-zinc-400 mb-1">Notas Olfativas</label>
@@ -483,8 +848,8 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, doc, setDoc, onSnapshot, collection, query } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { getAuth, signInAnonymously, signInWithEmailAndPassword, signOut, onAuthStateChanged, updatePassword, EmailAuthProvider, reauthenticateWithCredential } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, setDoc, onSnapshot, collection, query, getDocs, orderBy, deleteDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
         const myFirebaseConfig = {
             apiKey: "AIzaSyA__ONWSqwzBqPkrDIbQWuzv_nQTRbJPcA",
@@ -570,7 +935,9 @@
             { id: 1740000071, name: "Crema Karseell 500ml", category: "Body Splash y Cremas", price: 20000, notes: "Propiedades: Tratamiento capilar profesional reconstructor profundo formulado con una rica combinación de colágeno puro y nutritivo aceite de argán marroquí garantizando hidratación, suavidad y brillo extremo.", image: "https://placehold.co/600x600/18181b/D4AF37?text=Maca+Power" }
         ];
 
-        const defaultLogoSVG = "https://placehold.co/140x140/111/D4AF37?text=Black+Import";
+        // Tu logo. Si no cargara, se usa el monograma BP dibujado acá mismo.
+        const defaultLogoSVG = "/logo.webp";
+        const fallbackLogoSVG = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 128 128'%3E %3Cdefs%3E %3ClinearGradient id='g' x1='0' y1='1' x2='1' y2='0'%3E %3Cstop offset='0' stop-color='%23AA8C2C'/%3E %3Cstop offset='0.5' stop-color='%23D4AF37'/%3E %3Cstop offset='1' stop-color='%23F3E5AB'/%3E %3C/linearGradient%3E %3C/defs%3E %3Ccircle cx='64' cy='64' r='62' fill='%2309090b'/%3E %3Ccircle cx='64' cy='64' r='56' fill='none' stroke='url(%23g)' stroke-width='4'/%3E %3Ctext x='64' y='80' text-anchor='middle' font-family='Georgia%2C serif' font-size='46' font-weight='700' letter-spacing='1' fill='url(%23g)'%3EBP%3C/text%3E %3C/svg%3E";
 
         let defaultSettings = {
             brandName: "Black Perfumes",
@@ -582,7 +949,8 @@
             instagram: "https://instagram.com",
             facebook: "https://facebook.com",
             tiktok: "https://tiktok.com",
-            adminPassword: "admin123",
+            // Cuenta de Cloudinary donde se guardan las fotos (se puede cambiar en el panel, pestaña "Fotos").
+            cloudinary: { cloudName: "quwesu6x", uploadPreset: "black_perfumes" },
             sections: [
                 {
                     id: "garantia",
@@ -625,10 +993,24 @@
             ]
         };
 
-        let settings = JSON.parse(localStorage.getItem('bp_settings_v11')) || defaultSettings;
-        let products = JSON.parse(localStorage.getItem('bp_products_v11')) || defaultProducts;
-        let cart = JSON.parse(localStorage.getItem('bp_cart_v11')) || [];
+        // La clave del panel ya no se guarda en los datos del sitio: el acceso lo maneja Firebase Auth.
+        function cleanSettings(s) {
+            const { adminPassword, ...rest } = s || {};
+            // Enlaces "blob:" (solo existían en una compu) y el logo de ejemplo viejo se descartan.
+            if (typeof rest.logoImage === 'string' && /^blob:|placehold.co/.test(rest.logoImage)) delete rest.logoImage;
+            return rest;
+        }
+
+        function readStored(key, fallback) {
+            try { return JSON.parse(localStorage.getItem(key)) || fallback; } catch (e) { return fallback; }
+        }
+
+        let settings = { ...defaultSettings, ...cleanSettings(readStored('bp_settings_v11', {})) };
+        let products = readStored('bp_products_v11', defaultProducts);
+        let cart = readStored('bp_cart_v11', []);
+        try { localStorage.setItem('bp_settings_v11', JSON.stringify(settings)); } catch (e) {}
         let currentCategory = 'Todas';
+        let currentBrand = 'Todas';
         let currentSearch = '';
         let currentSort = 'relevancia';
         let tempSections = [];
@@ -640,10 +1022,16 @@
         window.currentDetailIndex = 0;
 
         let db = null;
+        let auth = null;
+        let isAdmin = false;
+        let lastCloudData = null; // último estado leído de la nube (se copia al historial antes de cambiarlo)
+        const VISITOR_PING_MS = 60000;
         let appId = "black-perfumes-bd";
 
         window.onload = async function() {
             renderSite();
+            startSparkles();
+            setTimeout(hideLoader, 600);
             await initFirebaseRealtime();
             setupKeyboardListeners();
         };
@@ -652,33 +1040,47 @@
             try {
                 const app = initializeApp(myFirebaseConfig);
                 db = getFirestore(app);
-                const auth = getAuth(app);
-                await signInAnonymously(auth);
+                auth = getAuth(app);
+
+                // Esperamos a saber si ya hay una sesión de administrador guardada antes de
+                // entrar como visitante anónimo (si no, se pisaría la sesión del admin).
+                const firstUser = await new Promise(resolve => {
+                    const unsub = onAuthStateChanged(auth, user => { unsub(); resolve(user); });
+                });
+                if (!firstUser) await signInAnonymously(auth);
+
+                let stopVisitorsListener = null;
+                onAuthStateChanged(auth, user => {
+                    isAdmin = !!(user && !user.isAnonymous);
+                    if (isAdmin && !stopVisitorsListener) {
+                        stopVisitorsListener = listenActiveVisitors();
+                    } else if (!isAdmin && stopVisitorsListener) {
+                        stopVisitorsListener();
+                        stopVisitorsListener = null;
+                    }
+                });
 
                 const stateRef = doc(db, 'artifacts', appId, 'store_state', 'main');
                 onSnapshot(stateRef, (docSnap) => {
-                    if (docSnap.exists()) {
-                        const cloudData = docSnap.data();
-                        let updated = false;
-                        if (cloudData.products && Array.isArray(cloudData.products) && cloudData.products.length > 0) {
-                            products = cloudData.products;
-                            localStorage.setItem('bp_products_v11', JSON.stringify(products));
-                            updated = true;
+                    if (!docSnap.exists()) return;
+                    const cloudData = docSnap.data();
+                    lastCloudData = cloudData;
+                    let updated = false;
+                    if (cloudData.products && Array.isArray(cloudData.products) && cloudData.products.length > 0) {
+                        products = cloudData.products;
+                        localStorage.setItem('bp_products_v11', JSON.stringify(products));
+                        updated = true;
+                    }
+                    if (cloudData.settings && typeof cloudData.settings === 'object') {
+                        settings = { ...defaultSettings, ...cleanSettings(cloudData.settings) };
+                        localStorage.setItem('bp_settings_v11', JSON.stringify(settings));
+                        updated = true;
+                    }
+                    if (updated) {
+                        renderSite();
+                        if (!document.getElementById('admin-modal').classList.contains('hidden')) {
+                            renderAdminProducts();
                         }
-                        if (cloudData.settings && typeof cloudData.settings === 'object') {
-                            settings = { ...defaultSettings, ...cloudData.settings };
-                            if (!settings.adminPassword) settings.adminPassword = defaultSettings.adminPassword;
-                            localStorage.setItem('bp_settings_v11', JSON.stringify(settings));
-                            updated = true;
-                        }
-                        if (updated) {
-                            renderSite();
-                            if (!document.getElementById('admin-modal').classList.contains('hidden')) {
-                                renderAdminProducts();
-                            }
-                        }
-                    } else {
-                        setDoc(stateRef, { products, settings }, { merge: true }).catch(() => {});
                     }
                 }, () => {});
 
@@ -688,41 +1090,176 @@
                     sessionStorage.setItem('bp_visitor_id', visitorId);
                 }
                 const visitorRef = doc(db, 'artifacts', appId, 'active_visitors', visitorId);
+                // Una marca por minuto y solo con la pestaña a la vista, para no gastar el límite gratis de Firebase.
                 const pingVisitor = async () => {
+                    if (document.visibilityState !== 'visible') return;
                     try { if (db) await setDoc(visitorRef, { lastSeen: Date.now() }); } catch (e) {}
                 };
                 await pingVisitor();
-                setInterval(pingVisitor, 15000);
-
-                const visitorsCol = collection(db, 'artifacts', appId, 'active_visitors');
-                onSnapshot(query(visitorsCol), (snapshot) => {
-                    const now = Date.now();
-                    let activeCount = 0;
-                    snapshot.forEach(docSnap => {
-                        const data = docSnap.data();
-                        if (data.lastSeen && (now - data.lastSeen < 45000)) activeCount++;
-                    });
-                    const countEl = document.getElementById('live-visitors-count');
-                    if (countEl) countEl.innerText = Math.max(1, activeCount);
-                }, () => {});
+                setInterval(pingVisitor, VISITOR_PING_MS);
+                document.addEventListener('visibilitychange', pingVisitor);
             } catch (e) {}
         }
+
+        // Solo el administrador puede leer la lista de visitantes (ver firestore.rules).
+        function listenActiveVisitors() {
+            const visitorsCol = collection(db, 'artifacts', appId, 'active_visitors');
+            return onSnapshot(query(visitorsCol), (snapshot) => {
+                const now = Date.now();
+                let activeCount = 0;
+                snapshot.forEach(docSnap => {
+                    const data = docSnap.data();
+                    if (data.lastSeen && (now - data.lastSeen < VISITOR_PING_MS * 2.5)) activeCount++;
+                });
+                const countEl = document.getElementById('live-visitors-count');
+                if (countEl) countEl.innerText = Math.max(1, activeCount);
+            }, () => {});
+        }
+
+        // Firestore no acepta documentos de más de 1 MB, y todo el sitio vive en uno solo.
+        const MAX_DOC_BYTES = 950000;
 
         async function saveCloudState() {
-            localStorage.setItem('bp_products_v11', JSON.stringify(products));
-            localStorage.setItem('bp_settings_v11', JSON.stringify(settings));
+            settings = cleanSettings(settings);
+            if (!db || !isAdmin) {
+                await window.showCustomAlert("Tu sesión de administrador se cerró. Volvé a ingresar para guardar los cambios.");
+                return false;
+            }
+            const data = { products, settings };
+            const bytes = new Blob([JSON.stringify(data)]).size;
+            if (bytes > MAX_DOC_BYTES) {
+                await window.showCustomAlert(`No se pudo guardar: los datos ocupan ${Math.round(bytes / 1024)} KB y el máximo es ${Math.round(MAX_DOC_BYTES / 1024)} KB. Usá links de imágenes en vez de subir archivos, o borrá fotos que no uses.`);
+                return false;
+            }
             try {
-                if (db) {
-                    const stateRef = doc(db, 'artifacts', appId, 'store_state', 'main');
-                    await setDoc(stateRef, { products, settings }, { merge: true });
-                }
-            } catch (e) {}
+                await backupBeforeSave();
+                const stateRef = doc(db, 'artifacts', appId, 'store_state', 'main');
+                // Sin merge: así se borra del documento cualquier dato viejo (como la clave anterior).
+                await setDoc(stateRef, data);
+                localStorage.setItem('bp_products_v11', JSON.stringify(products));
+                localStorage.setItem('bp_settings_v11', JSON.stringify(settings));
+                return true;
+            } catch (e) {
+                await window.showCustomAlert("No se pudieron guardar los cambios en la nube. Revisá tu conexión y que tu usuario sea el administrador.");
+                return false;
+            }
         }
+
+        // ---------- Historial de copias de seguridad ----------
+        // Antes de guardar, se copia cómo estaba la página (como máximo una vez cada 10 minutos).
+        const BACKUP_EVERY_MS = 10 * 60 * 1000;
+        const BACKUPS_TO_KEEP = 40;
+        let lastBackupAt = 0;
+
+        function backupsCollection() {
+            return collection(db, 'artifacts', appId, 'backups');
+        }
+
+        async function writeBackup(data, note) {
+            const savedAt = Date.now();
+            await setDoc(doc(backupsCollection(), String(savedAt)), {
+                products: data.products,
+                settings: cleanSettings(data.settings),
+                savedAt,
+                productCount: data.products.length,
+                note,
+            });
+            lastBackupAt = savedAt;
+            const snapshot = await getDocs(query(backupsCollection(), orderBy('savedAt', 'desc')));
+            await Promise.all(snapshot.docs.slice(BACKUPS_TO_KEEP).map(d => deleteDoc(d.ref)));
+        }
+
+        async function backupBeforeSave(force = false) {
+            if (!lastCloudData || !Array.isArray(lastCloudData.products) || !lastCloudData.settings) return;
+            if (!force && Date.now() - lastBackupAt < BACKUP_EVERY_MS) return;
+            try {
+                await writeBackup(lastCloudData, 'Automática (antes de un cambio)');
+            } catch (e) {
+                // Si la copia falla, el guardado sigue igual: no bloqueamos al administrador.
+            }
+        }
+
+        async function createManualBackup() {
+            try {
+                await writeBackup({ products, settings }, 'Manual');
+                await window.showCustomAlert("Copia creada.");
+            } catch (e) {
+                await window.showCustomAlert("No se pudo crear la copia. Revisá tu conexión.");
+            }
+            renderBackupList();
+        }
+
+        async function renderBackupList() {
+            const list = document.getElementById('backup-list');
+            if (!list) return;
+            list.innerHTML = '<p class="text-xs text-zinc-500"><i class="fa-solid fa-spinner fa-spin text-gold"></i> Cargando copias...</p>';
+            try {
+                const snapshot = await getDocs(query(backupsCollection(), orderBy('savedAt', 'desc')));
+                if (snapshot.empty) {
+                    list.innerHTML = '<p class="text-xs text-zinc-500 italic">Todavía no hay copias. Se crean solas cuando guardás cambios.</p>';
+                    return;
+                }
+                list.innerHTML = snapshot.docs.map(d => {
+                    const b = d.data();
+                    const when = new Date(b.savedAt).toLocaleString('es-AR', { dateStyle: 'medium', timeStyle: 'short' });
+                    return `
+                        <div class="flex items-center justify-between gap-3 bg-zinc-900 border border-zinc-800 rounded-xl px-4 py-3">
+                            <div class="min-w-0">
+                                <p class="text-sm text-zinc-100 font-semibold">${esc(when)}</p>
+                                <p class="text-[11px] text-zinc-500">${esc(b.note || '')} · ${Number(b.productCount) || 0} productos</p>
+                            </div>
+                            <button onclick="restoreBackup('${d.id}')" class="shrink-0 bg-gold/10 hover:bg-gold text-gold hover:text-zinc-950 px-3 py-1.5 rounded-xl text-xs font-semibold transition-all cursor-pointer"><i class="fa-solid fa-rotate-left"></i> Volver a esta</button>
+                        </div>`;
+                }).join('');
+            } catch (e) {
+                list.innerHTML = '<p class="text-xs text-red-400">No se pudo cargar el historial. Revisá que las reglas de Firebase estén actualizadas.</p>';
+            }
+        }
+
+        async function restoreBackup(id) {
+            const confirmed = await window.showCustomConfirm("¿Volver a esta copia? Lo que tengas ahora se guarda antes en el historial, así que podés deshacerlo.");
+            if (!confirmed) return;
+            try {
+                const snapshot = await getDocs(query(backupsCollection(), orderBy('savedAt', 'desc')));
+                const backup = snapshot.docs.find(d => d.id === id);
+                if (!backup) throw new Error('no encontrada');
+                const b = backup.data();
+                await backupBeforeSave(true);
+                lastBackupAt = Date.now(); // ya copiamos el estado actual
+                products = b.products;
+                settings = { ...defaultSettings, ...cleanSettings(b.settings) };
+                if (!(await saveCloudState())) return;
+                renderSite(); renderAdminProducts(); loadSettingsForm(); renderBackupList();
+                await window.showCustomAlert("Listo, la página volvió a esa copia.");
+            } catch (e) {
+                await window.showCustomAlert("No se pudo restaurar la copia.");
+            }
+        }
+
+        // Escapa texto de productos antes de insertarlo como HTML.
+        function esc(value) {
+            return String(value ?? '').replace(/[&<>"']/g, ch => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[ch]));
+        }
+
+        // Las fotos subidas a Cloudinary se piden ya achicadas y optimizadas al tamaño que se muestran.
+        function imgUrl(url, width) {
+            if (!url) return IMG_FALLBACK;
+            if (/^https:\/\/res\.cloudinary\.com\/[^/]+\/image\/upload\//.test(url)) {
+                return url.replace('/image/upload/', `/image/upload/f_auto,q_auto,c_limit,w_${width}/`);
+            }
+            return url;
+        }
+
+        const IMG_FALLBACK = "https://placehold.co/600x600/18181b/D4AF37?text=Black+Perfumes";
+        window.IMG_FALLBACK = IMG_FALLBACK; // lo usan los onerror="" de las imágenes
 
         function applyDesignSettings() {
             const root = document.documentElement;
-            if (settings.primaryColor) {
-                root.style.setProperty('--color-gold', settings.primaryColor);
+            const hex = String(settings.primaryColor || '').match(/^#?([0-9a-f]{6})$/i);
+            if (hex) {
+                const n = parseInt(hex[1], 16);
+                root.style.setProperty('--color-gold', '#' + hex[1]);
+                root.style.setProperty('--gold-rgb', `${n >> 16} ${(n >> 8) & 255} ${n & 255}`);
             }
         }
 
@@ -730,25 +1267,502 @@
             applyDesignSettings();
             renderHeader();
             renderHero();
+            renderLayoutTexts();
+            renderHeroBottles();
+            renderStats();
+            renderBrandMarquee();
+            renderFeatured();
             renderSections();
             renderFooter();
+            renderBrandFilters();
             renderCategories();
             renderCatalog();
             updateCartUI();
+            observeReveals();
         }
 
         function renderHeader() {
             const logoImg = document.getElementById('brand-logo-img');
             const logoText = document.getElementById('brand-title');
+            logoImg.onerror = () => { logoImg.onerror = null; logoImg.src = logoImg.src.endsWith(defaultLogoSVG) ? fallbackLogoSVG : defaultLogoSVG; };
             logoImg.src = settings.logoImage || defaultLogoSVG;
+            logoImg.alt = settings.brandName || "Black Perfumes";
             logoText.innerText = settings.brandName || "Black Perfumes";
+            const loaderLogo = document.getElementById('loader-logo-img');
+            if (loaderLogo && settings.logoImage) loaderLogo.src = settings.logoImage;
         }
 
         function renderHero() {
-            document.getElementById('hero-heading').innerHTML = settings.heroTitle;
             document.getElementById('hero-whatsapp-btn').href = `https://wa.me/${settings.whatsappNumber}?text=Hola,%20quiero%20consultar%20por%20el%20stock%20de%20perfumes`;
             document.getElementById('floating-whatsapp-btn').href = `https://wa.me/${settings.whatsappNumber}?text=Hola,%20quiero%20consultar%20por%20perfumes`;
-            document.title = settings.brandName;
+            document.title = `${settings.brandName} | Perfumes árabes y de diseñador originales en CABA`;
+        }
+
+        // ---------- Textos y secciones editables desde el panel (pestaña "Portada y Secciones") ----------
+        const DEFAULT_LAYOUT = {
+            heroLine1: 'Perfumes originales,',
+            heroLine2: 'sin gastar de más',
+            heroBadge: 'Villa Urquiza, CABA · Envíos a todo el país',
+            heroText: 'Fragancias árabes y de diseñador, nuevas y selladas. Elegí las tuyas, mandanos el pedido por WhatsApp y te lo llevamos.',
+            heroProducts: [],
+            showStats: true,
+            stats: [
+                { type: 'fixed', value: '+100', label: 'Clientes felices' },
+                { type: 'products', value: '', label: 'Fragancias' },
+                { type: 'brands', value: '', label: 'Marcas' },
+                { type: 'fixed', value: '24 hs', label: 'Despacho' },
+            ],
+            showMarquee: true,
+            showFeatured: true,
+            featuredBadge: 'Los favoritos',
+            featuredTitle: 'Más vendidos',
+            catalogBadge: 'Nuestra Tienda',
+            catalogTitle: 'Catálogo de Fragancias',
+            contactBadge: 'Atención Directa',
+            contactTitle: 'Contacto y Redes Sociales',
+            contactButton: 'Envianos mensaje por WhatsApp',
+            footerText: 'Ventas Mayoristas y Minoristas por WhatsApp',
+        };
+
+        // El título viejo se guardaba como HTML ("línea 1 <br/><span>línea 2</span>"): se separa en dos líneas.
+        function legacyHeroLines() {
+            const parts = String(settings.heroTitle || '').split(/<br\s*\/?>/i).map(part => {
+                const tmp = document.createElement('div');
+                tmp.innerHTML = part;
+                return tmp.textContent.trim();
+            });
+            return parts.length === 2 && parts[0] && parts[1] ? { heroLine1: parts[0], heroLine2: parts[1] } : {};
+        }
+
+        function getLayout() {
+            const saved = settings.layout || {};
+            const layout = { ...DEFAULT_LAYOUT, ...legacyHeroLines(), ...saved };
+            if (!Array.isArray(layout.stats) || layout.stats.length === 0) layout.stats = DEFAULT_LAYOUT.stats;
+            if (!Array.isArray(layout.heroProducts)) layout.heroProducts = [];
+            return layout;
+        }
+
+        function setText(id, text) {
+            const el = document.getElementById(id);
+            if (el) el.textContent = text;
+        }
+
+        function renderLayoutTexts() {
+            const layout = getLayout();
+            const heading = document.getElementById('hero-heading');
+            heading.innerHTML = `${esc(layout.heroLine1)} <br/><span class="text-transparent bg-clip-text bg-gradient-to-r from-gold-light via-gold to-gold-dark italic">${esc(layout.heroLine2)}</span>`;
+            setText('hero-badge-text', layout.heroBadge);
+            setText('hero-text', layout.heroText);
+            setText('featured-badge', layout.featuredBadge);
+            setText('featured-title', layout.featuredTitle);
+            setText('catalog-badge', layout.catalogBadge);
+            setText('catalog-title', layout.catalogTitle);
+            setText('contact-badge', layout.contactBadge);
+            setText('contact-title', layout.contactTitle);
+            setText('contact-button-text', layout.contactButton);
+            setText('footer-text', layout.footerText);
+            document.getElementById('brand-marquee-section').classList.toggle('hidden', !layout.showMarquee);
+        }
+
+        // Valor que se muestra en cada número: fijo ("+100", "24 hs") o calculado (fragancias / marcas).
+        function statParts(stat) {
+            if (stat.type === 'products') return { prefix: '', number: products.length, suffix: '' };
+            if (stat.type === 'brands') return { prefix: '', number: getBrands().filter(b => b.name !== 'Otras').length, suffix: '' };
+            const match = String(stat.value || '').match(/^(\D*?)(\d+)(.*)$/);
+            if (!match) return { prefix: String(stat.value || ''), number: null, suffix: '' };
+            return { prefix: match[1], number: Number(match[2]), suffix: match[3] };
+        }
+
+        let lastStatsSignature = '';
+        function renderStats() {
+            const layout = getLayout();
+            const bar = document.getElementById('stats-bar');
+            const container = document.getElementById('hero-stats');
+            const stats = layout.stats.filter(st => String(st.label || '').trim()).slice(0, 4);
+            bar.classList.toggle('hidden', !layout.showStats || stats.length === 0);
+
+            const parts = stats.map(statParts);
+            const signature = JSON.stringify([stats, parts]);
+            if (signature === lastStatsSignature) return; // evita reiniciar la animación si nada cambió
+            lastStatsSignature = signature;
+
+            const cols = { 1: 'grid-cols-1', 2: 'grid-cols-2', 3: 'grid-cols-2 md:grid-cols-3', 4: 'grid-cols-2 md:grid-cols-4' }[stats.length] || 'grid-cols-2';
+            container.className = `max-w-5xl mx-auto px-4 py-5 md:py-7 grid ${cols} gap-y-5 gap-x-4 text-center`;
+            container.innerHTML = stats.map((st, i) => {
+                const p = parts[i];
+                const value = p.number === null
+                    ? `<span>${esc(p.prefix)}</span>`
+                    : `<span>${esc(p.prefix)}</span><span class="count-up" data-target="${p.number}">0</span><span class="text-xl md:text-2xl">${esc(p.suffix)}</span>`;
+                return `
+                    <div class="reveal" style="transition-delay:${i * 90}ms">
+                        <div class="font-serif-custom text-3xl md:text-4xl font-bold text-gold-gradient">${value}</div>
+                        <div class="text-[11px] md:text-xs uppercase tracking-widest text-zinc-400 mt-1">${esc(st.label)}</div>
+                    </div>`;
+            }).join('');
+        }
+
+        // Los perfumes de la portada: los elegidos en el panel y, si faltan, los primeros de "Más vendidos".
+        function getHeroProducts() {
+            const chosen = getLayout().heroProducts
+                .map(id => products.find(p => p.id === Number(id)))
+                .filter(Boolean);
+            const rest = getFeatured().filter(p => !chosen.includes(p));
+            return [...chosen, ...rest].slice(0, 3);
+        }
+
+        // ----- Panel -----
+        function loadLayoutForm() {
+            const layout = getLayout();
+            const val = (id, v) => { document.getElementById(id).value = v ?? ''; };
+            val('layout-hero-line1', layout.heroLine1);
+            val('layout-hero-line2', layout.heroLine2);
+            val('layout-hero-badge', layout.heroBadge);
+            val('layout-hero-text', layout.heroText);
+            val('layout-featured-badge', layout.featuredBadge);
+            val('layout-featured-title', layout.featuredTitle);
+            val('layout-catalog-badge', layout.catalogBadge);
+            val('layout-catalog-title', layout.catalogTitle);
+            val('layout-contact-badge', layout.contactBadge);
+            val('layout-contact-title', layout.contactTitle);
+            val('layout-contact-button', layout.contactButton);
+            val('layout-footer-text', layout.footerText);
+            document.getElementById('layout-show-stats').checked = !!layout.showStats;
+            document.getElementById('layout-show-featured').checked = !!layout.showFeatured;
+            document.getElementById('layout-show-marquee').checked = !!layout.showMarquee;
+
+            const options = [...products].sort((a, b) => a.name.localeCompare(b.name));
+            document.querySelectorAll('.layout-hero-product').forEach((select, i) => {
+                const selected = Number(layout.heroProducts[i]) || '';
+                select.innerHTML = `<option value="">Automático</option>` + options.map(p =>
+                    `<option value="${p.id}" ${p.id === selected ? 'selected' : ''}>${esc(p.name)}</option>`).join('');
+            });
+
+            const stats = [...layout.stats];
+            while (stats.length < 4) stats.push({ type: 'fixed', value: '', label: '' });
+            document.getElementById('layout-stats-rows').innerHTML = stats.slice(0, 4).map(st => `
+                <div class="layout-stat-row grid grid-cols-1 sm:grid-cols-12 gap-2 bg-zinc-950 p-3 rounded-xl border border-zinc-800">
+                    <select class="stat-type admin-input sm:col-span-4 cursor-pointer" onchange="this.closest('.layout-stat-row').querySelector('.stat-value').disabled = this.value !== 'fixed'">
+                        <option value="fixed" ${st.type === 'fixed' ? 'selected' : ''}>Valor que escribo yo</option>
+                        <option value="products" ${st.type === 'products' ? 'selected' : ''}>Cantidad de fragancias (automático)</option>
+                        <option value="brands" ${st.type === 'brands' ? 'selected' : ''}>Cantidad de marcas (automático)</option>
+                    </select>
+                    <input type="text" class="stat-value admin-input sm:col-span-3 disabled:opacity-40" placeholder="Ej: +100" value="${esc(st.value)}" ${st.type !== 'fixed' ? 'disabled' : ''}>
+                    <input type="text" class="stat-label admin-input sm:col-span-5" placeholder="Nombre (ej: Clientes felices)" value="${esc(st.label)}">
+                </div>`).join('');
+        }
+
+        function readLayoutForm() {
+            const get = id => document.getElementById(id).value.trim();
+            return {
+                heroLine1: get('layout-hero-line1'),
+                heroLine2: get('layout-hero-line2'),
+                heroBadge: get('layout-hero-badge'),
+                heroText: get('layout-hero-text'),
+                heroProducts: [...document.querySelectorAll('.layout-hero-product')].map(s => Number(s.value)).filter(Boolean),
+                showStats: document.getElementById('layout-show-stats').checked,
+                stats: [...document.querySelectorAll('.layout-stat-row')].map(row => ({
+                    type: row.querySelector('.stat-type').value,
+                    value: row.querySelector('.stat-value').value.trim(),
+                    label: row.querySelector('.stat-label').value.trim(),
+                })),
+                showMarquee: document.getElementById('layout-show-marquee').checked,
+                showFeatured: document.getElementById('layout-show-featured').checked,
+                featuredBadge: get('layout-featured-badge'),
+                featuredTitle: get('layout-featured-title'),
+                catalogBadge: get('layout-catalog-badge'),
+                catalogTitle: get('layout-catalog-title'),
+                contactBadge: get('layout-contact-badge'),
+                contactTitle: get('layout-contact-title'),
+                contactButton: get('layout-contact-button'),
+                footerText: get('layout-footer-text'),
+            };
+        }
+
+        // ---------- Marcas ----------
+        // Se usa la marca cargada en el panel; si no hay, se detecta por el nombre del producto.
+        const BRAND_PATTERNS = [
+            ['Al Haramain', /al haramain/i],
+            ['Lattafa', /lattafa|badee al oud|khamrah|\byara\b|mayar|\basad\b|fakhar/i],
+            ['Armaf', /armaf|club de nuit|odyssey/i],
+            ['Afnan', /afnan|\b9\s?(pm|am)\b/i],
+            ['Rasasi', /rasasi|hawas/i],
+            ['French Avenue', /french avenue/i],
+            ['Maison Alhambra', /maison alhambra/i],
+            ['Bharara', /bharara/i],
+            ['Rayhaan', /rayhaan/i],
+            ['Xerjoff', /xerjoff/i],
+            ['Dior', /\bdior\b/i],
+            ['Armani', /armani/i],
+            ['Jean Paul Gaultier', /gaultier|\bjpg\b/i],
+            ['Azzaro', /azzaro/i],
+            ['Paco Rabanne', /paco rabanne|one million/i],
+            ['Valentino', /valentino/i],
+            ['Carolina Herrera', /carolina herrera/i],
+            ['Dolce & Gabbana', /dolce|gabbana|gabanna/i],
+            ['Versace', /versace/i],
+            ["Victoria's Secret", /victoria'?s secret/i],
+            ['Karseell', /karseell/i],
+        ];
+
+        function getBrand(p) {
+            if (p.brand && String(p.brand).trim()) return String(p.brand).trim();
+            const match = BRAND_PATTERNS.find(([, re]) => re.test(p.name || ''));
+            return match ? match[0] : 'Otras';
+        }
+
+        // Marcas ordenadas por cantidad de productos ("Otras" siempre al final).
+        function getBrands() {
+            const counts = {};
+            products.forEach(p => { const b = getBrand(p); counts[b] = (counts[b] || 0) + 1; });
+            return Object.entries(counts)
+                .sort((a, b) => (a[0] === 'Otras') - (b[0] === 'Otras') || b[1] - a[1] || a[0].localeCompare(b[0]))
+                .map(([name, count]) => ({ name, count }));
+        }
+
+        function renderBrandMarquee() {
+            const track = document.getElementById('brand-marquee');
+            if (!track) return;
+            const names = getBrands().map(b => b.name).filter(n => n !== 'Otras');
+            const item = name => `
+                <button onclick="selectBrand(this.dataset.brand)" data-brand="${esc(name)}" class="font-serif-custom text-lg md:text-2xl font-bold uppercase tracking-[0.2em] text-zinc-500 hover:text-gold transition-colors whitespace-nowrap cursor-pointer">${esc(name)}</button>
+                <span class="text-gold/60 text-sm" aria-hidden="true">✦</span>`;
+            // Se repite dos veces para que la cinta se vea continua.
+            track.innerHTML = [...names, ...names].map(item).join('');
+        }
+
+        function renderBrandFilters() {
+            const container = document.getElementById('brand-filters');
+            if (!container) return;
+            const brands = [{ name: 'Todas', count: products.length }, ...getBrands()];
+            container.innerHTML = brands.map(b => `
+                <button onclick="filterBrand(this.dataset.brand)" data-brand="${esc(b.name)}" class="shrink-0 px-3.5 py-2 rounded-full text-xs font-semibold transition-all cursor-pointer border ${currentBrand === b.name ? 'bg-gold/15 text-gold border-gold/60' : 'bg-transparent text-zinc-400 border-zinc-800 hover:border-zinc-600 hover:text-zinc-200'}">
+                    ${esc(b.name)} <span class="opacity-60">${b.count}</span>
+                </button>
+            `).join('');
+        }
+
+        function filterBrand(brand) {
+            currentBrand = brand;
+            renderBrandFilters();
+            renderCatalog();
+        }
+
+        function selectBrand(brand) {
+            filterBrand(brand);
+            document.getElementById('catalogo').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // ---------- Etiquetas y precios ----------
+        const BADGES = {
+            'Nuevo': 'bg-emerald-400 text-zinc-950',
+            'Más vendido': 'bg-gold text-zinc-950',
+            'Oferta': 'bg-red-500 text-white',
+            'Unisex': 'bg-zinc-100 text-zinc-950',
+            'Últimas unidades': 'bg-orange-400 text-zinc-950',
+        };
+
+        function badgeHTML(p, extraClasses = '') {
+            if (!p.badge || !BADGES[p.badge]) return '';
+            return `<span class="${BADGES[p.badge]} text-[10px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wider shadow-lg ${extraClasses}">${esc(p.badge)}</span>`;
+        }
+
+        function formatPrice(value) {
+            return '$' + Number(value || 0).toLocaleString('es-AR');
+        }
+
+        function priceHTML(p, size = 'card') {
+            const hasOld = Number(p.oldPrice) > Number(p.price);
+            const main = size === 'card' ? 'text-base sm:text-lg' : 'text-3xl';
+            const old = size === 'card' ? 'text-[11px] sm:text-xs' : 'text-base';
+            return `<span class="flex items-baseline gap-2 flex-wrap">
+                <span class="font-bold text-gold ${main}">${formatPrice(p.price)}</span>
+                ${hasOld ? `<span class="${old} text-zinc-500 line-through">${formatPrice(p.oldPrice)}</span>` : ''}
+            </span>`;
+        }
+
+        // ---------- Destacados ----------
+        // Los que marcás con la estrella en el panel; si no marcaste ninguno, los primeros del catálogo.
+        function getFeatured() {
+            const starred = products.filter(p => p.featured);
+            if (starred.length) return starred;
+            const bestSellers = products.filter(p => p.badge === 'Más vendido');
+            if (bestSellers.length) return bestSellers;
+            return products.slice(0, 8);
+        }
+
+        function renderFeatured() {
+            const section = document.getElementById('destacados');
+            const track = document.getElementById('featured-track');
+            if (!section || !track) return;
+            const featured = getFeatured();
+            section.classList.toggle('hidden', featured.length === 0 || !getLayout().showFeatured);
+            track.innerHTML = featured.map(p => productCardHTML(p, { slider: true })).join('');
+        }
+
+        function scrollFeatured(direction) {
+            const track = document.getElementById('featured-track');
+            track.scrollBy({ left: direction * track.clientWidth * 0.8, behavior: 'smooth' });
+        }
+
+        function renderHeroBottles() {
+            const container = document.getElementById('hero-bottles');
+            if (!container) return;
+            const picks = getHeroProducts();
+            if (picks.length === 0) { container.innerHTML = ''; return; }
+            const layouts = [
+                { pos: 'left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-20', size: 'w-40 sm:w-56 lg:w-72', tilt: 0, delay: 0 },
+                { pos: 'left-[2%] sm:left-[6%] top-[22%] z-10', size: 'w-24 sm:w-36 lg:w-44', tilt: -8, delay: 1.2 },
+                { pos: 'right-[2%] sm:right-[6%] top-[30%] z-10', size: 'w-24 sm:w-36 lg:w-44', tilt: 7, delay: 2.4 },
+            ];
+            container.innerHTML = `
+                <div class="absolute left-1/2 bottom-2 -translate-x-1/2 w-3/4 h-10 bg-gold/25 blur-2xl rounded-full" aria-hidden="true"></div>
+                ${picks.map((p, i) => {
+                    const l = layouts[i];
+                    return `
+                    <button onclick="openProductDetail(${p.id})" class="absolute ${l.pos} ${i ? 'opacity-90 hover:opacity-100' : ''} transition-opacity cursor-pointer group" aria-label="Ver ${esc(p.name)}">
+                        <div class="float-bottle ${l.size}" style="--tilt:${l.tilt}deg; animation-delay:-${l.delay}s">
+                            <div class="product-frame rounded-2xl sm:rounded-3xl shadow-2xl shadow-black/70 ring-1 ring-gold/50 group-hover:ring-gold transition-all">
+                                <img src="${esc(imgUrl(p.image, 600))}" alt="${esc(p.name)}" onerror="this.onerror=null;this.src=IMG_FALLBACK">
+                            </div>
+                            ${i === 0 ? `
+                                <div class="mt-3 mx-auto w-max max-w-full bg-zinc-950/90 border border-gold/40 rounded-full px-3 sm:px-4 py-1.5 text-center shadow-xl">
+                                    <span class="block text-[10px] sm:text-xs text-zinc-300 font-semibold truncate max-w-[9rem] sm:max-w-[14rem]">${esc(p.name)}</span>
+                                </div>` : ''}
+                        </div>
+                    </button>`;
+                }).join('')}`;
+        }
+
+        // ---------- Números de la portada ----------
+        function animateCount(el) {
+            const target = Number(el.dataset.target) || 0;
+            el.dataset.done = '1';
+            if (prefersReducedMotion() || target === 0) { el.textContent = target; return; }
+            const duration = 1400;
+            const start = performance.now();
+            const step = now => {
+                const t = Math.min(1, (now - start) / duration);
+                const eased = 1 - Math.pow(1 - t, 3);
+                el.textContent = Math.round(Number(el.dataset.target) * eased);
+                if (t < 1) requestAnimationFrame(step);
+            };
+            requestAnimationFrame(step);
+        }
+
+        // ---------- Animaciones al bajar ----------
+        function prefersReducedMotion() {
+            return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        }
+
+        const revealObserver = ('IntersectionObserver' in window) ? new IntersectionObserver(entries => {
+            entries.forEach(entry => {
+                if (!entry.isIntersecting) return;
+                entry.target.classList.add('is-visible');
+                entry.target.querySelectorAll('.count-up:not([data-done])').forEach(animateCount);
+                revealObserver.unobserve(entry.target);
+            });
+        }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' }) : null;
+
+        function observeReveals() {
+            document.querySelectorAll('.reveal:not(.is-visible)').forEach(el => {
+                if (revealObserver && !prefersReducedMotion()) revealObserver.observe(el);
+                else {
+                    el.classList.add('is-visible');
+                    el.querySelectorAll('.count-up:not([data-done])').forEach(animateCount);
+                }
+            });
+        }
+
+        // En celulares no hay "pasar el mouse": el brillo se activa al tocar la tarjeta.
+        document.addEventListener('touchstart', e => {
+            const card = e.target.closest && e.target.closest('.shine');
+            if (!card) return;
+            card.classList.add('is-touched');
+            setTimeout(() => card.classList.remove('is-touched'), 1000);
+        }, { passive: true });
+
+        // ---------- Brillos dorados de la portada ----------
+        function startSparkles() {
+            const canvas = document.getElementById('hero-sparkles');
+            if (!canvas || prefersReducedMotion()) return;
+            const ctx = canvas.getContext('2d');
+            let width = 0, height = 0, particles = [], visible = true;
+            const color = getComputedStyle(document.documentElement).getPropertyValue('--color-gold').trim() || '#D4AF37';
+
+            const makeParticle = anywhere => ({
+                x: Math.random() * width,
+                y: anywhere ? Math.random() * height : height + 10,
+                r: Math.random() * 1.6 + 0.4,
+                vx: (Math.random() - 0.5) * 0.15,
+                vy: -(Math.random() * 0.25 + 0.05),
+                phase: Math.random() * Math.PI * 2,
+                speed: Math.random() * 0.02 + 0.008,
+            });
+
+            const resize = () => {
+                const dpr = Math.min(window.devicePixelRatio || 1, 2);
+                width = canvas.clientWidth;
+                height = canvas.clientHeight;
+                canvas.width = width * dpr;
+                canvas.height = height * dpr;
+                ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+                const count = Math.round(Math.min(70, (width * height) / 14000));
+                particles = Array.from({ length: count }, () => makeParticle(true));
+            };
+
+            const frame = () => {
+                if (visible) {
+                    ctx.clearRect(0, 0, width, height);
+                    ctx.fillStyle = color;
+                    for (const p of particles) {
+                        p.x += p.vx; p.y += p.vy; p.phase += p.speed;
+                        if (p.y < -10) Object.assign(p, makeParticle(false));
+                        const alpha = 0.15 + 0.75 * Math.abs(Math.sin(p.phase));
+                        ctx.globalAlpha = alpha;
+                        ctx.beginPath();
+                        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+                        ctx.fill();
+                        if (p.r > 1.4 && alpha > 0.8) {
+                            ctx.globalAlpha = alpha * 0.5;
+                            ctx.fillRect(p.x - p.r * 3.5, p.y - 0.35, p.r * 7, 0.7);
+                            ctx.fillRect(p.x - 0.35, p.y - p.r * 3.5, 0.7, p.r * 7);
+                        }
+                    }
+                    ctx.globalAlpha = 1;
+                }
+                requestAnimationFrame(frame);
+            };
+
+            if ('IntersectionObserver' in window) new IntersectionObserver(([entry]) => { visible = entry.isIntersecting; }).observe(canvas);
+            resize();
+            window.addEventListener('resize', resize);
+            requestAnimationFrame(frame);
+        }
+
+        function hideLoader() {
+            document.getElementById('page-loader')?.classList.add('is-hidden');
+        }
+
+        // Íconos disponibles para las tarjetas de las secciones (se eligen en el panel).
+        const SECTION_ICONS = [
+            ['fa-shield-halved', 'Escudo (garantía)'], ['fa-certificate', 'Sello de calidad'], ['fa-gem', 'Gema (lujo)'],
+            ['fa-crown', 'Corona'], ['fa-box-open', 'Caja (stock)'], ['fa-comments', 'Chat (atención)'],
+            ['fa-headset', 'Soporte'], ['fa-money-bill-wave', 'Efectivo'], ['fa-coins', 'Monedas (cripto)'],
+            ['fa-building-columns', 'Banco (transferencia)'], ['fa-credit-card', 'Tarjeta'], ['fa-truck-fast', 'Envío rápido'],
+            ['fa-bolt', 'Rayo (rápido)'], ['fa-motorcycle', 'Moto (mensajería)'], ['fa-location-dot', 'Ubicación'],
+            ['fa-briefcase', 'Maletín (negocio)'], ['fa-handshake', 'Apretón de manos'], ['fa-tags', 'Etiquetas (precios)'],
+            ['fa-gift', 'Regalo'], ['fa-star', 'Estrella'], ['fa-heart', 'Corazón'], ['fa-spray-can-sparkles', 'Perfume'],
+        ];
+        // Las tarjetas viejas tenían emojis: se traducen al ícono equivalente.
+        const EMOJI_TO_ICON = {
+            '🛡️': 'fa-shield-halved', '🛡': 'fa-shield-halved', '📦': 'fa-box-open', '💬': 'fa-comments',
+            '💵': 'fa-money-bill-wave', '🪙': 'fa-coins', '🏦': 'fa-building-columns', '🚚': 'fa-truck-fast',
+            '⚡': 'fa-bolt', '🛵': 'fa-motorcycle', '💼': 'fa-briefcase', '🤝': 'fa-handshake',
+            '💳': 'fa-credit-card', '🎁': 'fa-gift', '⭐': 'fa-star', '✨': 'fa-star',
+        };
+        function cardIcon(card) {
+            if (card.icon && SECTION_ICONS.some(([icon]) => icon === card.icon)) return card.icon;
+            return EMOJI_TO_ICON[String(card.emoji || '').trim()] || 'fa-star';
         }
 
         function renderSections() {
@@ -759,15 +1773,16 @@
             }
             container.innerHTML = settings.sections.map(sec => `
                 <div id="bloque-${sec.id}" class="scroll-mt-28 space-y-10">
-                    <div class="text-center space-y-3">
+                    <div class="reveal text-center space-y-3">
                         ${sec.subtitle ? `<span class="text-xs font-bold uppercase tracking-widest text-gold bg-gold/10 px-4 py-1.5 rounded-full border border-gold/20 shadow-sm">${sec.subtitle}</span>` : ''}
                         <h2 class="font-serif-custom text-3xl md:text-4xl font-bold text-zinc-100 text-center">${sec.title}</h2>
                     </div>
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        ${sec.cards.map(card => `
-                            <div class="bg-zinc-900/60 border border-zinc-800/80 hover:border-gold/50 p-8 rounded-3xl transition-all shadow-xl flex flex-col items-center text-center group">
-                                <div class="w-16 h-16 bg-gold/10 rounded-2xl flex items-center justify-center text-3xl mb-6 border border-gold/20 group-hover:scale-110 transition-transform shadow-inner">
-                                    ${card.emoji || '✨'}
+                        ${sec.cards.map((card, i) => `
+                            <div class="reveal shine bg-zinc-900/60 border border-zinc-800/80 hover:border-gold/50 p-8 rounded-3xl transition-all shadow-xl flex flex-col items-center text-center group" style="transition-delay:${i * 90}ms">
+                                <div class="relative w-16 h-16 mb-6 rounded-full flex items-center justify-center bg-gradient-to-b from-gold/20 to-gold/5 ring-1 ring-gold/40 group-hover:ring-gold group-hover:scale-110 transition-all shadow-lg shadow-gold/10">
+                                    <span class="absolute inset-1.5 rounded-full border border-gold/15" aria-hidden="true"></span>
+                                    <i class="fa-solid ${cardIcon(card)} text-2xl text-gold"></i>
                                 </div>
                                 <h3 class="font-serif-custom font-bold text-xl text-zinc-100 mb-3 text-center">${card.title}</h3>
                                 <p class="text-zinc-400 text-sm leading-relaxed text-center">${card.text}</p>
@@ -783,8 +1798,8 @@
             if (!categoriesContainer) return;
             const categories = ['Todas', ...new Set(products.map(p => p.category))];
             categoriesContainer.innerHTML = categories.map(cat => `
-                <button onclick="filterCategory('${cat}')" class="px-4 py-2 rounded-xl text-xs font-semibold transition-all cursor-pointer ${currentCategory === cat ? 'bg-gold text-zinc-950 shadow-md shadow-gold/20 font-bold' : 'bg-zinc-900 text-zinc-300 hover:bg-zinc-800'}">
-                    ${cat}
+                <button onclick="filterCategory(this.dataset.cat)" data-cat="${esc(cat)}" class="px-4 py-2 rounded-xl text-xs font-semibold transition-all cursor-pointer ${currentCategory === cat ? 'bg-gold text-zinc-950 shadow-md shadow-gold/20 font-bold' : 'bg-zinc-900 text-zinc-300 hover:bg-zinc-800'}">
+                    ${esc(cat)}
                 </button>
             `).join('');
         }
@@ -805,14 +1820,64 @@
             renderCatalog();
         }
 
+        // Tarjeta de producto. En la franja de destacados (slider) va sin flechas de fotos.
+        function productCardHTML(p, { slider = false, index = 0 } = {}) {
+            const allImages = [p.image, ...(p.images || [])].filter(Boolean);
+            const hasMultiple = !slider && allImages.length > 1;
+            const sizing = slider ? 'w-[46%] sm:w-64 shrink-0 snap-start' : '';
+            const delay = slider ? '' : `style="transition-delay:${(index % 4) * 70}ms"`;
+            const imgId = slider ? '' : `id="card-img-${p.id}"`;
+
+            return `
+                <div class="reveal shine ${sizing} bg-zinc-900 border border-zinc-800 rounded-2xl sm:rounded-3xl overflow-hidden shadow-xl hover:border-gold/40 hover:-translate-y-1 hover:shadow-gold/10 transition-all duration-300 flex flex-col group relative" ${delay}>
+                    <div class="bg-zinc-950 relative p-2 sm:p-3 cursor-pointer" onclick="openProductDetail(${p.id})">
+                        <div class="product-frame rounded-xl sm:rounded-2xl">
+                            <img ${imgId} src="${esc(imgUrl(allImages[0], 600))}" data-index="0" alt="${esc(p.name)}" loading="lazy" decoding="async" onerror="this.onerror=null;this.src=IMG_FALLBACK" class="group-hover:scale-105 transition-transform duration-500">
+                        </div>
+                        <div class="absolute top-2 left-2 sm:top-3 sm:left-3 z-10 flex flex-col items-start gap-1">
+                            ${badgeHTML(p)}
+                            ${p.badge ? '' : `<span class="hidden sm:inline-block bg-zinc-900/90 text-gold text-[10px] font-bold px-3 py-1 rounded-full border border-gold/20 uppercase tracking-wider">${esc(p.category)}</span>`}
+                        </div>
+                        ${hasMultiple ? `
+                            <button onclick="event.stopPropagation(); changeCardImage(${p.id}, -1)" class="hidden sm:flex absolute left-2 top-1/2 -translate-y-1/2 bg-zinc-900/80 hover:bg-gold hover:text-zinc-950 text-zinc-200 border border-gold/30 w-8 h-8 rounded-full items-center justify-center text-xs transition-all opacity-80 hover:opacity-100 shadow-md cursor-pointer z-20" title="Imagen anterior">
+                                <i class="fa-solid fa-chevron-left"></i>
+                            </button>
+                            <button onclick="event.stopPropagation(); changeCardImage(${p.id}, 1)" class="hidden sm:flex absolute right-2 top-1/2 -translate-y-1/2 bg-zinc-900/80 hover:bg-gold hover:text-zinc-950 text-zinc-200 border border-gold/30 w-8 h-8 rounded-full items-center justify-center text-xs transition-all opacity-80 hover:opacity-100 shadow-md cursor-pointer z-20" title="Siguiente imagen">
+                                <i class="fa-solid fa-chevron-right"></i>
+                            </button>
+                            <div id="card-dots-${p.id}" class="absolute bottom-2 left-1/2 -translate-x-1/2 flex gap-1 z-10">
+                                ${allImages.map((_, idx) => `<span class="w-1.5 h-1.5 rounded-full ${idx === 0 ? 'bg-gold' : 'bg-zinc-600'} transition-all"></span>`).join('')}
+                            </div>
+                        ` : ''}
+                    </div>
+                    <div class="p-3 sm:p-6 flex flex-col flex-grow justify-between">
+                        <div onclick="openProductDetail(${p.id})" class="cursor-pointer">
+                            <span class="block text-[10px] uppercase tracking-[0.18em] text-gold/80 font-semibold mb-1">${esc(getBrand(p))}</span>
+                            <h3 class="font-serif-custom font-bold text-sm sm:text-lg leading-snug text-zinc-100 mb-1 hover:text-gold transition-colors">${esc(p.name)}</h3>
+                            <p class="hidden sm:block text-xs text-zinc-400 line-clamp-2 mb-4">${esc(p.notes)}</p>
+                        </div>
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pt-3 sm:pt-4 mt-2 sm:mt-0 border-t border-zinc-800/80">
+                            ${priceHTML(p)}
+                            <button onclick="addToCart(${p.id}, this)" class="add-btn bg-gold hover:bg-gold-light text-zinc-950 px-3 sm:px-4 py-2.5 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-2 shadow-md shadow-gold/20 cursor-pointer active:scale-95 shrink-0" aria-label="Agregar ${esc(p.name)} al carrito">
+                                <i class="fa-solid fa-cart-plus"></i> Agregar
+                            </button>
+                        </div>
+                    </div>
+                </div>`;
+        }
+
         function renderCatalog() {
             const grid = document.getElementById('product-grid');
             if (!grid) return;
 
             let filtered = products.filter(p => {
+                const brand = getBrand(p);
                 const matchesCat = currentCategory === 'Todas' || p.category === currentCategory;
-                const matchesSearch = p.name.toLowerCase().includes(currentSearch) || (p.notes && p.notes.toLowerCase().includes(currentSearch));
-                return matchesCat && matchesSearch;
+                const matchesBrand = currentBrand === 'Todas' || brand === currentBrand;
+                const matchesSearch = p.name.toLowerCase().includes(currentSearch)
+                    || brand.toLowerCase().includes(currentSearch)
+                    || (p.notes && p.notes.toLowerCase().includes(currentSearch));
+                return matchesCat && matchesBrand && matchesSearch;
             });
 
             if (currentSort === 'menor') filtered.sort((a, b) => a.price - b.price);
@@ -823,43 +1888,8 @@
                 return;
             }
 
-            grid.innerHTML = filtered.map(p => {
-                const allImages = [p.image, ...(p.images || [])].filter(Boolean);
-                const hasMultiple = allImages.length > 1;
-
-                return `
-                <div class="bg-zinc-900 border border-zinc-800 rounded-3xl overflow-hidden shadow-xl hover:border-gold/40 transition-all flex flex-col group relative">
-                    <div class="h-64 bg-zinc-950 overflow-hidden relative p-4 flex items-center justify-center cursor-pointer" onclick="openProductDetail(${p.id})">
-                        <img id="card-img-${p.id}" src="${allImages[0]}" data-index="0" alt="${p.name}" class="max-h-full max-w-full object-contain group-hover:scale-105 transition-transform duration-300">
-                        <span class="absolute top-3 left-3 bg-zinc-900/90 text-gold text-[10px] font-bold px-3 py-1 rounded-full border border-gold/20 uppercase tracking-wider z-10">${p.category}</span>
-                        
-                        ${hasMultiple ? `
-                            <button onclick="event.stopPropagation(); changeCardImage(${p.id}, -1)" class="absolute left-2 top-1/2 -translate-y-1/2 bg-zinc-900/80 hover:bg-gold hover:text-zinc-950 text-zinc-200 border border-gold/30 w-8 h-8 rounded-full flex items-center justify-center text-xs transition-all opacity-80 hover:opacity-100 shadow-md cursor-pointer z-20" title="Imagen anterior">
-                                <i class="fa-solid fa-chevron-left"></i>
-                            </button>
-                            <button onclick="event.stopPropagation(); changeCardImage(${p.id}, 1)" class="absolute right-2 top-1/2 -translate-y-1/2 bg-zinc-900/80 hover:bg-gold hover:text-zinc-950 text-zinc-200 border border-gold/30 w-8 h-8 rounded-full flex items-center justify-center text-xs transition-all opacity-80 hover:opacity-100 shadow-md cursor-pointer z-20" title="Siguiente imagen">
-                                <i class="fa-solid fa-chevron-right"></i>
-                            </button>
-                            <div id="card-dots-${p.id}" class="absolute bottom-2 left-1/2 -translate-x-1/2 flex gap-1 z-10">
-                                ${allImages.map((_, idx) => `<span class="w-1.5 h-1.5 rounded-full ${idx === 0 ? 'bg-gold' : 'bg-zinc-600'} transition-all"></span>`).join('')}
-                            </div>
-                        ` : ''}
-                    </div>
-                    <div class="p-6 flex flex-col flex-grow justify-between">
-                        <div onclick="openProductDetail(${p.id})" class="cursor-pointer">
-                            <h3 class="font-serif-custom font-bold text-lg text-zinc-100 mb-1 hover:text-gold transition-colors">${p.name}</h3>
-                            <p class="text-xs text-zinc-400 line-clamp-2 mb-4">${p.notes || ''}</p>
-                        </div>
-                        <div class="flex items-center justify-between pt-4 border-t border-zinc-800/80">
-                            <span class="font-bold text-gold text-lg">$${p.price.toLocaleString('es-AR')}</span>
-                            <button onclick="addToCart(${p.id})" class="bg-gold hover:bg-gold-light text-zinc-950 px-4 py-2.5 rounded-xl text-xs font-bold transition-all flex items-center gap-2 shadow-md shadow-gold/20 cursor-pointer">
-                                <i class="fa-solid fa-cart-plus"></i> Agregar
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            `;
-            }).join('');
+            grid.innerHTML = filtered.map((p, index) => productCardHTML(p, { index })).join('');
+            observeReveals();
         }
 
         window.changeCardImage = function(productId, direction) {
@@ -874,7 +1904,7 @@
             let currentIndex = parseInt(imgEl.getAttribute('data-index') || '0', 10);
             currentIndex = (currentIndex + direction + allImages.length) % allImages.length;
             imgEl.setAttribute('data-index', currentIndex);
-            imgEl.src = allImages[currentIndex];
+            imgEl.src = imgUrl(allImages[currentIndex], 600);
 
             const dotsContainer = document.getElementById(`card-dots-${productId}`);
             if (dotsContainer) {
@@ -893,32 +1923,48 @@
 
             renderModalContent(p);
             document.getElementById('product-detail-modal').classList.remove('hidden');
+            const track = document.getElementById('detail-track');
+            let scrollTimer = null;
+            track.addEventListener('scroll', () => {
+                clearTimeout(scrollTimer);
+                scrollTimer = setTimeout(() => setActiveDetailImage(Math.round(track.scrollLeft / track.clientWidth)), 60);
+            }, { passive: true });
         }
 
         function renderModalContent(p) {
             const content = document.getElementById('product-detail-content');
             content.innerHTML = `
-                <div class="lg:col-span-6 space-y-4">
-                    <div class="relative bg-zinc-950 border border-zinc-800 rounded-2xl overflow-hidden h-96 flex items-center justify-center p-4 group select-none">
-                        <img id="main-detail-img" src="${window.currentDetailImages[0]}" class="max-h-full max-w-full object-contain transition-all duration-300">
-                        
+                <div class="lg:col-span-6 space-y-3 min-w-0">
+                    <div class="relative group select-none">
+                        <div id="detail-track" class="flex overflow-x-auto snap-x snap-mandatory no-scrollbar rounded-2xl">
+                            ${window.currentDetailImages.map((img, idx) => `
+                                <button type="button" onclick="openLightbox(${idx})" class="snap-center shrink-0 w-full cursor-zoom-in" aria-label="Ampliar foto ${idx + 1}">
+                                    <div class="product-frame rounded-2xl">
+                                        <img src="${esc(imgUrl(img, 1000))}" alt="${esc(p.name)} - foto ${idx + 1}" ${idx ? 'loading="lazy"' : ''} onerror="this.onerror=null;this.src=IMG_FALLBACK">
+                                    </div>
+                                </button>
+                            `).join('')}
+                        </div>
+                        <span class="pointer-events-none absolute top-3 left-3 bg-zinc-950/80 text-zinc-200 text-[11px] font-semibold px-2.5 py-1 rounded-full border border-gold/30 flex items-center gap-1.5 z-10">
+                            <i class="fa-solid fa-magnifying-glass-plus text-gold"></i> <span class="sm:hidden">Tocá para ampliar</span><span class="hidden sm:inline">Clic para ampliar</span>
+                        </span>
                         ${window.currentDetailImages.length > 1 ? `
-                            <button onclick="updateModalImage(window.currentDetailIndex - 1)" class="absolute left-3 top-1/2 -translate-y-1/2 bg-zinc-900/90 hover:bg-gold hover:text-zinc-950 text-zinc-100 border border-gold/40 w-11 h-11 rounded-full flex items-center justify-center text-lg transition-all shadow-xl cursor-pointer z-10" title="Anterior (Flecha Izquierda)">
+                            <button onclick="updateModalImage(window.currentDetailIndex - 1)" class="hidden sm:flex absolute left-3 top-1/2 -translate-y-1/2 bg-zinc-900/90 hover:bg-gold hover:text-zinc-950 text-zinc-100 border border-gold/40 w-11 h-11 rounded-full items-center justify-center text-lg transition-all shadow-xl cursor-pointer z-10" title="Anterior (Flecha Izquierda)">
                                 <i class="fa-solid fa-chevron-left"></i>
                             </button>
-                            <button onclick="updateModalImage(window.currentDetailIndex + 1)" class="absolute right-3 top-1/2 -translate-y-1/2 bg-zinc-900/90 hover:bg-gold hover:text-zinc-950 text-zinc-100 border border-gold/40 w-11 h-11 rounded-full flex items-center justify-center text-lg transition-all shadow-xl cursor-pointer z-10" title="Siguiente (Flecha Derecha)">
+                            <button onclick="updateModalImage(window.currentDetailIndex + 1)" class="hidden sm:flex absolute right-3 top-1/2 -translate-y-1/2 bg-zinc-900/90 hover:bg-gold hover:text-zinc-950 text-zinc-100 border border-gold/40 w-11 h-11 rounded-full items-center justify-center text-lg transition-all shadow-xl cursor-pointer z-10" title="Siguiente (Flecha Derecha)">
                                 <i class="fa-solid fa-chevron-right"></i>
                             </button>
-                            <span id="modal-img-counter" class="absolute bottom-3 right-3 bg-zinc-950/80 text-gold text-xs font-bold px-3 py-1 rounded-full border border-gold/30">
+                            <span id="modal-img-counter" class="pointer-events-none absolute bottom-3 right-3 bg-zinc-950/80 text-gold text-xs font-bold px-3 py-1 rounded-full border border-gold/30 z-10">
                                 1 / ${window.currentDetailImages.length}
                             </span>
                         ` : ''}
                     </div>
                     ${window.currentDetailImages.length > 1 ? `
-                        <div class="flex gap-3 overflow-x-auto pb-2">
+                        <div class="flex gap-2 sm:gap-3 overflow-x-auto no-scrollbar p-1">
                             ${window.currentDetailImages.map((img, idx) => `
-                                <button onclick="updateModalImage(${idx})" class="detail-thumb-btn w-20 h-20 bg-zinc-950 border ${idx === 0 ? 'border-gold ring-2 ring-gold/50' : 'border-zinc-700'} hover:border-gold rounded-xl overflow-hidden shrink-0 p-1 cursor-pointer transition-all">
-                                    <img src="${img}" class="w-full h-full object-cover rounded-lg">
+                                <button onclick="updateModalImage(${idx})" class="detail-thumb-btn shrink-0 rounded-xl ring-2 ${idx === 0 ? 'ring-gold' : 'ring-transparent opacity-60'} hover:opacity-100 transition-all cursor-pointer" aria-label="Ver foto ${idx + 1}">
+                                    <div class="product-frame w-16 h-16 sm:w-20 sm:h-20 rounded-xl !p-1"><img src="${esc(imgUrl(img, 200))}" alt="" loading="lazy"></div>
                                 </button>
                             `).join('')}
                         </div>
@@ -926,15 +1972,16 @@
                 </div>
                 <div class="lg:col-span-6 space-y-6">
                     <div>
-                        <span class="text-xs font-bold uppercase tracking-widest text-gold bg-gold/10 px-3.5 py-1.5 rounded-full border border-gold/20">${p.category}</span>
-                        <h2 class="font-serif-custom text-3xl sm:text-4xl font-bold text-zinc-100 mt-3 mb-2">${p.name}</h2>
-                        <span class="text-3xl font-bold text-gold block">$${p.price.toLocaleString('es-AR')}</span>
+                        <div class="flex flex-wrap items-center gap-2">
+                            <span class="text-xs font-bold uppercase tracking-widest text-gold bg-gold/10 px-3.5 py-1.5 rounded-full border border-gold/20">${esc(p.category)}</span>
+                            ${badgeHTML(p)}
+                        </div>
+                        <span class="block text-xs uppercase tracking-[0.25em] text-gold/80 font-semibold mt-4">${esc(getBrand(p))}</span>
+                        <h2 class="font-serif-custom text-2xl sm:text-4xl font-bold text-zinc-100 mt-1 mb-3">${esc(p.name)}</h2>
+                        ${priceHTML(p, 'detail')}
                     </div>
-                    <div class="bg-zinc-950 p-5 rounded-2xl border border-zinc-800 space-y-2">
-                        <h4 class="font-bold text-xs uppercase tracking-wider text-zinc-400"><i class="fa-solid fa-feather text-gold"></i> Notas Olfativas / Descripción</h4>
-                        <p class="text-zinc-300 text-sm leading-relaxed">${p.notes || 'Sin especificaciones detalladas.'}</p>
-                    </div>
-                    <div class="flex gap-4 pt-4">
+                    ${notesHTML(p.notes)}
+                    <div class="flex gap-4 pt-2">
                         <button onclick="addToCart(${p.id}); closeProductDetail();" class="flex-grow bg-gold hover:bg-gold-light text-zinc-950 font-bold py-4 px-6 rounded-xl transition-all shadow-xl shadow-gold/20 flex items-center justify-center gap-3 text-base cursor-pointer">
                             <i class="fa-solid fa-bag-shopping"></i> Agregar al Carrito
                         </button>
@@ -943,26 +1990,151 @@
             `;
         }
 
-        function updateModalImage(index) {
-            if (!window.currentDetailImages || window.currentDetailImages.length === 0) return;
-            window.currentDetailIndex = (index + window.currentDetailImages.length) % window.currentDetailImages.length;
-            
-            const imgEl = document.getElementById('main-detail-img');
-            if (imgEl) imgEl.src = window.currentDetailImages[window.currentDetailIndex];
+        // Convierte "Salida: ... Corazón: ... Fondo: ..." en una pirámide olfativa.
+        // Si la descripción no tiene ese formato (cremas, body splash), se muestra como texto.
+        function parseNotes(notes) {
+            const match = String(notes || '').match(/salida:\s*(.*?)\s*coraz[oó]n:\s*(.*?)\s*fondo:\s*(.*)$/is);
+            if (!match) return null;
+            const split = text => text.replace(/\.\s*$/, '')
+                .split(/,\s*|\s+y\s+/i)
+                .map(t => t.trim())
+                .filter(Boolean)
+                .map(t => t.charAt(0).toUpperCase() + t.slice(1));
+            return [split(match[1]), split(match[2]), split(match[3])];
+        }
 
+        function notesHTML(notes) {
+            const tiers = parseNotes(notes);
+            if (!tiers) {
+                return `
+                    <div class="bg-zinc-950 p-5 rounded-2xl border border-zinc-800 space-y-2">
+                        <h4 class="font-bold text-xs uppercase tracking-wider text-zinc-400"><i class="fa-solid fa-feather text-gold"></i> Descripción</h4>
+                        <p class="text-zinc-300 text-sm leading-relaxed">${esc(notes) || 'Sin especificaciones detalladas.'}</p>
+                    </div>`;
+            }
+            const info = [
+                { label: 'Salida', hint: 'Lo primero que sentís', icon: 'fa-wind',
+                  clip: 'polygon(50% 0, 66.67% 100%, 33.33% 100%)', colors: 'from-gold-light to-gold', iconPos: 'bottom-2.5' },
+                { label: 'Corazón', hint: 'Después de unos minutos', icon: 'fa-heart',
+                  clip: 'polygon(33.33% 0, 66.67% 0, 83.33% 100%, 16.67% 100%)', colors: 'from-gold to-gold-dark', iconPos: 'top-1/2 -translate-y-1/2' },
+                { label: 'Fondo', hint: 'Lo que perdura en la piel', icon: 'fa-gem',
+                  clip: 'polygon(16.67% 0, 83.33% 0, 100% 100%, 0 100%)', colors: 'from-gold-dark to-[#5c4714]', iconPos: 'top-1/2 -translate-y-1/2' },
+            ];
+            // Cada fila tiene una "rebanada" de la pirámide; apiladas forman la figura completa.
+            return `
+                <div>
+                    <h4 class="font-bold text-xs uppercase tracking-wider text-zinc-400 mb-3"><i class="fa-solid fa-feather text-gold"></i> Pirámide olfativa</h4>
+                    <div class="space-y-1.5">
+                        ${tiers.map((notesList, i) => `
+                            <div class="flex items-stretch gap-4 min-h-[84px]">
+                                <div class="pyramid-tier relative w-24 sm:w-32 shrink-0" style="clip-path:${info[i].clip}; animation-delay:${i * 130}ms">
+                                    <div class="absolute inset-0 bg-gradient-to-b ${info[i].colors}"></div>
+                                    <div class="absolute inset-0 bg-[linear-gradient(115deg,transparent_42%,rgba(255,255,255,.35)_50%,transparent_58%)]"></div>
+                                    <i class="fa-solid ${info[i].icon} absolute left-1/2 -translate-x-1/2 ${info[i].iconPos} text-zinc-950/80 ${i === 0 ? 'text-[11px]' : 'text-base'}"></i>
+                                </div>
+                                <div class="flex-1 min-w-0 py-2 ${i < 2 ? 'border-b border-zinc-800/80' : ''} flex flex-col justify-center">
+                                    <div class="flex items-baseline gap-2 flex-wrap">
+                                        <span class="font-serif-custom font-bold text-zinc-100 text-base">${info[i].label}</span>
+                                        <span class="text-[11px] text-zinc-500">${info[i].hint}</span>
+                                    </div>
+                                    <div class="flex flex-wrap gap-1.5 mt-2">
+                                        ${notesList.map(n => `<span class="text-xs text-zinc-200 bg-gold/5 border border-gold/20 rounded-full px-2.5 py-1">${esc(n)}</span>`).join('')}
+                                    </div>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>`;
+        }
+
+        // Marca la foto activa (contador y miniaturas) sin mover la galería.
+        function setActiveDetailImage(index) {
+            const total = window.currentDetailImages.length;
+            if (!total) return;
+            window.currentDetailIndex = Math.max(0, Math.min(total - 1, index));
             const counterEl = document.getElementById('modal-img-counter');
-            if (counterEl) counterEl.innerText = `${window.currentDetailIndex + 1} / ${window.currentDetailImages.length}`;
-
-            const thumbs = document.querySelectorAll('.detail-thumb-btn');
-            thumbs.forEach((tb, i) => {
-                if (i === window.currentDetailIndex) {
-                    tb.classList.add('border-gold', 'ring-2', 'ring-gold/50');
-                    tb.classList.remove('border-zinc-700');
-                } else {
-                    tb.classList.remove('border-gold', 'ring-2', 'ring-gold/50');
-                    tb.classList.add('border-zinc-700');
-                }
+            if (counterEl) counterEl.innerText = `${window.currentDetailIndex + 1} / ${total}`;
+            document.querySelectorAll('.detail-thumb-btn').forEach((tb, i) => {
+                const active = i === window.currentDetailIndex;
+                tb.classList.toggle('ring-gold', active);
+                tb.classList.toggle('ring-transparent', !active);
+                tb.classList.toggle('opacity-60', !active);
             });
+        }
+
+        function updateModalImage(index) {
+            const total = window.currentDetailImages.length;
+            if (!total) return;
+            const target = (index + total) % total;
+            const track = document.getElementById('detail-track');
+            if (track) track.scrollTo({ left: target * track.clientWidth, behavior: prefersReducedMotion() ? 'auto' : 'smooth' });
+            setActiveDetailImage(target);
+        }
+
+        // ---------- Visor a pantalla completa con zoom ----------
+        let lightboxIndex = 0;
+        let lightboxZoomed = false;
+
+        function openLightbox(index) {
+            lightboxIndex = index;
+            document.getElementById('lightbox').classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+            showLightboxImage();
+        }
+
+        function closeLightbox() {
+            document.getElementById('lightbox').classList.add('hidden');
+            document.body.style.overflow = '';
+            updateModalImage(lightboxIndex);
+        }
+
+        function showLightboxImage() {
+            const images = window.currentDetailImages;
+            const img = document.getElementById('lightbox-img');
+            setLightboxZoom(false);
+            img.src = imgUrl(images[lightboxIndex], 2000);
+            document.getElementById('lightbox-counter').textContent = `${lightboxIndex + 1} / ${images.length}`;
+            document.querySelectorAll('.lightbox-nav').forEach(btn => btn.classList.toggle('invisible', images.length < 2));
+        }
+
+        function lightboxStep(direction) {
+            const total = window.currentDetailImages.length;
+            lightboxIndex = (lightboxIndex + direction + total) % total;
+            showLightboxImage();
+        }
+
+        // Clic o toque en la foto: acerca al punto tocado; otro clic vuelve al tamaño normal.
+        function setLightboxZoom(zoomed, event) {
+            const stage = document.getElementById('lightbox-stage');
+            const img = document.getElementById('lightbox-img');
+            lightboxZoomed = zoomed;
+            if (!zoomed) {
+                img.style.width = img.style.height = img.style.maxWidth = img.style.maxHeight = img.style.flexShrink = img.style.alignSelf = '';
+                img.classList.add('max-w-full', 'max-h-full', 'm-auto', 'cursor-zoom-in');
+                img.classList.remove('cursor-zoom-out');
+                return;
+            }
+            const rect = img.getBoundingClientRect();
+            const relX = event ? (event.clientX - rect.left) / rect.width : 0.5;
+            const relY = event ? (event.clientY - rect.top) / rect.height : 0.5;
+            const zoomedWidth = Math.max(rect.width * 2.5, stage.clientWidth * 1.5);
+            img.classList.remove('max-w-full', 'max-h-full', 'm-auto', 'cursor-zoom-in');
+            img.classList.add('cursor-zoom-out');
+            // Sin límites de tamaño y sin que el contenedor la achique, para poder recorrerla.
+            img.style.maxWidth = 'none';
+            img.style.maxHeight = 'none';
+            img.style.flexShrink = '0';
+            img.style.alignSelf = 'flex-start';
+            img.style.height = 'auto';
+            img.style.width = zoomedWidth + 'px';
+            requestAnimationFrame(() => {
+                stage.scrollLeft = relX * img.offsetWidth - stage.clientWidth / 2;
+                stage.scrollTop = relY * img.offsetHeight - stage.clientHeight / 2;
+            });
+        }
+
+        function toggleLightboxZoom(event) {
+            setLightboxZoom(!lightboxZoomed, event);
         }
 
         function closeProductDetail() {
@@ -971,6 +2143,12 @@
 
         function setupKeyboardListeners() {
             window.addEventListener('keydown', (e) => {
+                if (!document.getElementById('lightbox').classList.contains('hidden')) {
+                    if (e.key === 'Escape') closeLightbox();
+                    else if (e.key === 'ArrowRight') lightboxStep(1);
+                    else if (e.key === 'ArrowLeft') lightboxStep(-1);
+                    return;
+                }
                 const modal = document.getElementById('product-detail-modal');
                 if (modal && !modal.classList.contains('hidden')) {
                     if (e.key === 'ArrowRight') {
@@ -1005,12 +2183,55 @@
 
         function toggleCart() { document.getElementById('cart-drawer').classList.toggle('hidden'); }
 
-        function addToCart(productId) {
+        function toggleMobileMenu(force) {
+            const menu = document.getElementById('mobile-menu');
+            const open = typeof force === 'boolean' ? force : menu.classList.contains('hidden');
+            menu.classList.toggle('hidden', !open);
+            const btn = document.getElementById('mobile-menu-btn');
+            btn.setAttribute('aria-expanded', String(open));
+            btn.querySelector('i').className = `fa-solid ${open ? 'fa-xmark' : 'fa-bars'} text-lg`;
+        }
+
+        function restartAnimation(el, className) {
+            if (!el) return;
+            el.classList.remove(className);
+            void el.offsetWidth; // fuerza al navegador a reiniciar la animación
+            el.classList.add(className);
+        }
+
+        // Ya no abre el carrito solo: avisa con una animación y un cartelito.
+        function addToCart(productId, button) {
             const product = products.find(p => p.id === productId);
+            if (!product) return;
             const existing = cart.find(item => item.id === productId);
             if (existing) existing.qty += 1;
             else cart.push({ ...product, qty: 1 });
-            saveCart(); updateCartUI(); toggleCart();
+            saveCart(); updateCartUI();
+
+            restartAnimation(document.getElementById('cart-counter'), 'bump');
+            restartAnimation(document.getElementById('cart-btn'), 'cart-wiggle');
+
+            if (button) {
+                button.dataset.label = button.dataset.label || button.innerHTML;
+                button.innerHTML = '<i class="fa-solid fa-check"></i> Agregado';
+                button.classList.add('!bg-emerald-400');
+                clearTimeout(button._resetTimer);
+                button._resetTimer = setTimeout(() => {
+                    button.innerHTML = button.dataset.label;
+                    button.classList.remove('!bg-emerald-400');
+                }, 1400);
+            }
+            showCartToast(product);
+        }
+
+        let toastTimer = null;
+        function showCartToast(product) {
+            const toast = document.getElementById('cart-toast');
+            document.getElementById('cart-toast-text').textContent = `${product.name} se agregó al carrito`;
+            toast.classList.remove('hidden');
+            restartAnimation(toast, 'toast-in');
+            clearTimeout(toastTimer);
+            toastTimer = setTimeout(() => toast.classList.add('hidden'), 3200);
         }
 
         function updateQty(productId, delta) {
@@ -1042,9 +2263,9 @@
                 return `
                     <div class="py-4 flex items-center justify-between gap-4">
                         <div class="flex items-center space-x-3">
-                            <img src="${item.image}" class="w-14 h-14 object-cover rounded-xl border border-zinc-800 bg-zinc-950" alt="">
+                            <div class="product-frame w-14 h-14 shrink-0 rounded-xl !p-1"><img src="${esc(imgUrl(item.image, 150))}" alt=""></div>
                             <div>
-                                <h4 class="font-serif-custom font-bold text-sm text-zinc-100">${item.name}</h4>
+                                <h4 class="font-serif-custom font-bold text-sm text-zinc-100">${esc(item.name)}</h4>
                                 <span class="text-xs text-gold font-semibold">$${item.price.toLocaleString('es-AR')} x u.</span>
                             </div>
                         </div>
@@ -1074,6 +2295,7 @@
         }
 
         function openAdminAuth() {
+            if (isAdmin) { toggleAdminPanel(); return; }
             const pwdInput = document.getElementById('admin-password-input');
             if (pwdInput) pwdInput.value = '';
             const err = document.getElementById('auth-error-msg');
@@ -1087,23 +2309,49 @@
             if (modal) modal.classList.add('hidden');
         }
 
-        function handleAdminLogin(e) {
+        async function handleAdminLogin(e) {
             if (e) e.preventDefault();
-            const input = document.getElementById('admin-password-input');
-            const pass = input ? input.value : '';
-            if (pass === settings.adminPassword) {
+            const email = document.getElementById('admin-email-input').value.trim();
+            const pass = document.getElementById('admin-password-input').value;
+            const err = document.getElementById('auth-error-msg');
+            const btn = document.getElementById('admin-login-btn');
+            err.classList.add('hidden');
+            if (!auth) {
+                err.innerText = 'No se pudo conectar con el servidor. Probá de nuevo en unos segundos.';
+                err.classList.remove('hidden');
+                return;
+            }
+            btn.disabled = true;
+            try {
+                await signInWithEmailAndPassword(auth, email, pass);
+                isAdmin = true;
+                document.getElementById('admin-password-input').value = '';
                 closeAdminAuth();
                 toggleAdminPanel();
-            } else {
-                const err = document.getElementById('auth-error-msg');
-                if (err) err.classList.remove('hidden');
+            } catch (error) {
+                err.innerText = error.code === 'auth/too-many-requests'
+                    ? 'Demasiados intentos. Esperá unos minutos y probá de nuevo.'
+                    : 'Correo o contraseña incorrectos.';
+                err.classList.remove('hidden');
+            } finally {
+                btn.disabled = false;
             }
+        }
+
+        async function handleAdminLogout() {
+            document.getElementById('admin-modal').classList.add('hidden');
+            isAdmin = false;
+            try {
+                await signOut(auth);
+                await signInAnonymously(auth);
+            } catch (e) {}
         }
 
         function toggleAdminPanel() {
             const modal = document.getElementById('admin-modal');
             if (!modal) return;
             if (modal.classList.contains('hidden')) {
+                if (!isAdmin) { openAdminAuth(); return; }
                 loadSettingsForm();
                 renderAdminProducts();
                 modal.classList.remove('hidden');
@@ -1145,39 +2393,181 @@
             });
         };
 
-        window.handleNewImageFile = function(e) {
-            const file = e.target.files[0];
-            if (file) {
+        // ---------- Subida de fotos ----------
+        // Con Cloudinary configurado (pestaña "Fotos"), las fotos se guardan allá y en la base queda solo el link.
+        // Sin Cloudinary, se achican y se guardan dentro de la base, que tiene un límite de espacio.
+        function cloudinaryConfig() {
+            const c = settings.cloudinary || {};
+            return c.cloudName && c.uploadPreset ? c : null;
+        }
+
+        function loadImageFile(file) {
+            return new Promise((resolve, reject) => {
+                const img = new Image();
                 const objectUrl = URL.createObjectURL(file);
-                document.getElementById('new-image-url').value = objectUrl;
-            }
-        };
+                img.onload = () => { URL.revokeObjectURL(objectUrl); resolve(img); };
+                img.onerror = () => { URL.revokeObjectURL(objectUrl); reject(new Error('El archivo no es una imagen válida.')); };
+                img.src = objectUrl;
+            });
+        }
 
-        window.newExtraUrls = [];
-        window.handleNewExtraFiles = function(e) {
-            const files = e.target.files;
+        function drawScaled(img, maxSize) {
+            const scale = Math.min(1, maxSize / Math.max(img.width, img.height));
+            const canvas = document.createElement('canvas');
+            canvas.width = Math.round(img.width * scale);
+            canvas.height = Math.round(img.height * scale);
+            canvas.getContext('2d').drawImage(img, 0, 0, canvas.width, canvas.height);
+            return canvas;
+        }
+
+        async function fileToDataUrl(file, maxSize, quality = 0.8) {
+            return drawScaled(await loadImageFile(file), maxSize).toDataURL('image/webp', quality);
+        }
+
+        async function uploadImage(file, maxSize) {
+            const cfg = cloudinaryConfig();
+            if (!cfg) return { url: await fileToDataUrl(file, Math.min(maxSize, 600)), local: true };
+
+            // Se achica antes de subir para no gastar espacio de más (1600 px alcanza para el zoom).
+            const isPng = file.type === 'image/png';
+            const canvas = drawScaled(await loadImageFile(file), 1600);
+            const blob = await new Promise(resolve => canvas.toBlob(resolve, isPng ? 'image/png' : 'image/jpeg', 0.9));
+            const form = new FormData();
+            form.append('file', blob, file.name.replace(/\.[^.]+$/, '') + (isPng ? '.png' : '.jpg'));
+            form.append('upload_preset', cfg.uploadPreset);
+            form.append('folder', 'black-perfumes');
+            const res = await fetch(`https://api.cloudinary.com/v1_1/${encodeURIComponent(cfg.cloudName)}/image/upload`, { method: 'POST', body: form });
+            const data = await res.json().catch(() => ({}));
+            if (!res.ok || !data.secure_url) throw new Error(data.error?.message || 'Cloudinary no aceptó la foto.');
+            return { url: data.secure_url, local: false };
+        }
+
+        const PRODUCT_IMAGE_SIZE = 1600;
+        const LOGO_IMAGE_SIZE = 512;
+
+        // ---------- Administrador de fotos de cada producto ----------
+        window.photoLists = { new: [], edit: [] };
+        window.draggedPhoto = null; // lo usan los ondragstart="" de las miniaturas
+
+        function setPhotoStatus(prefix, html) {
+            document.getElementById(`${prefix}-photo-status`).innerHTML = html;
+        }
+
+        function renderPhotoManager(prefix) {
+            const list = photoLists[prefix];
+            const box = document.getElementById(`${prefix}-photos`);
+            if (!list.length) {
+                box.innerHTML = '<p class="text-xs text-zinc-500 italic m-auto py-6 text-center">Todavía no hay fotos.<br>Pegá un link, tocá "Subir fotos" o arrastrá archivos acá.</p>';
+                return;
+            }
+            const btn = 'w-7 h-7 rounded-lg bg-zinc-800 hover:bg-zinc-700 text-zinc-300 text-[11px] disabled:opacity-30 disabled:cursor-default cursor-pointer';
+            box.innerHTML = list.map((url, i) => `
+                <div class="w-24" draggable="true" ondragstart="draggedPhoto = { prefix: '${prefix}', index: ${i} }" ondragend="window.draggedPhoto = null" ondrop="photoBoxDrop(event, '${prefix}', ${i})" ondragover="event.preventDefault()">
+                    <div class="relative">
+                        <div class="product-frame w-24 h-24 rounded-xl !p-1 ring-2 ${i === 0 ? 'ring-gold' : 'ring-zinc-800'} cursor-grab active:cursor-grabbing">
+                            <img src="${esc(imgUrl(url, 200))}" alt="Foto ${i + 1}" onerror="this.onerror=null;this.src=IMG_FALLBACK">
+                        </div>
+                        ${i === 0 ? '<span class="absolute top-1 left-1 z-10 bg-gold text-zinc-950 text-[9px] font-bold px-1.5 py-0.5 rounded">PRINCIPAL</span>' : ''}
+                        ${String(url).startsWith('data:') ? '<span class="absolute top-1 right-1 z-10 bg-orange-400 text-zinc-950 text-[9px] w-5 h-5 rounded flex items-center justify-center" title="Guardada dentro de la base (ocupa espacio)"><i class="fa-solid fa-database"></i></span>' : ''}
+                    </div>
+                    <div class="flex justify-between gap-1 mt-1.5">
+                        <button type="button" class="${btn}" onclick="movePhoto('${prefix}', ${i}, ${i - 1})" ${i === 0 ? 'disabled' : ''} title="Mover a la izquierda"><i class="fa-solid fa-chevron-left"></i></button>
+                        <button type="button" class="${btn}" onclick="movePhoto('${prefix}', ${i}, 0)" ${i === 0 ? 'disabled' : ''} title="Hacer principal"><i class="fa-solid fa-star"></i></button>
+                        <button type="button" class="${btn} hover:!bg-red-500 hover:!text-white" onclick="removePhoto('${prefix}', ${i})" title="Quitar foto"><i class="fa-solid fa-xmark"></i></button>
+                        <button type="button" class="${btn}" onclick="movePhoto('${prefix}', ${i}, ${i + 1})" ${i === list.length - 1 ? 'disabled' : ''} title="Mover a la derecha"><i class="fa-solid fa-chevron-right"></i></button>
+                    </div>
+                </div>`).join('');
+        }
+
+        function setPhotoList(prefix, urls) {
+            photoLists[prefix] = urls.filter(Boolean);
+            renderPhotoManager(prefix);
+            setPhotoStatus(prefix, cloudinaryConfig() ? '' : '<i class="fa-solid fa-circle-info text-gold"></i> Cloudinary no está configurado: las fotos que subas se guardan dentro de la base, que tiene poco espacio. Configuralo en la pestaña "Fotos" o usá links.');
+        }
+
+        function movePhoto(prefix, from, to) {
+            const list = photoLists[prefix];
+            if (to < 0 || to >= list.length || from === to) return;
+            const [moved] = list.splice(from, 1);
+            list.splice(to, 0, moved);
+            renderPhotoManager(prefix);
+        }
+
+        function removePhoto(prefix, index) {
+            photoLists[prefix].splice(index, 1);
+            renderPhotoManager(prefix);
+        }
+
+        // Soltar sobre el recuadro: si son archivos se suben; si es una miniatura, se reordena.
+        function photoBoxDrop(event, prefix, targetIndex) {
+            event.preventDefault();
+            event.stopPropagation();
+            if (event.dataTransfer && event.dataTransfer.files && event.dataTransfer.files.length) {
+                addPhotoFiles(prefix, event.dataTransfer.files);
+                return;
+            }
+            if (window.draggedPhoto && window.draggedPhoto.prefix === prefix) {
+                const to = targetIndex === undefined ? photoLists[prefix].length - 1 : targetIndex;
+                movePhoto(prefix, window.draggedPhoto.index, to);
+            }
+            window.draggedPhoto = null;
+        }
+
+        function addPhotoUrls(prefix) {
+            const input = document.getElementById(`${prefix}-photo-url`);
+            const urls = input.value.split(/[\s,]+/).map(u => u.trim()).filter(u => /^https?:\/\//i.test(u));
+            if (!urls.length) {
+                setPhotoStatus(prefix, '<span class="text-red-400">Pegá un link que empiece con http:// o https://</span>');
+                return;
+            }
+            photoLists[prefix].push(...urls);
+            input.value = '';
+            renderPhotoManager(prefix);
+            setPhotoStatus(prefix, '');
+        }
+
+        async function addPhotoFiles(prefix, fileList) {
+            const files = [...fileList].filter(f => f.type.startsWith('image/'));
+            let failed = 0, local = 0;
             for (let i = 0; i < files.length; i++) {
-                const objectUrl = URL.createObjectURL(files[i]);
-                window.newExtraUrls.push(objectUrl);
+                setPhotoStatus(prefix, `<i class="fa-solid fa-spinner fa-spin text-gold"></i> Subiendo foto ${i + 1} de ${files.length}...`);
+                try {
+                    const result = await uploadImage(files[i], PRODUCT_IMAGE_SIZE);
+                    if (result.local) local++;
+                    photoLists[prefix].push(result.url);
+                    renderPhotoManager(prefix);
+                } catch (err) {
+                    failed++;
+                }
             }
-            renderNewExtraPreviews();
-        };
+            const parts = [];
+            if (failed) parts.push(`<span class="text-red-400">${failed} foto${failed > 1 ? 's' : ''} no se pudo subir. Revisá tu conexión o la configuración de Cloudinary.</span>`);
+            if (local) parts.push('<span class="text-orange-300">Sin Cloudinary: se guardaron dentro de la base (ocupan espacio).</span>');
+            setPhotoStatus(prefix, parts.join(' ') || '<span class="text-emerald-400"><i class="fa-solid fa-check"></i> Fotos subidas. Acordate de guardar el producto.</span>');
+        }
 
-        function renderNewExtraPreviews() {
-            const container = document.getElementById('new-extra-urls-preview');
-            if (!container) return;
-            
-            const textVal = document.getElementById('new-extra-urls-text') ? document.getElementById('new-extra-urls-text').value : '';
-            const pastedUrls = textVal.split(/[\n,]+/).map(u => u.trim()).filter(u => u.length > 0);
-            
-            const allExtra = [...pastedUrls, ...window.newExtraUrls];
+        function populateBrandDatalist() {
+            const dl = document.getElementById('brand-options');
+            if (dl) dl.innerHTML = getBrands().filter(b => b.name !== 'Otras').map(b => `<option value="${esc(b.name)}">`).join('');
+        }
 
-            container.innerHTML = allExtra.map((url) => `
-                <div class="relative w-12 h-12 bg-zinc-950 border border-zinc-700 rounded-lg overflow-hidden group">
-                    <img src="${url}" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/100x100/18181b/D4AF37?text=URL'">
-                    <span class="absolute bottom-0 inset-x-0 bg-zinc-950/80 text-[8px] text-zinc-400 text-center truncate px-0.5">Vista previa</span>
-                </div>
-            `).join('');
+        // Campos nuevos del producto: marca, etiqueta, precio anterior y destacado.
+        function readProductExtras(prefix) {
+            const oldPrice = Number(document.getElementById(`${prefix}-old-price`).value);
+            return {
+                brand: document.getElementById(`${prefix}-brand`).value.trim(),
+                badge: document.getElementById(`${prefix}-badge`).value,
+                oldPrice: oldPrice > 0 ? oldPrice : null,
+                featured: document.getElementById(`${prefix}-featured`).checked,
+            };
+        }
+
+        async function toggleFeatured(id) {
+            const p = products.find(prod => prod.id === id);
+            if (!p) return;
+            p.featured = !p.featured;
+            if (!(await saveCloudState())) { p.featured = !p.featured; return; }
+            renderAdminProducts(); renderSite();
         }
 
         function populateCategoryDatalist() {
@@ -1192,8 +2582,13 @@
             if (tabName === 'bloques') {
                 syncUIValuesToTempSections();
             }
+            if (tabName === 'respaldo') {
+                renderBackupList();
+            }
             if (tabName === 'nuevo') {
                 populateCategoryDatalist();
+                if (!photoLists.new.length) setPhotoList('new', []);
+                populateBrandDatalist();
             }
             document.querySelectorAll('.admin-tab-content').forEach(el => el.classList.add('hidden'));
             document.querySelectorAll('.admin-tab-btn').forEach(el => {
@@ -1212,33 +2607,26 @@
 
         async function handleAddNewProduct(e) {
             e.preventDefault();
-            const mainImgUrl = document.getElementById('new-image-url').value.trim();
-
-            const textVal = document.getElementById('new-extra-urls-text') ? document.getElementById('new-extra-urls-text').value : '';
-            const pastedUrls = textVal.split(/[\n,]+/).map(u => u.trim()).filter(u => u.length > 0);
-            const combinedExtraImages = [...pastedUrls, ...(window.newExtraUrls || [])];
+            const photos = photoLists.new;
 
             products.push({
                 id: Date.now(),
                 name: document.getElementById('new-name').value,
                 category: document.getElementById('new-category').value,
                 price: Number(document.getElementById('new-price').value),
-                image: mainImgUrl || "https://placehold.co/600x600/18181b/D4AF37?text=Perfume",
-                images: combinedExtraImages,
-                notes: document.getElementById('new-notes').value || ''
+                image: photos[0] || "https://placehold.co/600x600/18181b/D4AF37?text=Perfume",
+                images: photos.slice(1),
+                notes: document.getElementById('new-notes').value || '',
+                ...readProductExtras('new')
             });
             
-            window.newExtraUrls = [];
-            await saveCloudState();
+            if (!(await saveCloudState())) return;
             await window.showCustomAlert("Producto creado exitosamente.");
             document.getElementById('add-product-form').reset();
-            if (document.getElementById('new-extra-urls-text')) document.getElementById('new-extra-urls-text').value = '';
-            document.getElementById('new-extra-urls-preview').innerHTML = '';
-            document.getElementById('new-image-url').value = '';
+            setPhotoList('new', []);
             renderAdminProducts(); renderSite(); switchAdminTab('productos');
         }
 
-        window.renderNewExtraPreviews = renderNewExtraPreviews;
 
         function renderAdminProducts() {
             const list = document.getElementById('admin-product-list');
@@ -1273,12 +2661,13 @@
                         </div>
                         <img src="${p.image}" class="w-12 h-12 object-contain rounded-xl bg-zinc-900 border border-zinc-800 shrink-0" alt="">
                         <div>
-                            <h4 class="font-serif-custom font-bold text-sm text-zinc-100">${p.name}</h4>
-                            <p class="text-xs text-gold">${p.category} — $${p.price.toLocaleString('es-AR')}</p>
-                            <p class="text-[10px] text-zinc-500 mt-0.5"><i class="fa-solid fa-images"></i> ${totalImgs} foto${totalImgs > 1 ? 's' : ''}</p>
+                            <h4 class="font-serif-custom font-bold text-sm text-zinc-100">${esc(p.name)}</h4>
+                            <p class="text-xs text-gold">${esc(getBrand(p))} · ${esc(p.category)} — $${p.price.toLocaleString('es-AR')}</p>
+                            <p class="text-[10px] text-zinc-500 mt-0.5 flex items-center gap-2"><span><i class="fa-solid fa-images"></i> ${totalImgs} foto${totalImgs > 1 ? 's' : ''}</span>${badgeHTML(p, '!text-[9px] !px-2 !py-0.5')}</p>
                         </div>
                     </div>
                     <div class="flex items-center space-x-2 w-full sm:w-auto justify-end shrink-0">
+                        <button type="button" onclick="toggleFeatured(${p.id})" class="${p.featured ? 'bg-gold text-zinc-950' : 'bg-zinc-800 text-zinc-400 hover:text-gold'} px-3 py-1.5 rounded-xl text-xs font-semibold transition-all cursor-pointer" title="${p.featured ? 'Quitar de Más vendidos' : 'Mostrar en Más vendidos'}"><i class="fa-${p.featured ? 'solid' : 'regular'} fa-star"></i></button>
                         <button type="button" onclick="openEditModal(${p.id})" class="bg-gold/10 hover:bg-gold text-gold hover:text-zinc-950 px-3 py-1.5 rounded-xl text-xs font-semibold transition-all cursor-pointer"><i class="fa-solid fa-pen"></i> Editar</button>
                         <button type="button" onclick="deleteProduct(${p.id})" class="bg-red-500/10 hover:bg-red-500 text-red-400 hover:text-zinc-950 px-3 py-1.5 rounded-xl text-xs font-semibold transition-all cursor-pointer"><i class="fa-solid fa-trash"></i> Borrar</button>
                     </div>
@@ -1318,7 +2707,7 @@
             if (fromIndex !== -1 && toIndex !== -1) {
                 const [movedProduct] = products.splice(fromIndex, 1);
                 products.splice(toIndex, 0, movedProduct);
-                await saveCloudState();
+                if (!(await saveCloudState())) return;
                 renderAdminProducts();
                 renderSite();
             }
@@ -1338,72 +2727,15 @@
             document.getElementById('edit-category').value = p.category;
             document.getElementById('edit-price').value = p.price;
             document.getElementById('edit-notes').value = p.notes || '';
-            document.getElementById('edit-image-url').value = p.image;
-            document.getElementById('edit-image-file').value = '';
-            document.getElementById('edit-extra-files').value = '';
-            if (document.getElementById('edit-extra-urls-text')) {
-                document.getElementById('edit-extra-urls-text').value = '';
-            }
-            
-            window.editExtraUrls = p.images ? [...p.images] : [];
-            renderEditExtraThumbs();
+            document.getElementById('edit-brand').value = p.brand || '';
+            document.getElementById('edit-badge').value = p.badge || '';
+            document.getElementById('edit-old-price').value = p.oldPrice || '';
+            document.getElementById('edit-featured').checked = !!p.featured;
+            populateBrandDatalist();
+            setPhotoList('edit', [p.image, ...(p.images || [])]);
 
             document.getElementById('edit-modal').classList.remove('hidden');
         }
-
-        function renderEditExtraThumbs() {
-            const container = document.getElementById('edit-extra-thumbs');
-            if (!container) return;
-
-            const textVal = document.getElementById('edit-extra-urls-text') ? document.getElementById('edit-extra-urls-text').value : '';
-            const pastedUrls = textVal.split(/[\n,]+/).map(u => u.trim()).filter(u => u.length > 0);
-
-            const allExtra = [...(window.editExtraUrls || []), ...pastedUrls];
-
-            if (allExtra.length === 0) {
-                container.innerHTML = '<span class="text-xs text-zinc-500 italic">No hay fotos adicionales cargadas.</span>';
-                return;
-            }
-
-            container.innerHTML = allExtra.map((imgUrl, index) => {
-                const isFromList = index < (window.editExtraUrls || []).length;
-                return `
-                    <div class="relative w-16 h-16 bg-zinc-950 border border-zinc-700 rounded-lg overflow-hidden group">
-                        <img src="${imgUrl}" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/100x100/18181b/D4AF37?text=Error'">
-                        ${isFromList ? `
-                            <button type="button" onclick="removeEditExtraImage(${index})" class="absolute inset-0 bg-red-500/80 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer" title="Eliminar foto">
-                                <i class="fa-solid fa-trash"></i>
-                            </button>
-                        ` : `
-                            <span class="absolute bottom-0 inset-x-0 bg-zinc-950/80 text-[8px] text-zinc-400 text-center truncate px-0.5">Nueva</span>
-                        `}
-                    </div>
-                `;
-            }).join('');
-        }
-
-        window.removeEditExtraImage = function(index) {
-            window.editExtraUrls.splice(index, 1);
-            renderEditExtraThumbs();
-        };
-
-        window.handleEditImageFile = function(e) {
-            const file = e.target.files[0];
-            if (file) {
-                const objectUrl = URL.createObjectURL(file);
-                document.getElementById('edit-image-url').value = objectUrl;
-            }
-        };
-
-        window.handleEditExtraFiles = function(e) {
-            const files = e.target.files;
-            if (!window.editExtraUrls) window.editExtraUrls = [];
-            for (let i = 0; i < files.length; i++) {
-                const objectUrl = URL.createObjectURL(files[i]);
-                window.editExtraUrls.push(objectUrl);
-            }
-            renderEditExtraThumbs();
-        };
 
         function closeEditModal() { document.getElementById('edit-modal').classList.add('hidden'); }
 
@@ -1416,14 +2748,12 @@
             p.category = document.getElementById('edit-category').value;
             p.price = Number(document.getElementById('edit-price').value);
             p.notes = document.getElementById('edit-notes').value;
-            p.image = document.getElementById('edit-image-url').value;
+            Object.assign(p, readProductExtras('edit'));
+            const photos = photoLists.edit;
+            p.image = photos[0] || "https://placehold.co/600x600/18181b/D4AF37?text=Perfume";
+            p.images = photos.slice(1);
 
-            const textVal = document.getElementById('edit-extra-urls-text') ? document.getElementById('edit-extra-urls-text').value : '';
-            const pastedUrls = textVal.split(/[\n,]+/).map(u => u.trim()).filter(u => u.length > 0);
-
-            p.images = [...(window.editExtraUrls || []), ...pastedUrls];
-
-            await saveCloudState();
+            if (!(await saveCloudState())) return;
             await window.showCustomAlert("Cambios guardados correctamente.");
             closeEditModal(); 
             renderAdminProducts(); 
@@ -1434,7 +2764,7 @@
             const confirmed = await window.showCustomConfirm("¿Estás seguro de eliminar este producto?");
             if (confirmed) {
                 products = products.filter(p => p.id !== id);
-                await saveCloudState();
+                if (!(await saveCloudState())) return;
                 renderAdminProducts(); renderSite();
             }
         }
@@ -1442,8 +2772,6 @@
         function loadSettingsForm() {
             document.getElementById('setting-brand').value = settings.brandName || '';
             document.getElementById('setting-whatsapp').value = settings.whatsappNumber || '';
-            document.getElementById('setting-hero-title').value = settings.heroTitle || '';
-            document.getElementById('setting-hero-sub').value = settings.heroSub || '';
 
             document.getElementById('setting-color').value = settings.primaryColor || '#D4AF37';
             document.getElementById('setting-color-text').value = settings.primaryColor || '#D4AF37';
@@ -1454,13 +2782,25 @@
             document.getElementById('setting-fb').value = settings.facebook || '';
             document.getElementById('setting-tk').value = settings.tiktok || '';
 
+            loadLayoutForm();
+            const cloud = settings.cloudinary || {};
+            document.getElementById('setting-cloud-name').value = cloud.cloudName || '';
+            document.getElementById('setting-upload-preset').value = cloud.uploadPreset || '';
+            const state = document.getElementById('cloudinary-state');
+            state.textContent = cloudinaryConfig() ? 'Activo' : 'Sin configurar';
+            state.className = 'text-xs font-semibold px-3 py-1 rounded-full ' + (cloudinaryConfig() ? 'bg-emerald-400/15 text-emerald-300' : 'bg-orange-400/15 text-orange-300');
             tempSections = JSON.parse(JSON.stringify(settings.sections || []));
             renderAdminSectionsList();
         }
 
         async function handleLogoUpload(e) {
             if (e.target.files[0]) {
-                tempLogoUrl = URL.createObjectURL(e.target.files[0]);
+                try {
+                    tempLogoUrl = (await uploadImage(e.target.files[0], LOGO_IMAGE_SIZE)).url;
+                } catch (err) {
+                    await window.showCustomAlert("No se pudo subir el logo: " + err.message);
+                    return;
+                }
                 updateLogoPreview();
             }
         }
@@ -1495,8 +2835,8 @@
                     cardRows.forEach((cardRow) => {
                         const cTitle = cardRow.querySelector('.card-title-input').value;
                         const cText = cardRow.querySelector('.card-text-input').value;
-                        const cEmoji = cardRow.querySelector('.card-emoji-input').value;
-                        newCards.push({ title: cTitle, text: cText, emoji: cEmoji });
+                        const cIcon = cardRow.querySelector('.card-icon-input').value;
+                        newCards.push({ title: cTitle, text: cText, icon: cIcon });
                     });
                     tempSections[sIdx].cards = newCards;
                 }
@@ -1537,7 +2877,7 @@
                                     </div>
                                     <div class="sm:col-span-3"><input type="text" value="${card.title}" placeholder="Título" class="card-title-input w-full bg-zinc-900 border border-zinc-800 rounded px-2 py-1 text-xs text-zinc-100 outline-none"></div>
                                     <div class="sm:col-span-5"><input type="text" value="${card.text}" placeholder="Descripción" class="card-text-input w-full bg-zinc-900 border border-zinc-800 rounded px-2 py-1 text-xs text-zinc-100 outline-none"></div>
-                                    <div class="sm:col-span-2"><input type="text" value="${card.emoji || '✨'}" placeholder="Emoji" class="card-emoji-input w-full bg-zinc-900 border border-zinc-800 rounded px-2 py-1 text-xs text-zinc-100 outline-none text-center"></div>
+                                    <div class="sm:col-span-2"><select class="card-icon-input w-full bg-zinc-900 border border-zinc-800 rounded px-2 py-1 text-xs text-zinc-100 outline-none cursor-pointer" title="Ícono">${SECTION_ICONS.map(([icon, label]) => `<option value="${icon}" ${cardIcon(card) === icon ? 'selected' : ''}>${label}</option>`).join('')}</select></div>
                                     <div class="sm:col-span-1 text-right"><button type="button" onclick="removeAdminCard(${sIdx}, ${cIdx})" class="text-red-400 hover:text-red-300 text-xs cursor-pointer"><i class="fa-solid fa-xmark"></i></button></div>
                                 </div>
                             `).join('')}
@@ -1569,7 +2909,7 @@
 
         function addAdminSection() {
             syncUIValuesToTempSections();
-            tempSections.push({ id: "nueva-seccion", title: "Título de Sección", subtitle: "Badge", cards: [{ title: "Tarjeta 1", text: "Descripción...", emoji: "✨" }] });
+            tempSections.push({ id: "nueva-seccion", title: "Título de Sección", subtitle: "Badge", cards: [{ title: "Tarjeta 1", text: "Descripción...", icon: "fa-star" }] });
             renderAdminSectionsList();
         }
         function removeAdminSection(index) {
@@ -1579,7 +2919,7 @@
         }
         function addAdminCard(sIdx) {
             syncUIValuesToTempSections();
-            tempSections[sIdx].cards.push({ title: "Nueva Tarjeta", text: "Descripción...", emoji: "⭐" });
+            tempSections[sIdx].cards.push({ title: "Nueva Tarjeta", text: "Descripción...", icon: "fa-star" });
             renderAdminSectionsList();
         }
         function removeAdminCard(sIdx, cIdx) {
@@ -1592,16 +2932,19 @@
             syncUIValuesToTempSections();
             settings.brandName = document.getElementById('setting-brand').value;
             settings.whatsappNumber = document.getElementById('setting-whatsapp').value;
-            settings.heroTitle = document.getElementById('setting-hero-title').value;
-            settings.heroSub = document.getElementById('setting-hero-sub').value;
             settings.primaryColor = document.getElementById('setting-color').value;
             settings.logoImage = tempLogoUrl || settings.logoImage || defaultLogoSVG;
             settings.instagram = document.getElementById('setting-ig').value;
             settings.facebook = document.getElementById('setting-fb').value;
             settings.tiktok = document.getElementById('setting-tk').value;
             settings.sections = tempSections;
+            settings.layout = readLayoutForm();
+            settings.cloudinary = {
+                cloudName: document.getElementById('setting-cloud-name').value.trim(),
+                uploadPreset: document.getElementById('setting-upload-preset').value.trim(),
+            };
 
-            await saveCloudState();
+            if (!(await saveCloudState())) return;
             await window.showCustomAlert("¡Configuración guardada y sincronizada en tiempo real!");
             renderSite(); toggleAdminPanel();
         }
@@ -1612,25 +2955,39 @@
 
         async function handlePasswordChange(e) {
             e.preventDefault();
+            const current = document.getElementById('current-admin-password').value;
             const p1 = document.getElementById('new-admin-password').value;
             const p2 = document.getElementById('confirm-admin-password').value;
             if (p1 !== p2) {
                 await window.showCustomAlert("Las contraseñas no coinciden.");
                 return;
             }
-            if (p1.length < 4) {
-                await window.showCustomAlert("La contraseña debe tener al menos 4 caracteres.");
+            if (p1.length < 10) {
+                await window.showCustomAlert("La contraseña debe tener al menos 10 caracteres.");
                 return;
             }
-            settings.adminPassword = p1;
-            await saveCloudState();
-            await window.showCustomAlert("¡Contraseña de administrador actualizada y sincronizada en la nube!");
+            const user = auth && auth.currentUser;
+            if (!user || user.isAnonymous) {
+                await window.showCustomAlert("Tu sesión se cerró. Volvé a ingresar.");
+                return;
+            }
+            try {
+                await reauthenticateWithCredential(user, EmailAuthProvider.credential(user.email, current));
+                await updatePassword(user, p1);
+            } catch (error) {
+                await window.showCustomAlert(error.code === 'auth/invalid-credential' || error.code === 'auth/wrong-password'
+                    ? "La contraseña actual no es correcta."
+                    : "No se pudo cambiar la contraseña. Probá de nuevo.");
+                return;
+            }
+            await window.showCustomAlert("¡Contraseña de administrador actualizada!");
+            document.getElementById('current-admin-password').value = '';
             document.getElementById('new-admin-password').value = '';
             document.getElementById('confirm-admin-password').value = '';
         }
 
         function exportBackupJSON() {
-            const backupData = { products: products, settings: settings, exportDate: new Date().toISOString() };
+            const backupData = { products: products, settings: cleanSettings(settings), exportDate: new Date().toISOString() };
             const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(backupData, null, 2));
             const downloadAnchor = document.createElement('a');
             downloadAnchor.setAttribute("href", dataStr);
@@ -1650,10 +3007,11 @@
                     else if (typeof parsed === 'object' && parsed !== null) {
                         if (Array.isArray(parsed.products)) products = parsed.products;
                         if (typeof parsed.settings === 'object' && parsed.settings !== null) {
-                            settings = { ...defaultSettings, ...parsed.settings };
+                            settings = { ...defaultSettings, ...cleanSettings(parsed.settings) };
                         }
                     }
-                    await saveCloudState();
+                    await backupBeforeSave(true); // importar pisa todo: siempre se copia antes
+                    if (!(await saveCloudState())) { e.target.value = ''; return; }
                     await window.showCustomAlert("¡Respaldo importado y sincronizado correctamente con la nube!");
                     renderSite(); renderAdminProducts(); loadSettingsForm();
                 } catch (err) {
@@ -1672,19 +3030,33 @@
         window.updateQty = updateQty;
         window.checkoutWhatsApp = checkoutWhatsApp;
         window.toggleCart = toggleCart;
+        window.toggleMobileMenu = toggleMobileMenu;
+        window.filterBrand = filterBrand;
+        window.selectBrand = selectBrand;
+        window.scrollFeatured = scrollFeatured;
+        window.toggleFeatured = toggleFeatured;
+        window.addPhotoUrls = addPhotoUrls;
+        window.addPhotoFiles = addPhotoFiles;
+        window.movePhoto = movePhoto;
+        window.removePhoto = removePhoto;
+        window.photoBoxDrop = photoBoxDrop;
         window.openProductDetail = openProductDetail;
         window.updateModalImage = updateModalImage;
+        window.openLightbox = openLightbox;
+        window.closeLightbox = closeLightbox;
+        window.lightboxStep = lightboxStep;
+        window.toggleLightboxZoom = toggleLightboxZoom;
         window.closeProductDetail = closeProductDetail;
         window.openAdminAuth = openAdminAuth;
         window.closeAdminAuth = closeAdminAuth;
         window.handleAdminLogin = handleAdminLogin;
+        window.handleAdminLogout = handleAdminLogout;
         window.toggleAdminPanel = toggleAdminPanel;
         window.switchAdminTab = switchAdminTab;
         window.handleAddNewProduct = handleAddNewProduct;
         window.openEditModal = openEditModal;
         window.closeEditModal = closeEditModal;
         window.handleSaveEditedProduct = handleSaveEditedProduct;
-        window.renderEditExtraThumbs = renderEditExtraThumbs;
         window.deleteProduct = deleteProduct;
         window.handleAdminDragStart = handleAdminDragStart;
         window.handleAdminDragOver = handleAdminDragOver;
@@ -1705,15 +3077,8 @@
         window.exportBackupJSON = exportBackupJSON;
         window.importBackupJSON = importBackupJSON;
         window.handlePasswordChange = handlePasswordChange;
-        window.resetDefaultData = async function() {
-            const confirmed = await window.showCustomConfirm("¿Restaurar todos los productos y configuraciones originales de fábrica?");
-            if (confirmed) {
-                products = defaultProducts;
-                settings = defaultSettings;
-                await saveCloudState();
-                renderSite(); renderAdminProducts(); loadSettingsForm();
-            }
-        };
+        window.createManualBackup = createManualBackup;
+        window.restoreBackup = restoreBackup;
     </script>
 </body>
 </html>
