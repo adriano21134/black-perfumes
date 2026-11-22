@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Gestión | Black Perfumes</title>
+    <meta name="robots" content="noindex, nofollow">
+    <meta name="theme-color" content="#09090b">
+    <link rel="icon" href="/favicon-64.png" type="image/png">
+    <link rel="apple-touch-icon" href="/icon-192.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = { theme: { extend: { colors: { gold: { DEFAULT: 'rgb(212 175 55 / <alpha-value>)', light: 'rgb(243 229 171 / <alpha-value>)' } } } } };
+    </script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: #09090b; color: #f4f4f5; }
+        .serif { font-family: 'Playfair Display', serif; }
+        .card { background: #18181b; border: 1px solid #27272a; border-radius: 1rem; }
+        .inp { width: 100%; background: #09090b; border: 1px solid #3f3f46; border-radius: .75rem; padding: .6rem .8rem; font-size: .9rem; color: #f4f4f5; outline: none; }
+        .inp:focus { border-color: rgb(212 175 55); }
+        .lbl { display: block; font-size: .7rem; font-weight: 600; text-transform: uppercase; letter-spacing: .06em; color: #a1a1aa; margin-bottom: .3rem; }
+        .btn-gold { background: rgb(212 175 55); color: #09090b; font-weight: 700; border-radius: .75rem; padding: .65rem 1rem; }
+        .btn-gold:hover { background: rgb(243 229 171); }
+        .btn-ghost { border: 1px solid #3f3f46; border-radius: .75rem; padding: .55rem .9rem; color: #d4d4d8; }
+        .btn-ghost:hover { border-color: rgb(212 175 55); color: rgb(212 175 55); }
+        .tab-btn.active { color: rgb(212 175 55); }
+        .tab-btn.active .tab-dot { opacity: 1; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { scrollbar-width: none; }
+        .bar { background: linear-gradient(to top, rgb(212 175 55 / .35), rgb(212 175 55)); border-radius: .4rem .4rem 0 0; }
+        .bar-g { background: #10b981; border-radius: .4rem .4rem 0 0; }
+        .modal-bg { background: rgba(0,0,0,.75); backdrop-filter: blur(4px); }
+        input[type=number]::-webkit-inner-spin-button { opacity: .4; }
+        .pb-safe { padding-bottom: calc(5.5rem + env(safe-area-inset-bottom)); }
+        .nav-safe { padding-bottom: env(safe-area-inset-bottom); }
+    </style>
+</head>
+<body class="min-h-screen">
+
+<!-- Ingreso -->
+<section id="login-screen" class="min-h-screen flex items-center justify-center px-4 hidden">
+    <form id="login-form" class="card w-full max-w-sm p-6 space-y-4">
+        <div class="text-center space-y-2">
+            <img src="/logo.webp" alt="" class="w-16 h-16 mx-auto rounded-full">
+            <h1 class="serif text-2xl text-gold">Gestión</h1>
+            <p class="text-sm text-zinc-400">Black Perfumes · acceso privado</p>
+        </div>
+        <div><label class="lbl" for="login-email">Correo</label><input id="login-email" type="email" autocomplete="username" required class="inp"></div>
+        <div><label class="lbl" for="login-pass">Contraseña</label><input id="login-pass" type="password" autocomplete="current-password" required class="inp"></div>
+        <p id="login-error" class="text-sm text-red-400 hidden"></p>
+        <button class="btn-gold w-full">Entrar</button>
+        <a href="/" class="block text-center text-xs text-zinc-500 hover:text-gold">Volver a la tienda</a>
+    </form>
+</section>
+
+<!-- Cargando -->
+<section id="loading-screen" class="min-h-screen flex flex-col items-center justify-center gap-3">
+    <img src="/logo.webp" alt="" class="w-16 h-16 rounded-full animate-pulse">
+    <p class="text-sm text-zinc-400" id="loading-text">Cargando…</p>
+</section>
+
+<!-- App -->
+<div id="app" class="hidden">
+    <header class="sticky top-0 z-30 bg-zinc-950/90 backdrop-blur border-b border-zinc-800">
+        <div class="max-w-6xl mx-auto px-4 h-14 flex items-center justify-between gap-3">
+            <div class="flex items-center gap-2 min-w-0">
+                <img src="/logo.webp" alt="" class="w-8 h-8 rounded-full">
+                <span class="serif text-lg text-gold truncate">Gestión</span>
+            </div>
+            <nav class="hidden md:flex items-center gap-1 text-sm" id="top-tabs"></nav>
+            <div class="flex items-center gap-2">
+                <button data-action="new-sale" class="btn-gold text-sm hidden md:inline-flex items-center gap-2"><i class="fa-solid fa-plus"></i> Venta</button>
+                <a href="/" class="btn-ghost text-sm" title="Ver la tienda"><i class="fa-solid fa-store"></i></a>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-4 pt-4 pb-safe md:pb-10">
+        <!-- INICIO -->
+        <section data-tab="inicio" class="tab space-y-4">
+            <div class="flex items-center justify-between">
+                <button class="btn-ghost" data-action="month-prev" aria-label="Mes anterior"><i class="fa-solid fa-chevron-left"></i></button>
+                <h2 class="serif text-xl text-center" id="month-title"></h2>
+                <button class="btn-ghost" data-action="month-next" aria-label="Mes siguiente"><i class="fa-solid fa-chevron-right"></i></button>
+            </div>
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-3" id="kpis"></div>
+            <div class="card p-4">
+                <div class="flex items-center justify-between mb-3">
+                    <h3 class="font-semibold">Últimos 12 meses</h3>
+                    <div class="text-xs text-zinc-400 flex gap-3"><span><span class="inline-block w-2.5 h-2.5 rounded-sm bg-gold mr-1"></span>Vendido</span><span><span class="inline-block w-2.5 h-2.5 rounded-sm bg-emerald-500 mr-1"></span>Ganancia</span></div>
+                </div>
+                <div id="chart" class="h-40 flex items-end gap-1.5"></div>
+                <div id="chart-labels" class="flex gap-1.5 mt-1 text-[10px] text-zinc-500"></div>
+            </div>
+            <div class="grid md:grid-cols-2 gap-3">
+                <div class="card p-4"><h3 class="font-semibold mb-3">Más vendidos del mes</h3><div id="top-products" class="space-y-2 text-sm"></div></div>
+                <div class="card p-4"><h3 class="font-semibold mb-3">Mejores clientes del mes</h3><div id="top-clients" class="space-y-2 text-sm"></div></div>
+            </div>
+            <div class="card p-4">
+                <div class="flex items-center justify-between gap-2 mb-1"><h3 class="font-semibold">Para volver a escribir</h3><span class="text-xs text-zinc-400" id="recompra-note"></span></div>
+                <p class="text-xs text-zinc-400 mb-3">Clientes que te compraron hace tiempo: un buen momento para ofrecerles algo nuevo.</p>
+                <div id="recompra" class="space-y-2 text-sm"></div>
+            </div>
+            <div class="grid md:grid-cols-2 gap-3">
+                <div class="card p-4">
+                    <div class="flex items-center justify-between mb-3"><h3 class="font-semibold">Gastos del mes</h3><button data-action="new-expense" class="text-sm text-gold"><i class="fa-solid fa-plus mr-1"></i>Agregar</button></div>
+                    <div id="expenses" class="space-y-2 text-sm"></div>
+                </div>
+                <div class="card p-4"><h3 class="font-semibold mb-3">Cómo te conocieron</h3><div id="channels" class="space-y-2 text-sm"></div></div>
+            </div>
+            <div class="card p-4" id="low-margin-box"><h3 class="font-semibold mb-1">Ventas con poca ganancia</h3><p class="text-xs text-zinc-400 mb-3">Este mes, ganancia menor al 20% sobre el costo.</p><div id="low-margin" class="space-y-2 text-sm"></div></div>
+        </section>
+
+        <!-- VENTAS -->
+        <section data-tab="ventas" class="tab hidden space-y-3">
+            <div class="flex flex-col sm:flex-row gap-2">
+                <div class="relative flex-1"><i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-zinc-500 text-sm"></i><input id="sales-search" class="inp pl-9" placeholder="Buscar cliente o perfume…"></div>
+                <select id="sales-month" class="inp sm:w-48"></select>
+                <select id="sales-class" class="inp sm:w-44"><option value="venta">Ventas</option><option value="salida">Regalos / testers</option><option value="">Todo</option></select>
+            </div>
+            <div id="sales-summary" class="text-sm text-zinc-400"></div>
+            <div id="sales-list" class="space-y-2"></div>
+        </section>
+
+        <!-- CLIENTES -->
+        <section data-tab="clientes" class="tab hidden space-y-3">
+            <div class="flex gap-2">
+                <div class="relative flex-1"><i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-zinc-500 text-sm"></i><input id="clients-search" class="inp pl-9" placeholder="Buscar cliente…"></div>
+                <select id="clients-sort" class="inp w-40"><option value="total">Más compraron</option><option value="ultima">Compra reciente</option><option value="nombre">Nombre A-Z</option></select>
+            </div>
+            <div id="clients-summary" class="text-sm text-zinc-400"></div>
+            <div id="clients-list" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-2"></div>
+        </section>
+
+        <!-- PRODUCTOS -->
+        <section data-tab="productos" class="tab hidden space-y-3">
+            <div class="flex flex-col sm:flex-row gap-2">
+                <div class="relative flex-1"><i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-zinc-500 text-sm"></i><input id="products-search" class="inp pl-9" placeholder="Buscar perfume…"></div>
+                <select id="products-cat" class="inp sm:w-64"></select>
+            </div>
+            <p class="text-xs text-zinc-400">Costo = lo que pagaste (en dólares) × dólar del día. El precio de la web se toma de la tienda. Decant 5 ml = precio del frasco ÷ 10.</p>
+            <div id="products-list" class="space-y-2"></div>
+        </section>
+
+        <!-- MÁS -->
+        <section data-tab="mas" class="tab hidden space-y-4 max-w-2xl">
+            <form id="config-form" class="card p-4 space-y-3">
+                <h3 class="font-semibold">Cotización y costos</h3>
+                <div class="grid grid-cols-2 gap-3">
+                    <div><label class="lbl" for="cfg-dolar">Dólar (ARS)</label><input id="cfg-dolar" type="number" step="1" min="1" class="inp" required></div>
+                    <div><label class="lbl" for="cfg-usdt">USDT (%)</label><input id="cfg-usdt" type="number" step="0.01" min="0" class="inp" required></div>
+                    <div><label class="lbl" for="cfg-pack">Envase decant (USD)</label><input id="cfg-pack" type="number" step="0.01" min="0" class="inp" required></div>
+                    <div><label class="lbl" for="cfg-recompra">Avisar "volver a escribir" a los (meses)</label><input id="cfg-recompra" type="number" step="1" min="1" class="inp" required></div>
+                </div>
+                <p class="text-xs text-zinc-400">El dólar se usa para calcular el costo y la ganancia de las ventas nuevas. Cada venta guarda la cotización de ese día.</p>
+                <button class="btn-gold text-sm">Guardar</button>
+            </form>
+            <div class="card p-4 space-y-3">
+                <h3 class="font-semibold">Historial del Excel</h3>
+                <p class="text-sm text-zinc-400" id="import-status"></p>
+                <label class="btn-ghost text-sm inline-flex items-center gap-2 cursor-pointer"><i class="fa-solid fa-file-import"></i> Cargar archivo del historial<input type="file" id="import-file" accept=".json,application/json" class="hidden"></label>
+            </div>
+            <div class="card p-4 space-y-3">
+                <h3 class="font-semibold">Descargar</h3>
+                <p class="text-sm text-zinc-400">Las ventas en una planilla que abre Excel (por ejemplo, para el contador).</p>
+                <button data-action="export-csv" class="btn-ghost text-sm inline-flex items-center gap-2"><i class="fa-solid fa-file-excel"></i> Descargar ventas</button>
+            </div>
+            <div class="card p-4 flex items-center justify-between">
+                <span class="text-sm text-zinc-400" id="user-email"></span>
+                <button data-action="logout" class="btn-ghost text-sm"><i class="fa-solid fa-right-from-bracket mr-1"></i> Salir</button>
+            </div>
+        </section>
+    </main>
+
+    <!-- Botón flotante (celular) -->
+    <button data-action="new-sale" class="md:hidden fixed right-4 z-30 w-14 h-14 rounded-full bg-gold text-zinc-950 text-xl shadow-lg shadow-black/50" style="bottom: calc(4.75rem + env(safe-area-inset-bottom));" aria-label="Nueva venta"><i class="fa-solid fa-plus"></i></button>
+
+    <!-- Navegación inferior (celular) -->
+    <nav class="md:hidden fixed bottom-0 inset-x-0 z-30 bg-zinc-950/95 backdrop-blur border-t border-zinc-800 nav-safe">
+        <div class="grid grid-cols-5" id="bottom-tabs"></div>
+    </nav>
+</div>
+
+<!-- Modal genérico -->
+<div id="modal" class="fixed inset-0 z-50 hidden modal-bg flex items-end sm:items-center justify-center sm:p-4">
+    <div class="bg-zinc-900 border border-zinc-800 w-full sm:max-w-2xl max-h-[92vh] overflow-y-auto rounded-t-2xl sm:rounded-2xl">
+        <div class="sticky top-0 bg-zinc-900 border-b border-zinc-800 px-4 py-3 flex items-center justify-between z-10">
+            <h3 id="modal-title" class="serif text-lg text-gold"></h3>
+            <button data-action="close-modal" class="w-9 h-9 rounded-full hover:bg-zinc-800" aria-label="Cerrar"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <div id="modal-body" class="p-4"></div>
+    </div>
+</div>
+
+<!-- Aviso -->
+<div id="toast" class="fixed left-1/2 -translate-x-1/2 bottom-24 md:bottom-6 z-[60] hidden bg-zinc-800 border border-zinc-700 text-sm px-4 py-2.5 rounded-xl shadow-lg"></div>
+
+<datalist id="dl-products"></datalist>
+<datalist id="dl-clients"></datalist>
+<datalist id="dl-zonas"></datalist>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+import { getFirestore, doc, getDoc, setDoc, deleteDoc, collection, getDocs, writeBatch } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+const firebaseConfig = {
+    apiKey: "AIzaSyA__ONWSqwzBqPkrDIbQWuzv_nQTRbJPcA",
+    authDomain: "black-perfumes-bd.firebaseapp.com",
+    projectId: "black-perfumes-bd",
+    storageBucket: "black-perfumes-bd.firebasestorage.app",
+    messagingSenderId: "1005208384289",
+    appId: "1:1005208384289:web:ad25e2cd7a299cacbec460",
+};
+const ADMIN_UID = "QQ3R9IIU90c5zSAySo9KYse1y0y1";
+const APP = "black-perfumes-bd";
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+const col = name => collection(db, 'artifacts', APP, name);
+const datosRef = id => doc(db, 'artifacts', APP, 'gestion_datos', id);
+
+// ---------- Estado ----------
+const S = {
+    config: { dolar: 1680, usdt: 0.0325, packagingDecantUSD: 0.67, recompraMeses: 4 },
+    catalogo: [], ventas: [], clientes: [], compras: [], gastos: [], web: [], showAllRecompra: false,
+    tab: 'inicio', month: new Date().toISOString().slice(0, 7),
+};
+
+// ---------- Utilidades ----------
+const $ = id => document.getElementById(id);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const ars = n => { const v = Math.round(Number(n) || 0); return (v < 0 ? '−$' : '$') + Math.abs(v).toLocaleString('es-AR'); };
+const usd = n => { const v = Math.round((Number(n) || 0) * 100) / 100; return (v < 0 ? '−US$' : 'US$') + Math.abs(v).toLocaleString('es-AR', { minimumFractionDigits: 0, maximumFractionDigits: 2 }); };
+const pct = n => (isFinite(n) ? Math.round(n * 100) : 0) + '%';
+const today = () => { const d = new Date(); d.setMinutes(d.getMinutes() - d.getTimezoneOffset()); return d.toISOString().slice(0, 10); };
+const MESES = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
+const monthName = ym => { const [y, m] = ym.split('-'); return MESES[Number(m) - 1] + ' ' + y; };
+const shortMonth = ym => MESES[Number(ym.slice(5)) - 1].slice(0, 3);
+const addMonth = (ym, d) => { const [y, m] = ym.split('-').map(Number); const t = new Date(y, m - 1 + d, 1); return t.getFullYear() + '-' + String(t.getMonth() + 1).padStart(2, '0'); };
+const fmtDate = s => { const [y, m, d] = s.split('-'); return `${d}/${m}/${y.slice(2)}`; };
+const norm = s => String(s || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
+let toastTimer;
+function toast(msg, isError) {
+    const t = $('toast'); t.textContent = msg; t.classList.remove('hidden');
+    t.classList.toggle('border-red-500', !!isError);
+    clearTimeout(toastTimer); toastTimer = setTimeout(() => t.classList.add('hidden'), 3500);
+}
+
+// ---------- Precios y costos ----------
+const catByKey = key => S.catalogo.find(c => c.key === key);
+const catByName = name => S.catalogo.find(c => norm(c.nombre) === norm(name));
+const webPrice = c => { if (!c || !c.webId) return 0; const p = S.web.find(w => w.id === c.webId); return p ? Number(p.price) || 0 : 0; };
+const decantPrice = c => Math.round(webPrice(c) / 10 / 100) * 100;
+const unitCostUSD = (c, tipo) => !c ? 0 : tipo === 'decant' ? c.costoUSD / (c.ml || 100) * 5 + (Number(S.config.packagingDecantUSD) || 0) : c.costoUSD;
+const ENTREGAS = ['Retiro', 'En mano', 'Moto / cadete', 'Correo / envío', 'Otro'];
+const CANALES = ['Instagram', 'WhatsApp', 'Recomendación', 'Página web', 'MercadoLibre', 'TikTok', 'Facebook', 'Otro'];
+const clientRec = name => S.clientes.find(c => norm(c.nombre) === norm(name));
+const usdOf = (ars, cotiz) => (Number(ars) || 0) / (Number(cotiz) || Number(S.config.dolar) || 1);
+const saleOfClient = name =>S.ventas.filter(v => v.clase === 'venta' && norm(v.cliente) === norm(name));
+
+// ---------- Ingreso ----------
+function showScreen(name) {
+    $('login-screen').classList.toggle('hidden', name !== 'login');
+    $('loading-screen').classList.toggle('hidden', name !== 'loading');
+    $('app').classList.toggle('hidden', name !== 'app');
+}
+$('login-form').addEventListener('submit', async e => {
+    e.preventDefault();
+    $('login-error').classList.add('hidden');
+    try {
+        await signInWithEmailAndPassword(auth, $('login-email').value.trim(), $('login-pass').value);
+        $('login-pass').value = '';
+    } catch (err) {
+        $('login-error').textContent = 'Correo o contraseña incorrectos.';
+        $('login-error').classList.remove('hidden');
+    }
+});
+onAuthStateChanged(auth, async user => {
+    if (!user || user.isAnonymous) return showScreen('login');
+    if (user.uid !== ADMIN_UID) { await signOut(auth); $('login-error').textContent = 'Esta cuenta no tiene acceso.'; $('login-error').classList.remove('hidden'); return showScreen('login'); }
+    $('user-email').textContent = user.email;
+    showScreen('loading');
+    try { await loadAll(); showScreen('app'); render(); }
+    catch (err) {
+        console.error(err);
+        $('loading-text').innerHTML = err.code === 'permission-denied'
+            ? 'Falta actualizar las reglas de Firebase para el panel de gestión.<br><span class="text-xs">Seguí el paso de las instrucciones y recargá.</span>'
+            : 'No se pudo cargar la información. Revisá la conexión y recargá.';
+    }
+});
+
+// ---------- Carga ----------
+async function loadAll() {
+    const [cfg, cat, ventas, clientes, compras, gastos, store] = await Promise.all([
+        getDoc(datosRef('config')), getDoc(datosRef('catalogo')),
+        getDocs(col('gestion_ventas')), getDocs(col('gestion_clientes')), getDocs(col('gestion_compras')), getDocs(col('gestion_gastos')),
+        getDoc(doc(db, 'artifacts', APP, 'store_state', 'main')),
+    ]);
+    if (cfg.exists()) S.config = { ...S.config, ...cfg.data() };
+    S.catalogo = cat.exists() ? (cat.data().items || []) : [];
+    S.ventas = ventas.docs.map(d => ({ id: d.id, ...d.data() }));
+    S.clientes = clientes.docs.map(d => ({ id: d.id, ...d.data() }));
+    S.compras = compras.docs.map(d => ({ id: d.id, ...d.data() }));
+    S.gastos = gastos.docs.map(d => ({ id: d.id, ...d.data() })).sort((a, b) => b.fecha.localeCompare(a.fecha));
+    S.web = store.exists() ? (store.data().products || []) : [];
+    // Productos nuevos de la web que todavía no estén en el catálogo
+    for (const w of S.web) if (!S.catalogo.some(c => c.webId === w.id)) {
+        S.catalogo.push({ key: 'w' + w.id, nombre: w.name, webId: w.id, categoria: w.category, costoUSD: 0, ml: Number((w.name.match(/(\d+)\s*ml/i) || [])[1]) || 100,
+            decant: /Árabes/.test(w.category || '') || /Stronger With You Intensely/i.test(w.name), nuevo: true });
+    }
+    S.ventas.sort((a, b) => (b.fecha + (b.creado || '')).localeCompare(a.fecha + (a.creado || '')));
+}
+
+// ---------- Navegación ----------
+const TABS = [['inicio', 'fa-chart-pie', 'Inicio'], ['ventas', 'fa-receipt', 'Ventas'], ['clientes', 'fa-users', 'Clientes'], ['productos', 'fa-spray-can-sparkles', 'Productos'], ['mas', 'fa-ellipsis', 'Más']];
+$('bottom-tabs').innerHTML = TABS.map(([id, ic, l]) => `<button class="tab-btn flex flex-col items-center gap-0.5 py-2.5 text-zinc-400 text-[11px]" data-goto="${id}"><i class="fa-solid ${ic} text-lg"></i>${l}</button>`).join('');
+$('top-tabs').innerHTML = TABS.map(([id, ic, l]) => `<button class="tab-btn px-3 py-1.5 rounded-lg hover:bg-zinc-800 text-zinc-400" data-goto="${id}"><i class="fa-solid ${ic} mr-1.5"></i>${l}</button>`).join('');
+function goTab(t) {
+    S.tab = t;
+    document.querySelectorAll('.tab').forEach(s => s.classList.toggle('hidden', s.dataset.tab !== t));
+    document.querySelectorAll('[data-goto]').forEach(b => b.classList.toggle('active', b.dataset.goto === t));
+    render(); window.scrollTo(0, 0);
+}
+
+function render() {
+    const r = { inicio: renderInicio, ventas: renderVentas, clientes: renderClientes, productos: renderProductos, mas: renderMas }[S.tab];
+    document.querySelectorAll('[data-goto]').forEach(b => b.classList.toggle('active', b.dataset.goto === S.tab));
+    r && r();
+    $('dl-products').innerHTML = S.catalogo.filter(c => c.webId || c.costoUSD).map(c => `<option value="${esc(c.nombre)}">`).join('');
+    $('dl-clients').innerHTML = allClientNames().map(n => `<option value="${esc(n)}">`).join('');
+    $('dl-zonas').innerHTML = [...new Set([...S.clientes.map(c => c.zona), ...S.ventas.map(v => v.zona)].filter(Boolean))].sort().map(z => `<option value="${esc(z)}">`).join('');
+}
+const allClientNames = () => [...new Set([...S.clientes.map(c => c.nombre), ...S.ventas.filter(v => v.clase === 'venta').map(v => v.cliente)].filter(Boolean))].sort((a, b) => a.localeCompare(b));
+
+// ---------- Inicio ----------
+const salesOfMonth = ym => S.ventas.filter(v => v.clase === 'venta' && v.fecha.startsWith(ym));
+function renderInicio() {
+    const ym = S.month, vs = salesOfMonth(ym), prev = salesOfMonth(addMonth(ym, -1));
+    $('month-title').textContent = monthName(ym).replace(/^./, c => c.toUpperCase());
+    const tot = vs.reduce((a, v) => a + v.totalARS, 0), ganV = vs.reduce((a, v) => a + v.gananciaARS, 0), cost = vs.reduce((a, v) => a + v.costoARS, 0);
+    const gs = expensesOfMonth(ym), gasto = gs.reduce((a, g) => a + g.montoARS, 0);
+    const gan = ganV - gasto;
+    const ganUSD = vs.reduce((a, v) => a + usdOf(v.gananciaARS, v.cotiz), 0) - gs.reduce((a, g) => a + usdOf(g.montoARS, g.cotiz), 0);
+    const ptot = prev.reduce((a, v) => a + v.totalARS, 0);
+    const frascos = vs.reduce((a, v) => a + v.items.filter(i => i.tipo === 'frasco').reduce((x, i) => x + i.cantidad, 0), 0);
+    const decants = vs.reduce((a, v) => a + v.items.filter(i => i.tipo === 'decant').reduce((x, i) => x + i.cantidad, 0), 0);
+    const delta = ptot ? (tot / ptot - 1) : null;
+    const kpi = (label, value, sub, color = 'text-zinc-50') => `<div class="card p-4"><p class="text-xs text-zinc-400">${label}</p><p class="text-xl sm:text-2xl font-bold ${color} mt-1">${value}</p><p class="text-xs text-zinc-500 mt-1">${sub}</p></div>`;
+    $('kpis').innerHTML =
+        kpi('Vendido', ars(tot), delta === null ? '&nbsp;' : `<span class="${delta >= 0 ? 'text-emerald-400' : 'text-red-400'}">${delta >= 0 ? '▲' : '▼'} ${pct(Math.abs(delta))}</span> vs mes anterior`, 'text-gold') +
+        kpi(gasto ? 'Ganancia (menos gastos)' : 'Ganancia', `${usd(ganUSD)}<span class="block text-sm font-semibold text-zinc-300">${ars(gan)}</span>`,
+            (cost ? `${pct(gan / cost)} sobre el costo` : '') + (gasto ? ` · gastos ${ars(gasto)}` : '') || '&nbsp;', gan >= 0 ? 'text-emerald-400' : 'text-red-400') +
+        kpi('Ventas', vs.length, `${new Set(vs.map(v => norm(v.cliente))).size} clientes`) +
+        kpi('Perfumes vendidos', frascos, `${decants} decants`);
+
+    // Gráfico 12 meses
+    const months = Array.from({ length: 12 }, (_, i) => addMonth(ym, i - 11));
+    const data = months.map(m => { const s = salesOfMonth(m); return [s.reduce((a, v) => a + v.totalARS, 0), s.reduce((a, v) => a + v.gananciaARS, 0) - expensesOfMonth(m).reduce((a, g) => a + g.montoARS, 0)]; });
+    const max = Math.max(1, ...data.map(d => d[0]));
+    $('chart').innerHTML = data.map(([t, g], i) => `<button class="flex-1 h-full flex items-end gap-0.5 group" data-month="${months[i]}" title="${monthName(months[i])}: ${ars(t)} vendido, ${ars(g)} ganancia">
+        <div class="bar flex-1 ${months[i] === ym ? '' : 'opacity-60 group-hover:opacity-90'}" style="height:${t / max * 100}%"></div>
+        <div class="bar-g flex-1 ${months[i] === ym ? '' : 'opacity-60 group-hover:opacity-90'}" style="height:${Math.max(0, g) / max * 100}%"></div></button>`).join('');
+    $('chart-labels').innerHTML = months.map(m => `<span class="flex-1 text-center ${m === ym ? 'text-gold' : ''}">${shortMonth(m)}</span>`).join('');
+
+    // Más vendidos
+    const prods = {};
+    for (const v of vs) for (const i of v.items) { const k = i.nombre + (i.tipo === 'decant' ? ' (decant)' : ''); prods[k] = prods[k] || { n: 0, t: 0 }; prods[k].n += i.cantidad; prods[k].t += i.totalARS; }
+    const topP = Object.entries(prods).sort((a, b) => b[1].n - a[1].n || b[1].t - a[1].t).slice(0, 6);
+    $('top-products').innerHTML = topP.length ? topP.map(([n, x]) => `<div class="flex justify-between gap-2"><span class="truncate">${esc(n)}</span><span class="text-zinc-400 shrink-0">${x.n} u · ${ars(x.t)}</span></div>`).join('') : '<p class="text-zinc-500">Sin ventas este mes.</p>';
+    const clis = {};
+    for (const v of vs) { clis[v.cliente] = clis[v.cliente] || { n: 0, t: 0 }; clis[v.cliente].n++; clis[v.cliente].t += v.totalARS; }
+    const topC = Object.entries(clis).sort((a, b) => b[1].t - a[1].t).slice(0, 6);
+    $('top-clients').innerHTML = topC.length ? topC.map(([n, x]) => `<button class="w-full flex justify-between gap-2 hover:text-gold" data-client="${esc(n)}"><span class="truncate">${esc(n)}</span><span class="text-zinc-400 shrink-0">${x.n} compra${x.n > 1 ? 's' : ''} · ${ars(x.t)}</span></button>`).join('') : '<p class="text-zinc-500">Sin ventas este mes.</p>';
+    const low = vs.filter(v => v.costoARS > 0 && v.gananciaARS / v.costoARS < 0.2);
+    $('low-margin').innerHTML = low.length ? low.map(saleRow).join('') : '<p class="text-zinc-500">Ninguna. 👍</p>';
+
+    // Gastos del mes
+    $('expenses').innerHTML = gs.length ? gs.map(g => `<button data-expense="${g.id}" class="w-full flex justify-between gap-2 hover:text-gold"><span class="truncate">${fmtDate(g.fecha)} · ${esc(g.concepto)}</span><span class="text-zinc-400 shrink-0">${ars(g.montoARS)}</span></button>`).join('')
+        + `<div class="flex justify-between border-t border-zinc-800 pt-2 font-semibold"><span>Total</span><span>${ars(gasto)}</span></div>`
+        : '<p class="text-zinc-500">Sin gastos cargados este mes.</p>';
+
+    // Canales
+    const ch = {};
+    for (const v of vs) { const c = v.canal || clientRec(v.cliente)?.canal; if (c) ch[c] = (ch[c] || 0) + 1; }
+    const chList = Object.entries(ch).sort((a, b) => b[1] - a[1]);
+    const chTot = chList.reduce((a, x) => a + x[1], 0);
+    $('channels').innerHTML = chList.length ? chList.map(([c, n]) => `<div><div class="flex justify-between"><span>${esc(c)}</span><span class="text-zinc-400">${n} venta${n > 1 ? 's' : ''}</span></div><div class="h-1.5 bg-zinc-800 rounded mt-1"><div class="h-1.5 bg-gold rounded" style="width:${n / chTot * 100}%"></div></div></div>`).join('')
+        + (vs.length > chTot ? `<p class="text-xs text-zinc-500">${vs.length - chTot} venta${vs.length - chTot > 1 ? 's' : ''} sin el dato.</p>` : '')
+        : '<p class="text-zinc-500">Todavía no hay datos. Cuando cargues una venta, elegí "Cómo te conoció" (es opcional).</p>';
+
+    renderRecompra();
+}
+
+// ---------- Para volver a escribir ----------
+function renderRecompra() {
+    const meses = Number(S.config.recompraMeses) || 4;
+    const limite = addMonth(today().slice(0, 7), -meses) + today().slice(7);
+    const list = clientStats().filter(c => c.ultima && c.ultima <= limite && !(c.rec?.contactado && c.rec.contactado > c.ultima && c.rec.contactado > limite))
+        .sort((a, b) => b.total - a.total);
+    $('recompra-note').textContent = `más de ${meses} meses sin comprar`;
+    const shown = S.showAllRecompra ? list : list.slice(0, 6);
+    $('recompra').innerHTML = list.length ? shown.map(c => {
+        const last = saleOfClient(c.nombre)[0];
+        const tel = String(c.rec?.telefono || '').replace(/\D/g, '');
+        return `<div class="flex items-center gap-2">
+            <button data-client="${esc(c.nombre)}" class="flex-1 min-w-0 text-left hover:text-gold"><p class="truncate font-medium">${esc(c.nombre)}</p>
+            <p class="text-xs text-zinc-400 truncate">Última: ${fmtDate(c.ultima)} · ${esc(last ? last.items.map(i => i.nombre).join(', ') : '')}</p></button>
+            ${tel ? `<a target="_blank" rel="noopener" href="https://wa.me/${tel.length <= 10 ? '549' + tel : tel}" class="w-9 h-9 shrink-0 rounded-full bg-emerald-600/20 text-emerald-400 flex items-center justify-center" title="WhatsApp"><i class="fa-brands fa-whatsapp"></i></a>` : ''}
+            <button data-contacted="${esc(c.nombre)}" class="btn-ghost text-xs shrink-0" title="Ocultar hasta el próximo aviso">Ya le escribí</button>
+        </div>`;
+    }).join('') + (list.length > 6 ? `<button data-action="toggle-recompra" class="text-xs text-gold">${S.showAllRecompra ? 'Ver menos' : `Ver los ${list.length}`}</button>` : '')
+        : '<p class="text-zinc-500">Nadie por ahora.</p>';
+}
+async function markContacted(name) {
+    const rec = clientRec(name);
+    const { id, ...data } = rec || { nombre: name, telefono: '', mayorista: false, notas: '' };
+    data.contactado = today();
+    const cid = id || doc(col('gestion_clientes')).id;
+    try { await setDoc(doc(col('gestion_clientes'), cid), data); S.clientes = S.clientes.filter(c => c.id !== cid); S.clientes.push({ id: cid, ...data }); toast('Listo, te lo recuerdo más adelante'); renderRecompra(); }
+    catch (err) { toast('No se pudo guardar.', true); }
+}
+
+// ---------- Gastos ----------
+const expensesOfMonth = ym => S.gastos.filter(g => g.fecha.startsWith(ym));
+function openExpense(g) {
+    const e = g || { fecha: today(), concepto: '', montoARS: '', cotiz: Number(S.config.dolar) };
+    $('modal-title').textContent = g ? 'Editar gasto' : 'Nuevo gasto';
+    $('modal-body').innerHTML = `<form id="expense-form" class="space-y-3">
+        <div class="grid grid-cols-2 gap-3">
+            <div><label class="lbl" for="g-fecha">Fecha</label><input id="g-fecha" type="date" class="inp" value="${e.fecha}" required></div>
+            <div><label class="lbl" for="g-monto">Monto ($)</label><input id="g-monto" type="number" min="0" step="100" class="inp" value="${e.montoARS}" required></div>
+        </div>
+        <div><label class="lbl" for="g-concepto">Concepto</label><input id="g-concepto" class="inp" list="dl-gastos" value="${esc(e.concepto)}" placeholder="Ej: bolsas, publicidad Instagram…" required></div>
+        <datalist id="dl-gastos">${['Bolsas / packaging', 'Envases decants', 'Publicidad', 'Envíos', 'Otro'].map(x => `<option value="${x}">`).join('')}</datalist>
+        <p class="text-xs text-zinc-400">Se descuenta de la ganancia del mes. Se guarda con el dólar de hoy (${ars(e.cotiz)}) para pasarlo a dólares.</p>
+        <div class="flex gap-2">${g ? '<button type="button" data-action="delete-expense" class="btn-ghost text-red-400"><i class="fa-solid fa-trash"></i></button>' : ''}<button class="btn-gold flex-1">Guardar</button></div>
+    </form>`;
+    openModal();
+    $('expense-form').addEventListener('submit', async ev => {
+        ev.preventDefault();
+        const data = { fecha: $('g-fecha').value, concepto: $('g-concepto').value.trim(), montoARS: Number($('g-monto').value) || 0, cotiz: e.cotiz };
+        const id = g?.id || doc(col('gestion_gastos')).id;
+        try { await setDoc(doc(col('gestion_gastos'), id), data); S.gastos = S.gastos.filter(x => x.id !== id); S.gastos.push({ id, ...data }); S.gastos.sort((a, b) => b.fecha.localeCompare(a.fecha)); closeModal(); toast('Gasto guardado ✓'); render(); }
+        catch (err) { toast('No se pudo guardar.', true); }
+    });
+    if (g) $('modal-body').querySelector('[data-action="delete-expense"]').addEventListener('click', async () => {
+        if (!confirm('¿Borrar este gasto?')) return;
+        try { await deleteDoc(doc(col('gestion_gastos'), g.id)); S.gastos = S.gastos.filter(x => x.id !== g.id); closeModal(); toast('Gasto borrado'); render(); }
+        catch (err) { toast('No se pudo borrar.', true); }
+    });
+}
+
+// ---------- Ventas ----------
+function saleRow(v) {
+    const m = v.costoARS > 0 ? v.gananciaARS / v.costoARS : null;
+    const items = v.items.map(i => `${i.cantidad > 1 ? i.cantidad + '× ' : ''}${esc(i.nombre)}${i.tipo === 'decant' && !/dec|dcnt/i.test(i.nombre) ? ' (decant)' : ''}`).join(', ');
+    return `<button data-sale="${v.id}" class="card w-full text-left p-3 hover:border-gold/60 flex gap-3 items-start">
+        <div class="text-center shrink-0 w-11"><p class="text-lg font-bold leading-none">${v.fecha.slice(8)}</p><p class="text-[10px] uppercase text-zinc-500">${shortMonth(v.fecha.slice(0, 7))}</p></div>
+        <div class="flex-1 min-w-0">
+            <p class="font-semibold truncate">${esc(v.cliente || 'Sin nombre')}${isMayorista(v.cliente) ? ' <span class="text-[10px] text-gold border border-gold/40 rounded px-1 align-middle">MAYORISTA</span>' : ''}</p>
+            <p class="text-xs text-zinc-400 line-clamp-2">${items}</p>
+            ${v.zona || v.entrega ? `<p class="text-[11px] text-zinc-500 truncate"><i class="fa-solid fa-location-dot mr-1"></i>${esc([v.zona, v.entrega].filter(Boolean).join(' · '))}</p>` : ''}
+            ${v.notas ? `<p class="text-xs text-zinc-500 italic truncate">${esc(v.notas)}</p>` : ''}
+        </div>
+        <div class="text-right shrink-0">
+            ${v.clase === 'salida' ? `<p class="text-sm text-zinc-400">Sin cobro</p><p class="text-xs text-red-400">−${ars(v.costoARS)}</p>` :
+            `<p class="font-bold">${ars(v.totalARS)}</p><p class="text-xs ${v.gananciaARS >= 0 ? 'text-emerald-400' : 'text-red-400'}">${v.gananciaARS >= 0 ? '+' : ''}${usd(usdOf(v.gananciaARS, v.cotiz))}${m !== null ? ' · ' + pct(m) : ''}</p>`}
+        </div></button>`;
+}
+const isMayorista = name => S.clientes.some(c => c.mayorista && norm(c.nombre) === norm(name));
+function renderVentas() {
+    const months = [...new Set(S.ventas.map(v => v.fecha.slice(0, 7)))].sort().reverse();
+    const sel = $('sales-month');
+    const prev = sel.dataset.init ? sel.value : (months.includes(S.month) ? S.month : '');
+    sel.innerHTML = '<option value="">Todos los meses</option>' + months.map(m => `<option value="${m}">${monthName(m)}</option>`).join('');
+    sel.value = months.includes(prev) ? prev : '';
+    sel.dataset.init = '1';
+    const q = norm($('sales-search').value), m = sel.value, cl = $('sales-class').value;
+    const list = S.ventas.filter(v => (!cl || v.clase === cl) && (!m || v.fecha.startsWith(m)) &&
+        (!q || norm(v.cliente).includes(q) || v.items.some(i => norm(i.nombre).includes(q)) || norm(v.notas).includes(q)));
+    const vv = list.filter(v => v.clase === 'venta');
+    const tot = vv.reduce((a, v) => a + v.totalARS, 0), gan = vv.reduce((a, v) => a + v.gananciaARS, 0), ganU = vv.reduce((a, v) => a + usdOf(v.gananciaARS, v.cotiz), 0);
+    $('sales-summary').innerHTML = `${list.length} registro${list.length !== 1 ? 's' : ''}${cl !== 'salida' ? ` · vendido <b class="text-zinc-200">${ars(tot)}</b> · ganancia <b class="text-emerald-400">${usd(ganU)}</b> (${ars(gan)})` : ''}`;
+    $('sales-list').innerHTML = list.length ? list.map(saleRow).join('') : '<p class="text-zinc-500 text-sm py-8 text-center">No hay ventas para mostrar.</p>';
+}
+['sales-search', 'sales-month', 'sales-class'].forEach(id => $(id).addEventListener('input', renderVentas));
+
+// ---------- Formulario de venta ----------
+let editing = null;
+function openSaleForm(sale) {
+    editing = sale ? JSON.parse(JSON.stringify(sale)) : { fecha: today(), cliente: '', clase: 'venta', items: [], cobradoUSD: 0, cotiz: Number(S.config.dolar), envioARS: 0, medio: 'Transferencia', notas: '' };
+    if (!editing.items.length) editing.items.push(newItem());
+    $('modal-title').textContent = sale ? 'Editar venta' : 'Nueva venta';
+    $('modal-body').innerHTML = `
+    <form id="sale-form" class="space-y-4">
+        <div class="grid grid-cols-2 gap-3">
+            <div><label class="lbl" for="f-fecha">Fecha</label><input id="f-fecha" type="date" class="inp" value="${editing.fecha}" required></div>
+            <div><label class="lbl" for="f-clase">Tipo</label><select id="f-clase" class="inp"><option value="venta">Venta</option><option value="salida">Regalo / tester (sin cobro)</option></select></div>
+        </div>
+        <div><label class="lbl" for="f-cliente">Cliente</label><input id="f-cliente" class="inp" list="dl-clients" value="${esc(editing.cliente)}" placeholder="Nombre del cliente" autocomplete="off"></div>
+        <div class="grid grid-cols-2 gap-3">
+            <div><label class="lbl" for="f-zona">Zona</label><input id="f-zona" class="inp" list="dl-zonas" value="${esc(editing.zona)}" placeholder="Ej: Villa Urquiza" autocomplete="off"></div>
+            <div><label class="lbl" for="f-entrega">Entrega</label><select id="f-entrega" class="inp"><option value="">—</option>${ENTREGAS.map(x => `<option>${x}</option>`).join('')}</select></div>
+        </div>
+        <div><label class="lbl" for="f-canal">Cómo te conoció <span class="normal-case font-normal text-zinc-500">(opcional)</span></label><select id="f-canal" class="inp"><option value="">No sé / no pregunté</option>${CANALES.map(x => `<option>${x}</option>`).join('')}</select></div>
+        <div>
+            <div class="flex items-center justify-between mb-2"><span class="lbl mb-0">Productos</span><button type="button" data-action="add-item" class="text-sm text-gold"><i class="fa-solid fa-plus mr-1"></i>Agregar</button></div>
+            <div id="f-items" class="space-y-2"></div>
+        </div>
+        <div id="f-pay" class="grid grid-cols-2 gap-3">
+            <div><label class="lbl" for="f-medio">Medio de pago</label><select id="f-medio" class="inp">${['Efectivo', 'Transferencia', 'Mercado Pago', 'Dólares', 'Tarjeta', 'Otro'].map(m => `<option>${m}</option>`).join('')}</select></div>
+            <div><label class="lbl" for="f-envio">Envío que pagás vos ($)</label><input id="f-envio" type="number" min="0" step="100" class="inp" value="${editing.envioARS || ''}" placeholder="0"></div>
+            <div><label class="lbl" for="f-usd">Parte pagada en dólares (US$)</label><input id="f-usd" type="number" min="0" step="1" class="inp" value="${editing.cobradoUSD || ''}" placeholder="0"></div>
+            <div><label class="lbl" for="f-cotiz">Dólar del día ($)</label><input id="f-cotiz" type="number" min="1" step="1" class="inp" value="${editing.cotiz}"></div>
+        </div>
+        <div><label class="lbl" for="f-notas">Notas</label><input id="f-notas" class="inp" value="${esc(editing.notas)}" placeholder="Ej: le hice precio por llevar 3, envío gratis…"></div>
+        <div id="f-totals" class="card p-3 text-sm space-y-1"></div>
+        <div class="flex gap-2">
+            ${sale ? '<button type="button" data-action="delete-sale" class="btn-ghost text-red-400 hover:!border-red-500 hover:!text-red-400"><i class="fa-solid fa-trash"></i></button>' : ''}
+            <button class="btn-gold flex-1">${sale ? 'Guardar cambios' : 'Guardar venta'}</button>
+        </div>
+    </form>`;
+    $('f-clase').value = editing.clase; $('f-medio').value = editing.medio || 'Transferencia';
+    $('f-entrega').value = editing.entrega || ''; $('f-canal').value = editing.canal || '';
+    // Al elegir un cliente conocido, completa zona y canal
+    $('f-cliente').addEventListener('change', () => {
+        const rec = clientRec($('f-cliente').value);
+        if (rec) { if (!$('f-zona').value && rec.zona) $('f-zona').value = rec.zona; if (!$('f-canal').value && rec.canal) $('f-canal').value = rec.canal; readHead(); }
+    });
+    renderItems(); openModal();
+    const form = $('sale-form');
+    form.addEventListener('input', e => { readHead(); if (e.target.closest('[data-item]')) readItem(e.target); updateTotals(); });
+    form.addEventListener('change', e => { if (e.target.matches('[data-f="nombre"],[data-f="tipo"]')) { readItem(e.target, true); renderItems(); } });
+    form.addEventListener('submit', e => { e.preventDefault(); saveSale(); });
+}
+const newItem = () => ({ key: null, nombre: '', tipo: 'frasco', cantidad: 1, totalARS: 0, costoUnitUSD: 0 });
+function renderItems() {
+    $('f-items').innerHTML = editing.items.map((it, idx) => {
+        const c = catByKey(it.key);
+        const sug = c ? (it.tipo === 'decant' ? decantPrice(c) : webPrice(c)) : 0;
+        return `<div data-item="${idx}" class="card p-3 space-y-2">
+            <div class="flex gap-2"><input data-f="nombre" class="inp flex-1" list="dl-products" value="${esc(it.nombre)}" placeholder="Perfume (escribí para buscar)" autocomplete="off">
+            <button type="button" data-action="del-item" class="w-10 shrink-0 text-zinc-500 hover:text-red-400" aria-label="Quitar"><i class="fa-solid fa-xmark"></i></button></div>
+            <div class="grid grid-cols-3 gap-2">
+                <select data-f="tipo" class="inp"><option value="frasco">Frasco</option>${(!c || c.decant || it.tipo === 'decant') ? '<option value="decant">Decant 5ml</option>' : ''}<option value="otro">Otro</option></select>
+                <input data-f="cantidad" type="number" min="1" step="1" class="inp" value="${it.cantidad}" aria-label="Cantidad">
+                <input data-f="totalARS" type="number" min="0" step="100" class="inp" value="${it.totalARS || ''}" placeholder="Total $" aria-label="Total cobrado por esta línea">
+            </div>
+            <p class="text-[11px] text-zinc-500">${c ? `Precio web: ${sug ? ars(sug) + (it.tipo === 'decant' ? ' (decant)' : '') + ' c/u' : 'sin precio en la web'} · costo ${usd(unitCostUSD(c, it.tipo))} c/u` : it.nombre ? (it.key === null && it.costoUnitUSD ? `Costo estimado ${usd(it.costoUnitUSD)} c/u` : 'Producto fuera del catálogo: sin costo') : 'Elegí un perfume de la lista'}</p>
+        </div>`;
+    }).join('');
+    editing.items.forEach((it, idx) => { const el = document.querySelector(`[data-item="${idx}"] [data-f="tipo"]`); if (el) el.value = it.tipo; });
+    updateTotals();
+}
+function readItem(el, picked) {
+    const box = el.closest('[data-item]'); if (!box) return;
+    const it = editing.items[Number(box.dataset.item)];
+    const f = el.dataset.f;
+    if (f === 'nombre') {
+        it.nombre = el.value;
+        const c = catByName(el.value);
+        const changed = (c ? c.key : null) !== it.key;
+        it.key = c ? c.key : null;
+        if (c && changed) { it.costoUnitUSD = unitCostUSD(c, it.tipo); if (picked || !it.totalARS) it.totalARS = (it.tipo === 'decant' ? decantPrice(c) : webPrice(c)) * it.cantidad; }
+        if (!c && changed) { it.costoUnitUSD = 0; delete it.costoEstimado; }
+    } else if (f === 'tipo') {
+        it.tipo = el.value; const c = catByKey(it.key);
+        if (c) { it.costoUnitUSD = unitCostUSD(c, it.tipo); it.totalARS = (it.tipo === 'decant' ? decantPrice(c) : webPrice(c)) * it.cantidad; }
+    } else if (f === 'cantidad') {
+        const c = catByKey(it.key), q = Math.max(1, Number(el.value) || 1);
+        const unit = it.cantidad ? it.totalARS / it.cantidad : 0;
+        it.cantidad = q; if (c || unit) it.totalARS = Math.round(unit * q);
+        const tot = el.closest('[data-item]').querySelector('[data-f="totalARS"]'); if (tot) tot.value = it.totalARS || '';
+    } else if (f === 'totalARS') it.totalARS = Number(el.value) || 0;
+}
+function readHead() {
+    editing.fecha = $('f-fecha').value; editing.clase = $('f-clase').value; editing.cliente = $('f-cliente').value.trim();
+    editing.medio = $('f-medio').value; editing.envioARS = Number($('f-envio').value) || 0;
+    editing.cobradoUSD = Number($('f-usd').value) || 0; editing.cotiz = Number($('f-cotiz').value) || Number(S.config.dolar);
+    editing.notas = $('f-notas').value.trim();
+    editing.zona = $('f-zona').value.trim(); editing.entrega = $('f-entrega').value; editing.canal = $('f-canal').value;
+}
+function computeSale(v) {
+    const salida = v.clase === 'salida';
+    const totalARS = salida ? 0 : Math.round(v.items.reduce((a, i) => a + (Number(i.totalARS) || 0), 0));
+    const costoARS = Math.round(v.items.reduce((a, i) => a + (Number(i.costoUnitUSD) || 0) * i.cantidad, 0) * v.cotiz);
+    const cobradoUSD = salida ? 0 : v.cobradoUSD;
+    return { totalARS, costoARS, cobradoUSD, cobradoARS: Math.max(0, totalARS - Math.round(cobradoUSD * v.cotiz)), gananciaARS: salida ? 0 : totalARS - costoARS - (v.envioARS || 0) };
+}
+function updateTotals() {
+    const r = computeSale(editing), salida = editing.clase === 'salida';
+    $('f-pay').classList.toggle('hidden', salida);
+    const m = r.costoARS ? r.gananciaARS / r.costoARS : null;
+    $('f-totals').innerHTML = salida
+        ? `<div class="flex justify-between"><span class="text-zinc-400">Costo de lo que sale sin cobrar</span><b class="text-red-400">${ars(r.costoARS)}</b></div>`
+        : `<div class="flex justify-between"><span class="text-zinc-400">Total cobrado</span><b class="text-lg">${ars(r.totalARS)}</b></div>
+           ${r.cobradoUSD ? `<div class="flex justify-between text-xs text-zinc-400"><span>En pesos ${ars(r.cobradoARS)} + en dólares ${usd(r.cobradoUSD)}</span></div>` : ''}
+           <div class="flex justify-between"><span class="text-zinc-400">Costo</span><span>${ars(r.costoARS)}</span></div>
+           ${editing.envioARS ? `<div class="flex justify-between"><span class="text-zinc-400">Envío a tu cargo</span><span>−${ars(editing.envioARS)}</span></div>` : ''}
+           <div class="flex justify-between border-t border-zinc-800 pt-1"><span class="text-zinc-400">Ganancia</span><b class="${r.gananciaARS >= 0 ? 'text-emerald-400' : 'text-red-400'}">${ars(r.gananciaARS)}${m !== null ? ' · ' + pct(m) + ' sobre el costo' : ''}</b></div>
+           ${m !== null && m < 0 ? '<p class="text-xs text-red-400"><i class="fa-solid fa-triangle-exclamation mr-1"></i>Esta venta queda a pérdida.</p>' : ''}`;
+}
+async function saveSale() {
+    readHead();
+    editing.items = editing.items.filter(i => i.nombre.trim());
+    if (!editing.items.length) return toast('Agregá al menos un producto.', true);
+    if (!editing.fecha) return toast('Poné la fecha.', true);
+    for (const i of editing.items) { i.cantidad = Math.max(1, Number(i.cantidad) || 1); i.totalARS = Number(i.totalARS) || 0; }
+    Object.assign(editing, computeSale(editing));
+    const isNew = !editing.id;
+    if (isNew) { editing.creado = new Date().toISOString(); editing.origen = 'panel'; }
+    const id = editing.id || doc(col('gestion_ventas')).id;
+    const { id: _omit, ...data } = editing;
+    try {
+        await setDoc(doc(col('gestion_ventas'), id), data);
+        const saved = { id, ...data };
+        S.ventas = S.ventas.filter(v => v.id !== id); S.ventas.push(saved);
+        S.ventas.sort((a, b) => (b.fecha + (b.creado || '')).localeCompare(a.fecha + (a.creado || '')));
+        if (data.cliente && data.clase === 'venta') {
+            const rec = clientRec(data.cliente);
+            if (!rec) {
+                const cref = doc(col('gestion_clientes'));
+                const cli = { nombre: data.cliente, telefono: '', mayorista: false, notas: '', zona: data.zona || '', canal: data.canal || '' };
+                await setDoc(cref, cli); S.clientes.push({ id: cref.id, ...cli });
+            } else if ((data.zona && !rec.zona) || (data.canal && !rec.canal)) {
+                const { id: cid, ...cli } = { ...rec, zona: rec.zona || data.zona, canal: rec.canal || data.canal };
+                await setDoc(doc(col('gestion_clientes'), cid), cli); Object.assign(rec, cli);
+            }
+        }
+        closeModal(); toast(isNew ? 'Venta guardada ✓' : 'Cambios guardados ✓'); render();
+    } catch (err) { console.error(err); toast('No se pudo guardar. Revisá la conexión.', true); }
+}
+async function deleteSale() {
+    if (!editing?.id || !confirm('¿Borrar esta venta? No se puede deshacer.')) return;
+    try { await deleteDoc(doc(col('gestion_ventas'), editing.id)); S.ventas = S.ventas.filter(v => v.id !== editing.id); closeModal(); toast('Venta borrada'); render(); }
+    catch (err) { toast('No se pudo borrar.', true); }
+}
+
+// ---------- Clientes ----------
+function clientStats() {
+    const map = {};
+    for (const n of allClientNames()) map[norm(n)] = { nombre: n, n: 0, total: 0, gan: 0, ultima: '', rec: S.clientes.find(c => norm(c.nombre) === norm(n)) };
+    for (const v of S.ventas.filter(v => v.clase === 'venta')) { const s = map[norm(v.cliente)]; if (!s) continue; s.n++; s.total += v.totalARS; s.gan += v.gananciaARS; if (v.fecha > s.ultima) s.ultima = v.fecha; }
+    return Object.values(map);
+}
+function renderClientes() {
+    const q = norm($('clients-search').value), sort = $('clients-sort').value;
+    let list = clientStats().filter(c => !q || norm(c.nombre).includes(q) || norm(c.rec?.telefono).includes(q));
+    list.sort(sort === 'nombre' ? (a, b) => a.nombre.localeCompare(b.nombre) : sort === 'ultima' ? (a, b) => b.ultima.localeCompare(a.ultima) : (a, b) => b.total - a.total);
+    $('clients-summary').textContent = `${list.length} cliente${list.length !== 1 ? 's' : ''}`;
+    $('clients-list').innerHTML = list.map(c => `<button data-client="${esc(c.nombre)}" class="card p-3 text-left hover:border-gold/60">
+        <div class="flex items-center justify-between gap-2"><p class="font-semibold truncate">${esc(c.nombre)}</p>${c.rec?.mayorista ? '<span class="text-[10px] text-gold border border-gold/40 rounded px-1 shrink-0">MAYORISTA</span>' : ''}</div>
+        <p class="text-xs text-zinc-400 mt-1">${c.n} compra${c.n !== 1 ? 's' : ''} · ${ars(c.total)}${c.ultima ? ' · última ' + fmtDate(c.ultima) : ''}</p></button>`).join('') || '<p class="text-zinc-500 text-sm">Sin clientes.</p>';
+}
+['clients-search', 'clients-sort'].forEach(id => $(id).addEventListener('input', renderClientes));
+function openClient(name) {
+    const st = clientStats().find(c => norm(c.nombre) === norm(name)) || { nombre: name, n: 0, total: 0, gan: 0 };
+    const rec = st.rec || { nombre: name, telefono: '', mayorista: false, notas: '' };
+    const ventas = saleOfClient(name);
+    const tel = String(rec.telefono || '').replace(/\D/g, '');
+    $('modal-title').textContent = name;
+    $('modal-body').innerHTML = `
+        <div class="grid grid-cols-3 gap-2 mb-4 text-center">
+            <div class="card p-2"><p class="text-xs text-zinc-400">Compras</p><p class="font-bold">${st.n}</p></div>
+            <div class="card p-2"><p class="text-xs text-zinc-400">Total</p><p class="font-bold text-gold">${ars(st.total)}</p></div>
+            <div class="card p-2"><p class="text-xs text-zinc-400">Ganancia</p><p class="font-bold text-emerald-400">${ars(st.gan)}</p></div>
+        </div>
+        <form id="client-form" class="space-y-3 mb-4">
+            <div class="grid grid-cols-2 gap-3">
+                <div><label class="lbl" for="c-tel">Teléfono / WhatsApp</label><input id="c-tel" class="inp" value="${esc(rec.telefono)}" placeholder="11 2345 6789" inputmode="tel"></div>
+                <label class="flex items-end gap-2 pb-2.5 text-sm"><input id="c-may" type="checkbox" class="w-4 h-4 accent-yellow-500" ${rec.mayorista ? 'checked' : ''}> Cliente mayorista</label>
+            </div>
+            <div class="grid grid-cols-2 gap-3">
+                <div><label class="lbl" for="c-zona">Zona</label><input id="c-zona" class="inp" list="dl-zonas" value="${esc(rec.zona)}" placeholder="Ej: Villa Urquiza"></div>
+                <div><label class="lbl" for="c-canal">Cómo te conoció</label><select id="c-canal" class="inp"><option value="">No sé</option>${CANALES.map(x => `<option ${rec.canal === x ? 'selected' : ''}>${x}</option>`).join('')}</select></div>
+            </div>
+            <div><label class="lbl" for="c-notas">Notas</label><input id="c-notas" class="inp" value="${esc(rec.notas)}" placeholder="Ej: le gustan los dulces, revende en Córdoba…"></div>
+            <div class="flex gap-2"><button class="btn-gold flex-1 text-sm">Guardar datos</button>
+            ${tel ? `<a class="btn-ghost text-sm" target="_blank" rel="noopener" href="https://wa.me/${tel.length <= 10 ? '549' + tel : tel}"><i class="fa-brands fa-whatsapp mr-1"></i>WhatsApp</a>` : ''}</div>
+        </form>
+        <h4 class="font-semibold mb-2">Historial</h4>
+        <div class="space-y-2">${ventas.length ? ventas.map(saleRow).join('') : '<p class="text-sm text-zinc-500">Sin compras registradas.</p>'}</div>`;
+    openModal();
+    $('client-form').addEventListener('submit', async e => {
+        e.preventDefault();
+        const data = { ...(rec.id ? (({ id, ...r }) => r)(rec) : {}), nombre: name, telefono: $('c-tel').value.trim(), mayorista: $('c-may').checked, notas: $('c-notas').value.trim(),
+            zona: $('c-zona').value.trim(), canal: $('c-canal').value };
+        const id = rec.id || doc(col('gestion_clientes')).id;
+        try { await setDoc(doc(col('gestion_clientes'), id), data); S.clientes = S.clientes.filter(c => c.id !== id); S.clientes.push({ id, ...data }); toast('Cliente guardado ✓'); render(); openClient(name); }
+        catch (err) { toast('No se pudo guardar.', true); }
+    });
+}
+
+// ---------- Productos ----------
+function renderProductos() {
+    const cats = [...new Set(S.catalogo.map(c => c.categoria))];
+    const sel = $('products-cat'), prev = sel.value;
+    sel.innerHTML = '<option value="">Todas las categorías</option>' + cats.map(c => `<option>${esc(c)}</option>`).join('');
+    sel.value = cats.includes(prev) ? prev : '';
+    const q = norm($('products-search').value);
+    const list = S.catalogo.filter(c => (!sel.value || c.categoria === sel.value) && (!q || norm(c.nombre).includes(q)))
+        .sort((a, b) => (b.webId ? 1 : 0) - (a.webId ? 1 : 0) || a.nombre.localeCompare(b.nombre));
+    const dolar = Number(S.config.dolar);
+    $('products-list').innerHTML = list.map(c => {
+        const p = webPrice(c), costo = c.costoUSD * dolar, m = costo ? p / costo - 1 : null;
+        const sold = S.ventas.filter(v => v.clase === 'venta').reduce((a, v) => a + v.items.filter(i => i.key === c.key && i.tipo === 'frasco').reduce((x, i) => x + i.cantidad, 0), 0);
+        return `<div class="card p-3 flex gap-3 items-center">
+            <div class="flex-1 min-w-0">
+                <p class="font-semibold truncate">${esc(c.nombre)}</p>
+                <p class="text-xs text-zinc-400">${esc(c.categoria)}${sold ? ` · ${sold} vendido${sold > 1 ? 's' : ''}` : ''}${c.decant ? ' · <span class="text-gold">decant ' + (p ? ars(decantPrice(c)) : '') + '</span>' : ''}</p>
+            </div>
+            <button data-cost="${esc(c.key)}" class="text-right shrink-0 hover:text-gold" title="Cambiar costo">
+                <p class="text-xs text-zinc-400">Costo</p><p class="text-sm">${c.costoUSD ? usd(c.costoUSD) : '<span class="text-red-400">cargar</span>'}</p>
+            </button>
+            <div class="text-right shrink-0 w-24">
+                <p class="text-xs text-zinc-400">Web</p><p class="text-sm font-semibold">${p ? ars(p) : '—'}</p>
+                ${m !== null && p ? `<p class="text-[11px] ${m < 0 ? 'text-red-400' : m < 0.3 ? 'text-amber-400' : 'text-emerald-400'}">${pct(m)}</p>` : ''}
+            </div></div>`;
+    }).join('') || '<p class="text-zinc-500 text-sm">Sin productos.</p>';
+}
+['products-search', 'products-cat'].forEach(id => $(id).addEventListener('input', renderProductos));
+async function editCost(key) {
+    const c = catByKey(key); if (!c) return;
+    const v = prompt(`Costo de "${c.nombre}" en dólares (lo que pagaste, con pasero y USDT):`, c.costoUSD || '');
+    if (v === null) return;
+    const n = Number(String(v).replace(',', '.'));
+    if (!(n >= 0)) return toast('Número no válido.', true);
+    c.costoUSD = n; c.editado = true; delete c.nuevo;
+    try { await saveCatalog(); toast('Costo actualizado ✓'); render(); } catch (err) { toast('No se pudo guardar.', true); }
+}
+const saveCatalog = () => setDoc(datosRef('catalogo'), { items: S.catalogo.map(({ nuevo, ...c }) => c), actualizado: new Date().toISOString() });
+
+// ---------- Más ----------
+function renderMas() {
+    $('cfg-dolar').value = S.config.dolar; $('cfg-usdt').value = Math.round(S.config.usdt * 10000) / 100; $('cfg-pack').value = S.config.packagingDecantUSD;
+    $('cfg-recompra').value = S.config.recompraMeses || 4;
+    const n = S.ventas.filter(v => v.origen === 'excel').length;
+    $('import-status').textContent = n ? `Ya cargado: ${n} registros del Excel. Si lo cargás de nuevo, se reemplazan.` : 'Todavía no cargaste el historial del Excel. Usá el archivo que te pasó Claude.';
+}
+$('config-form').addEventListener('submit', async e => {
+    e.preventDefault();
+    const cfg = { ...S.config, dolar: Number($('cfg-dolar').value), usdt: Number($('cfg-usdt').value) / 100, packagingDecantUSD: Number($('cfg-pack').value), recompraMeses: Math.max(1, Number($('cfg-recompra').value) || 4) };
+    try { await setDoc(datosRef('config'), cfg); S.config = cfg; toast('Guardado ✓'); render(); } catch (err) { toast('No se pudo guardar.', true); }
+});
+$('import-file').addEventListener('change', async e => {
+    const file = e.target.files[0]; e.target.value = '';
+    if (!file) return;
+    let data;
+    try { data = JSON.parse(await file.text()); } catch { return toast('El archivo no es válido.', true); }
+    if (data.tipo !== 'black-perfumes-gestion') return toast('Ese no es el archivo del historial.', true);
+    const prevExcel = S.ventas.filter(v => v.origen === 'excel').length + S.compras.filter(c => c.origen === 'excel').length;
+    if (!confirm(`Se van a cargar ${data.ventas.length} ventas/salidas, ${data.compras.length} compras, ${data.clientes.length} clientes y los costos de ${data.catalogo.length} productos.` +
+        (prevExcel ? `\n\nYa había ${prevExcel} registros del Excel: se reemplazan. Lo que cargaste desde el panel no se toca.` : '') + '\n\n¿Seguimos?')) return;
+    $('import-status').textContent = 'Cargando… no cierres la página.';
+    try {
+        const ops = [];
+        for (const v of S.ventas.filter(v => v.origen === 'excel')) ops.push(b => b.delete(doc(col('gestion_ventas'), v.id)));
+        for (const c of S.compras.filter(c => c.origen === 'excel')) ops.push(b => b.delete(doc(col('gestion_compras'), c.id)));
+        for (const v of data.ventas) ops.push(b => b.set(doc(col('gestion_ventas')), v));
+        for (const c of data.compras) ops.push(b => b.set(doc(col('gestion_compras')), c));
+        const known = new Set(S.clientes.map(c => norm(c.nombre)));
+        for (const c of data.clientes) if (!known.has(norm(c.nombre))) ops.push(b => b.set(doc(col('gestion_clientes')), c));
+        // Catálogo: los costos del archivo, sin pisar costos que ya cambiaste en el panel
+        const merged = data.catalogo.map(c => { const cur = catByKey(c.key); return cur && cur.editado ? { ...c, costoUSD: cur.costoUSD, editado: true } : c; });
+        ops.push(b => b.set(datosRef('catalogo'), { items: merged, actualizado: new Date().toISOString() }));
+        if (!S.config.guardado) ops.push(b => b.set(datosRef('config'), { ...data.config, guardado: true }));
+        for (let i = 0; i < ops.length; i += 400) { const b = writeBatch(db); ops.slice(i, i + 400).forEach(f => f(b)); await b.commit(); }
+        await loadAll(); toast('Historial cargado ✓'); render();
+    } catch (err) { console.error(err); toast('No se pudo cargar el historial.', true); renderMas(); }
+});
+function exportCSV() {
+    const rows = [['Fecha', 'Tipo', 'Cliente', 'Productos', 'Cantidad', 'Total cobrado ($)', 'Pagado en USD', 'Dólar del día', 'Costo ($)', 'Envío a cargo ($)', 'Ganancia ($)', 'Medio de pago', 'Notas']];
+    for (const v of [...S.ventas].sort((a, b) => a.fecha.localeCompare(b.fecha)))
+        rows.push([fmtDate(v.fecha), v.clase === 'venta' ? 'Venta' : 'Sin cobro', v.cliente, v.items.map(i => `${i.cantidad}x ${i.nombre}${i.tipo === 'decant' ? ' (decant)' : ''}`).join(' + '),
+            v.items.reduce((a, i) => a + i.cantidad, 0), v.totalARS, v.cobradoUSD || 0, v.cotiz, v.costoARS, v.envioARS || 0, v.gananciaARS, v.medio || '', v.notas || '']);
+    const csv = '﻿' + rows.map(r => r.map(x => `"${String(x ?? '').replace(/"/g, '""')}"`).join(';')).join('\r\n');
+    const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([csv], { type: 'text/csv;charset=utf-8' }));
+    a.download = `ventas-black-perfumes-${today()}.csv`; a.click(); URL.revokeObjectURL(a.href);
+}
+
+// ---------- Modal y acciones ----------
+function openModal() { $('modal').classList.remove('hidden'); document.body.style.overflow = 'hidden'; }
+function closeModal() { $('modal').classList.add('hidden'); document.body.style.overflow = ''; editing = null; }
+$('modal').addEventListener('click', e => { if (e.target === $('modal')) closeModal(); });
+document.addEventListener('keydown', e => { if (e.key === 'Escape' && !$('modal').classList.contains('hidden')) closeModal(); });
+document.addEventListener('click', e => {
+    const t = e.target.closest('[data-action],[data-goto],[data-sale],[data-client],[data-month],[data-cost],[data-expense],[data-contacted]');
+    if (!t) return;
+    if (t.dataset.expense) { const g = S.gastos.find(x => x.id === t.dataset.expense); if (g) openExpense(g); return; }
+    if (t.dataset.contacted) return markContacted(t.dataset.contacted);
+    if (t.dataset.action === 'new-expense') return openExpense();
+    if (t.dataset.action === 'toggle-recompra') { S.showAllRecompra = !S.showAllRecompra; return renderRecompra(); }
+    if (t.dataset.goto) return goTab(t.dataset.goto);
+    if (t.dataset.sale) { const v = S.ventas.find(x => x.id === t.dataset.sale); if (v) openSaleForm(v); return; }
+    if (t.dataset.client) return openClient(t.dataset.client);
+    if (t.dataset.month) { S.month = t.dataset.month; return renderInicio(); }
+    if (t.dataset.cost) return editCost(t.dataset.cost);
+    const a = t.dataset.action;
+    if (a === 'new-sale') openSaleForm();
+    else if (a === 'close-modal') closeModal();
+    else if (a === 'month-prev') { S.month = addMonth(S.month, -1); renderInicio(); }
+    else if (a === 'month-next') { S.month = addMonth(S.month, 1); renderInicio(); }
+    else if (a === 'add-item') { readHead(); editing.items.push(newItem()); renderItems(); }
+    else if (a === 'del-item') { const idx = Number(t.closest('[data-item]').dataset.item); editing.items.splice(idx, 1); if (!editing.items.length) editing.items.push(newItem()); renderItems(); }
+    else if (a === 'delete-sale') deleteSale();
+    else if (a === 'logout') signOut(auth);
+    else if (a === 'export-csv') exportCSV();
+});
+goTab('inicio');
+</script>
+</body>
+</html>
