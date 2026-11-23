@@ -87,6 +87,11 @@
             </div>
             <div class="grid grid-cols-2 lg:grid-cols-4 gap-3" id="kpis"></div>
             <div class="card p-4">
+                <h3 class="font-semibold mb-1">Tu negocio en dólares</h3>
+                <p class="text-xs text-zinc-400 mb-3">Plata que entró por ventas menos lo que pagaste en compras y gastos, más la mercadería que tenés guardada (a costo).</p>
+                <div id="business" class="overflow-x-auto"></div>
+            </div>
+            <div class="card p-4">
                 <div class="flex items-center justify-between mb-3">
                     <h3 class="font-semibold">Últimos 12 meses</h3>
                     <div class="text-xs text-zinc-400 flex gap-3"><span><span class="inline-block w-2.5 h-2.5 rounded-sm bg-gold mr-1"></span>Vendido</span><span><span class="inline-block w-2.5 h-2.5 rounded-sm bg-emerald-500 mr-1"></span>Ganancia</span></div>
@@ -134,14 +139,50 @@
             <div id="clients-list" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-2"></div>
         </section>
 
-        <!-- PRODUCTOS -->
-        <section data-tab="productos" class="tab hidden space-y-3">
-            <div class="flex flex-col sm:flex-row gap-2">
-                <div class="relative flex-1"><i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-zinc-500 text-sm"></i><input id="products-search" class="inp pl-9" placeholder="Buscar perfume…"></div>
-                <select id="products-cat" class="inp sm:w-64"></select>
+        <!-- STOCK -->
+        <section data-tab="stock" class="tab hidden space-y-3">
+            <div class="flex flex-wrap gap-2">
+                <button data-sub="stock" class="sub-btn btn-ghost text-sm flex-1 sm:flex-none"><i class="fa-solid fa-boxes-stacked mr-1"></i> Stock</button>
+                <button data-sub="compras" class="sub-btn btn-ghost text-sm flex-1 sm:flex-none"><i class="fa-solid fa-truck-ramp-box mr-1"></i> Compras</button>
+                <button data-sub="precios" class="sub-btn btn-ghost text-sm flex-1 sm:flex-none"><i class="fa-solid fa-tags mr-1"></i> Precios</button>
+                <button data-action="new-purchase" class="btn-gold text-sm w-full sm:w-auto sm:ml-auto inline-flex items-center justify-center gap-2 shrink-0"><i class="fa-solid fa-plus"></i> Cargar compra</button>
             </div>
-            <p class="text-xs text-zinc-400">Costo = lo que pagaste (en dólares) × dólar del día. El precio de la web se toma de la tienda. Decant 5 ml = precio del frasco ÷ 10.</p>
-            <div id="products-list" class="space-y-2"></div>
+            <div id="sub-stock" class="space-y-3">
+                <div class="grid grid-cols-2 lg:grid-cols-4 gap-3" id="stock-kpis"></div>
+                <div class="card p-4" id="restock-box"><h3 class="font-semibold mb-1">Para reponer</h3><p class="text-xs text-zinc-400 mb-3">Se vendieron bien en los últimos 3 meses y te queda 1 o ninguno.</p><div id="restock" class="flex flex-wrap gap-2 text-sm"></div></div>
+                <div class="flex flex-col sm:flex-row gap-2">
+                    <div class="relative flex-1"><i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-zinc-500 text-sm"></i><input id="products-search" class="inp pl-9" placeholder="Buscar perfume…"></div>
+                    <select id="products-filter" class="inp sm:w-44"><option value="con">Con stock</option><option value="lentos">Sin venderse hace +90 días</option><option value="sin">Sin stock</option><option value="todos">Todos</option></select>
+                    <select id="products-sort" class="inp sm:w-44"><option value="valor">Más plata invertida</option><option value="dias">Más días en stock</option><option value="vendidos">Más vendidos (3 meses)</option><option value="nombre">Nombre A-Z</option></select>
+                </div>
+                <p class="text-xs text-zinc-400">Costo = lo que pagaste por unidad (con pasero y USDT). "Días en stock" = desde que entró la unidad más vieja que te queda. Tocá un perfume para ver sus movimientos o ajustar el stock.</p>
+                <div id="products-list" class="space-y-2"></div>
+            </div>
+            <div id="sub-compras" class="space-y-2 hidden">
+                <div id="purchases-summary" class="text-sm text-zinc-400"></div>
+                <div id="purchases-list" class="space-y-2"></div>
+            </div>
+            <div id="sub-precios" class="space-y-3 hidden">
+                <form id="pricing-form" class="card p-4 space-y-3">
+                    <div class="grid grid-cols-3 gap-3">
+                        <div><label class="lbl" for="pr-dolar">Dólar ($)</label><input id="pr-dolar" type="number" min="1" step="1" class="inp" required></div>
+                        <div><label class="lbl" for="pr-usdt">USDT (%)</label><input id="pr-usdt" type="number" min="0" step="0.01" class="inp" required></div>
+                        <div><label class="lbl" for="pr-pasero">Pasero (US$)</label><input id="pr-pasero" type="number" min="0" step="0.01" class="inp" required></div>
+                    </div>
+                    <p class="text-xs text-zinc-400">Costo = el mayor entre lo que pagaste y lo que cuesta reponerlo hoy ((precio Paraguay + pasero) × (1 + USDT)). Precio = costo + ganancia (40% salvo excepciones), redondeado a $5.000. Nunca por debajo del costo.</p>
+                    <div class="flex flex-wrap gap-2 items-center">
+                        <label class="btn-ghost text-sm inline-flex items-center gap-2 cursor-pointer"><i class="fa-solid fa-file-import"></i> Cargar precios de Paraguay<input type="file" id="market-file" accept=".json,application/json" class="hidden"></label>
+                        <span id="market-date" class="text-xs text-zinc-500"></span>
+                    </div>
+                </form>
+                <div class="flex flex-col sm:flex-row gap-2">
+                    <div class="relative flex-1"><i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-zinc-500 text-sm"></i><input id="pricing-search" class="inp pl-9" placeholder="Buscar perfume…"></div>
+                    <select id="pricing-filter" class="inp sm:w-52"><option value="cambian">Solo los que cambian</option><option value="todos">Todos</option><option value="sinmercado">Sin precio de Paraguay</option></select>
+                </div>
+                <div id="pricing-summary" class="text-sm text-zinc-400"></div>
+                <div id="pricing-list" class="space-y-2"></div>
+                <div class="sticky bottom-20 md:bottom-4 z-20"><button data-action="apply-prices" id="apply-prices" class="btn-gold w-full shadow-lg shadow-black/60"></button></div>
+            </div>
         </section>
 
         <!-- MÁS -->
@@ -153,6 +194,7 @@
                     <div><label class="lbl" for="cfg-usdt">USDT (%)</label><input id="cfg-usdt" type="number" step="0.01" min="0" class="inp" required></div>
                     <div><label class="lbl" for="cfg-pack">Envase decant (USD)</label><input id="cfg-pack" type="number" step="0.01" min="0" class="inp" required></div>
                     <div><label class="lbl" for="cfg-recompra">Avisar "volver a escribir" a los (meses)</label><input id="cfg-recompra" type="number" step="1" min="1" class="inp" required></div>
+                    <div><label class="lbl" for="cfg-pasero">Pasero + envío por perfume (US$)</label><input id="cfg-pasero" type="number" step="0.01" min="0" class="inp" required></div>
                 </div>
                 <p class="text-xs text-zinc-400">El dólar se usa para calcular el costo y la ganancia de las ventas nuevas. Cada venta guarda la cotización de ese día.</p>
                 <button class="btn-gold text-sm">Guardar</button>
@@ -175,7 +217,7 @@
     </main>
 
     <!-- Botón flotante (celular) -->
-    <button data-action="new-sale" class="md:hidden fixed right-4 z-30 w-14 h-14 rounded-full bg-gold text-zinc-950 text-xl shadow-lg shadow-black/50" style="bottom: calc(4.75rem + env(safe-area-inset-bottom));" aria-label="Nueva venta"><i class="fa-solid fa-plus"></i></button>
+    <button id="fab" data-action="new-sale" class="md:hidden fixed right-4 z-30 w-14 h-14 rounded-full bg-gold text-zinc-950 text-xl shadow-lg shadow-black/50" style="bottom: calc(4.75rem + env(safe-area-inset-bottom));" aria-label="Nueva venta"><i class="fa-solid fa-plus"></i></button>
 
     <!-- Navegación inferior (celular) -->
     <nav class="md:hidden fixed bottom-0 inset-x-0 z-30 bg-zinc-950/95 backdrop-blur border-t border-zinc-800 nav-safe">
@@ -308,6 +350,8 @@ async function loadAll() {
     S.web = store.exists() ? (store.data().products || []) : [];
     // Productos nuevos de la web que todavía no estén en el catálogo
     for (const w of S.web) if (!S.catalogo.some(c => c.webId === w.id)) {
+        const same = S.catalogo.find(c => !c.webId && norm(c.nombre) === norm(w.name));
+        if (same) { same.webId = w.id; same.categoria = w.category; same.decant = /Árabes/.test(w.category || '') || /Stronger With You Intensely/i.test(w.name); continue; }
         S.catalogo.push({ key: 'w' + w.id, nombre: w.name, webId: w.id, categoria: w.category, costoUSD: 0, ml: Number((w.name.match(/(\d+)\s*ml/i) || [])[1]) || 100,
             decant: /Árabes/.test(w.category || '') || /Stronger With You Intensely/i.test(w.name), nuevo: true });
     }
@@ -315,18 +359,19 @@ async function loadAll() {
 }
 
 // ---------- Navegación ----------
-const TABS = [['inicio', 'fa-chart-pie', 'Inicio'], ['ventas', 'fa-receipt', 'Ventas'], ['clientes', 'fa-users', 'Clientes'], ['productos', 'fa-spray-can-sparkles', 'Productos'], ['mas', 'fa-ellipsis', 'Más']];
+const TABS = [['inicio', 'fa-chart-pie', 'Inicio'], ['ventas', 'fa-receipt', 'Ventas'], ['clientes', 'fa-users', 'Clientes'], ['stock', 'fa-boxes-stacked', 'Stock'], ['mas', 'fa-ellipsis', 'Más']];
 $('bottom-tabs').innerHTML = TABS.map(([id, ic, l]) => `<button class="tab-btn flex flex-col items-center gap-0.5 py-2.5 text-zinc-400 text-[11px]" data-goto="${id}"><i class="fa-solid ${ic} text-lg"></i>${l}</button>`).join('');
 $('top-tabs').innerHTML = TABS.map(([id, ic, l]) => `<button class="tab-btn px-3 py-1.5 rounded-lg hover:bg-zinc-800 text-zinc-400" data-goto="${id}"><i class="fa-solid ${ic} mr-1.5"></i>${l}</button>`).join('');
 function goTab(t) {
     S.tab = t;
+    $('fab').classList.toggle('!hidden', t === 'stock');
     document.querySelectorAll('.tab').forEach(s => s.classList.toggle('hidden', s.dataset.tab !== t));
     document.querySelectorAll('[data-goto]').forEach(b => b.classList.toggle('active', b.dataset.goto === t));
     render(); window.scrollTo(0, 0);
 }
 
 function render() {
-    const r = { inicio: renderInicio, ventas: renderVentas, clientes: renderClientes, productos: renderProductos, mas: renderMas }[S.tab];
+    const r = { inicio: renderInicio, ventas: renderVentas, clientes: renderClientes, stock: renderStock, mas: renderMas }[S.tab];
     document.querySelectorAll('[data-goto]').forEach(b => b.classList.toggle('active', b.dataset.goto === S.tab));
     r && r();
     $('dl-products').innerHTML = S.catalogo.filter(c => c.webId || c.costoUSD).map(c => `<option value="${esc(c.nombre)}">`).join('');
@@ -392,6 +437,31 @@ function renderInicio() {
         : '<p class="text-zinc-500">Todavía no hay datos. Cuando cargues una venta, elegí "Cómo te conoció" (es opcional).</p>';
 
     renderRecompra();
+    renderBusiness(ym);
+}
+function renderBusiness(ym) {
+    const sumV = vs => vs.reduce((a, v) => a + usdOf(v.totalARS, v.cotiz), 0);
+    const sumC = cs => cs.filter(c => c.tipo !== 'ajuste').reduce((a, c) => a + (c.totalUSD || 0), 0);
+    const sumG = gs => gs.reduce((a, g) => a + usdOf(g.montoARS, g.cotiz), 0);
+    const ventasAll = S.ventas.filter(v => v.clase === 'venta');
+    const mes = { v: sumV(ventasAll.filter(v => v.fecha.startsWith(ym))), c: sumC(S.compras.filter(c => c.fecha.startsWith(ym))), g: sumG(expensesOfMonth(ym)) };
+    const tot = { v: sumV(ventasAll), c: sumC(S.compras), g: sumG(S.gastos) };
+    const merca = stockValueUSD(stockInfo());
+    const first = [...S.ventas.map(v => v.fecha), ...S.compras.map(c => c.fecha)].sort()[0];
+    const row = (l, a, b, cls = '') => `<tr class="${cls}"><td class="py-1.5 pr-3 text-zinc-400">${l}</td><td class="py-1.5 px-3 text-right whitespace-nowrap">${a}</td><td class="py-1.5 pl-3 text-right whitespace-nowrap">${b}</td></tr>`;
+    const res = x => x.v - x.c - x.g;
+    const color = n => n >= 0 ? 'text-emerald-400' : 'text-red-400';
+    $('business').innerHTML = `<table class="w-full text-sm">
+        <thead><tr class="text-xs text-zinc-500"><th></th><th class="text-right px-3 font-medium">${monthName(ym)}</th><th class="text-right pl-3 font-medium">Desde el inicio${first ? ' (' + fmtDate(first) + ')' : ''}</th></tr></thead>
+        <tbody>
+        ${row('Ventas', usd(mes.v), usd(tot.v))}
+        ${row('Compras de mercadería', '−' + usd(mes.c), '−' + usd(tot.c))}
+        ${row('Gastos', mes.g ? '−' + usd(mes.g) : '—', tot.g ? '−' + usd(tot.g) : '—')}
+        ${row('Plata que generó', `<b class="${color(res(mes))}">${usd(res(mes))}</b>`, `<b class="${color(res(tot))}">${usd(res(tot))}</b>`, 'border-t border-zinc-800')}
+        ${row('Mercadería guardada hoy', '', `<span class="text-gold">${usd(merca)}</span>`)}
+        ${row('<b class="text-zinc-200">Resultado total</b>', '', `<b class="text-lg ${color(res(tot) + merca)}">${usd(res(tot) + merca)}</b>`, 'border-t border-zinc-800')}
+        </tbody></table>
+        <p class="text-[11px] text-zinc-500 mt-2">Si un mes da negativo en "plata que generó" suele ser porque compraste mercadería: esa plata no se perdió, está en el stock.</p>`;
 }
 
 // ---------- Para volver a escribir ----------
@@ -538,6 +608,7 @@ function openSaleForm(sale) {
 }
 const newItem = () => ({ key: null, nombre: '', tipo: 'frasco', cantidad: 1, totalARS: 0, costoUnitUSD: 0 });
 function renderItems() {
+    const info = stockInfo();
     $('f-items').innerHTML = editing.items.map((it, idx) => {
         const c = catByKey(it.key);
         const sug = c ? (it.tipo === 'decant' ? decantPrice(c) : webPrice(c)) : 0;
@@ -549,7 +620,7 @@ function renderItems() {
                 <input data-f="cantidad" type="number" min="1" step="1" class="inp" value="${it.cantidad}" aria-label="Cantidad">
                 <input data-f="totalARS" type="number" min="0" step="100" class="inp" value="${it.totalARS || ''}" placeholder="Total $" aria-label="Total cobrado por esta línea">
             </div>
-            <p class="text-[11px] text-zinc-500">${c ? `Precio web: ${sug ? ars(sug) + (it.tipo === 'decant' ? ' (decant)' : '') + ' c/u' : 'sin precio en la web'} · costo ${usd(unitCostUSD(c, it.tipo))} c/u` : it.nombre ? (it.key === null && it.costoUnitUSD ? `Costo estimado ${usd(it.costoUnitUSD)} c/u` : 'Producto fuera del catálogo: sin costo') : 'Elegí un perfume de la lista'}</p>
+            <p class="text-[11px] text-zinc-500">${c ? `Precio web: ${sug ? ars(sug) + (it.tipo === 'decant' ? ' (decant)' : '') + ' c/u' : 'sin precio en la web'} · costo ${usd(unitCostUSD(c, it.tipo))} c/u${it.tipo !== 'decant' ? ((st => ` · <span class="${st <= 0 && !editing.id ? 'text-red-400' : ''}">stock ${st}${st <= 0 && !editing.id ? ' (no tenés cargado)' : ''}</span>`)((info[c.key] || EMPTY_STOCK).stock)) : ''}` : it.nombre ? (it.key === null && it.costoUnitUSD ? `Costo estimado ${usd(it.costoUnitUSD)} c/u` : 'Producto fuera del catálogo: sin costo') : 'Elegí un perfume de la lista'}</p>
         </div>`;
     }).join('');
     editing.items.forEach((it, idx) => { const el = document.querySelector(`[data-item="${idx}"] [data-f="tipo"]`); if (el) el.value = it.tipo; });
@@ -694,34 +765,372 @@ function openClient(name) {
     });
 }
 
-// ---------- Productos ----------
-function renderProductos() {
-    const cats = [...new Set(S.catalogo.map(c => c.categoria))];
-    const sel = $('products-cat'), prev = sel.value;
-    sel.innerHTML = '<option value="">Todas las categorías</option>' + cats.map(c => `<option>${esc(c)}</option>`).join('');
-    sel.value = cats.includes(prev) ? prev : '';
-    const q = norm($('products-search').value);
-    const list = S.catalogo.filter(c => (!sel.value || c.categoria === sel.value) && (!q || norm(c.nombre).includes(q)))
-        .sort((a, b) => (b.webId ? 1 : 0) - (a.webId ? 1 : 0) || a.nombre.localeCompare(b.nombre));
-    const dolar = Number(S.config.dolar);
-    $('products-list').innerHTML = list.map(c => {
-        const p = webPrice(c), costo = c.costoUSD * dolar, m = costo ? p / costo - 1 : null;
-        const sold = S.ventas.filter(v => v.clase === 'venta').reduce((a, v) => a + v.items.filter(i => i.key === c.key && i.tipo === 'frasco').reduce((x, i) => x + i.cantidad, 0), 0);
-        return `<div class="card p-3 flex gap-3 items-center">
+// ---------- Stock ----------
+const daysBetween = (a, b) => Math.round((new Date(b) - new Date(a)) / 864e5);
+const daysAgo = n => { const d = new Date(today()); d.setDate(d.getDate() - n); return d.toISOString().slice(0, 10); };
+// Recorre compras, ajustes, ventas y regalos en orden de fecha. Los decants no descuentan frascos:
+// cuando abrís un frasco para decants se carga como ajuste o tester.
+function stockInfo() {
+    const map = {}, ev = [], d90 = daysAgo(90);
+    const get = k => map[k] || (map[k] = { stock: 0, lots: [], lastSale: '', sold90: 0, soldTotal: 0, movs: [] });
+    for (const c of S.compras) for (const i of c.items) if (i.key)
+        ev.push({ fecha: c.fecha, key: i.key, q: c.tipo === 'ajuste' ? Number(i.cantidad) : Math.abs(Number(i.cantidad)), kind: c.tipo === 'ajuste' ? 'ajuste' : 'compra', who: c.tipo === 'ajuste' ? (c.motivo || 'Ajuste') : c.proveedor, ref: c.id, cost: i.costoUSD });
+    for (const v of S.ventas) for (const i of v.items) if (i.key && i.tipo !== 'decant')
+        ev.push({ fecha: v.fecha, key: i.key, q: -Number(i.cantidad), kind: v.clase, who: v.cliente, ref: v.id });
+    ev.sort((a, b) => a.fecha.localeCompare(b.fecha) || b.q - a.q);
+    for (const e of ev) {
+        const s = get(e.key); s.movs.push(e); s.stock += e.q;
+        if (e.q > 0) s.lots.push({ fecha: e.fecha, q: e.q });
+        else { let r = -e.q; while (r > 0 && s.lots.length) { const l = s.lots[0], t = Math.min(l.q, r); l.q -= t; r -= t; if (!l.q) s.lots.shift(); } }
+        if (e.kind === 'venta') { s.soldTotal -= e.q; if (e.fecha > s.lastSale) s.lastSale = e.fecha; if (e.fecha >= d90) s.sold90 -= e.q; }
+    }
+    for (const s of Object.values(map)) s.dias = s.stock > 0 && s.lots.length ? daysBetween(s.lots[0].fecha, today()) : null;
+    return map;
+}
+const EMPTY_STOCK = { stock: 0, lots: [], lastSale: '', sold90: 0, soldTotal: 0, movs: [], dias: null };
+const stockValueUSD = info => S.catalogo.reduce((a, c) => a + Math.max(0, (info[c.key] || EMPTY_STOCK).stock) * (c.costoUSD || 0), 0);
+let SUB = 'stock';
+function renderStock() {
+    document.querySelectorAll('.sub-btn').forEach(b => { const on = b.dataset.sub === SUB; b.classList.toggle('!border-gold', on); b.classList.toggle('!text-gold', on); });
+    ['stock', 'compras', 'precios'].forEach(s => $('sub-' + s).classList.toggle('hidden', SUB !== s));
+    return SUB === 'stock' ? renderStockList() : SUB === 'compras' ? renderCompras() : renderPrecios();
+}
+function renderStockList() {
+    const info = stockInfo(), dolar = Number(S.config.dolar);
+    const rows = S.catalogo.map(c => ({ c, s: info[c.key] || EMPTY_STOCK }));
+    const con = rows.filter(r => r.s.stock > 0);
+    const valor = stockValueUSD(info);
+    const lentos = con.filter(r => (r.s.lastSale ? daysBetween(r.s.lastSale, today()) : r.s.dias) > 90);
+    const lentosUSD = lentos.reduce((a, r) => a + r.s.stock * (r.c.costoUSD || 0), 0);
+    const sinStockWeb = rows.filter(r => r.c.webId && r.s.stock <= 0).length;
+    const neg = rows.filter(r => r.s.stock < 0).length;
+    const kpi = (label, value, sub, color = 'text-zinc-50') => `<div class="card p-4"><p class="text-xs text-zinc-400">${label}</p><p class="text-xl sm:text-2xl font-bold ${color} mt-1">${value}</p><p class="text-xs text-zinc-500 mt-1">${sub}</p></div>`;
+    $('stock-kpis').innerHTML =
+        kpi('Mercadería invertida hoy', usd(valor), `≈ ${ars(valor * dolar)} al dólar de hoy`, 'text-gold') +
+        kpi('Unidades en stock', con.reduce((a, r) => a + r.s.stock, 0), `${con.length} perfumes distintos`) +
+        kpi('Sin venderse hace +90 días', lentos.length, lentos.length ? `${usd(lentosUSD)} parados` : 'Ninguno 👍', lentos.length ? 'text-amber-400' : 'text-zinc-50') +
+        kpi('Sin stock', sinStockWeb, neg ? `<span class="text-red-400">${neg} con stock negativo: revisar</span>` : 'de los que están en la web');
+    const restock = rows.filter(r => r.s.sold90 >= 2 && r.s.stock <= 1).sort((a, b) => b.s.sold90 - a.s.sold90);
+    $('restock').innerHTML = restock.length ? restock.map(r => `<button data-product="${esc(r.c.key)}" class="btn-ghost text-xs">${esc(r.c.nombre)} <span class="text-zinc-500">· ${r.s.sold90} vendidos · queda ${Math.max(0, r.s.stock)}</span></button>`).join('') : '<p class="text-zinc-500">Nada urgente.</p>';
+
+    const q = norm($('products-search').value), f = $('products-filter').value, sort = $('products-sort').value;
+    let list = rows.filter(r => !q || norm(r.c.nombre).includes(q));
+    if (!q) list = list.filter(r => f === 'todos' || (f === 'con' && r.s.stock !== 0) || (f === 'sin' && r.s.stock <= 0 && (r.c.webId || r.s.movs.length)) || (f === 'lentos' && lentos.includes(r)));
+    const val = r => Math.max(0, r.s.stock) * (r.c.costoUSD || 0);
+    list.sort(sort === 'nombre' ? (a, b) => a.c.nombre.localeCompare(b.c.nombre) : sort === 'dias' ? (a, b) => (b.s.dias ?? -1) - (a.s.dias ?? -1)
+        : sort === 'vendidos' ? (a, b) => b.s.sold90 - a.s.sold90 || b.s.soldTotal - a.s.soldTotal : (a, b) => val(b) - val(a) || a.c.nombre.localeCompare(b.c.nombre));
+    $('products-list').innerHTML = list.map(({ c, s }) => {
+        const p = webPrice(c), m = c.costoUSD && p ? p / (c.costoUSD * dolar) - 1 : null;
+        const sinVender = s.stock > 0 ? (s.lastSale ? daysBetween(s.lastSale, today()) : s.dias) : null;
+        return `<button data-product="${esc(c.key)}" class="card w-full text-left p-3 flex gap-3 items-center hover:border-gold/60">
+            <div class="w-12 shrink-0 text-center"><p class="text-xl font-bold ${s.stock < 0 ? 'text-red-400' : s.stock === 0 ? 'text-zinc-600' : ''}">${s.stock}</p><p class="text-[10px] uppercase text-zinc-500">stock</p></div>
             <div class="flex-1 min-w-0">
                 <p class="font-semibold truncate">${esc(c.nombre)}</p>
-                <p class="text-xs text-zinc-400">${esc(c.categoria)}${sold ? ` · ${sold} vendido${sold > 1 ? 's' : ''}` : ''}${c.decant ? ' · <span class="text-gold">decant ' + (p ? ars(decantPrice(c)) : '') + '</span>' : ''}</p>
+                <p class="text-xs text-zinc-400 truncate">${s.stock > 0 ? `${s.dias} días en stock · ` : ''}${s.lastSale ? 'última venta ' + fmtDate(s.lastSale) : s.movs.length ? 'sin ventas' : 'sin movimientos'}${s.sold90 ? ` · ${s.sold90} en 3 meses` : ''}</p>
+                ${sinVender > 90 ? `<p class="text-[11px] text-amber-400"><i class="fa-solid fa-hourglass-half mr-1"></i>${sinVender} días sin venderse</p>` : ''}
             </div>
-            <button data-cost="${esc(c.key)}" class="text-right shrink-0 hover:text-gold" title="Cambiar costo">
-                <p class="text-xs text-zinc-400">Costo</p><p class="text-sm">${c.costoUSD ? usd(c.costoUSD) : '<span class="text-red-400">cargar</span>'}</p>
-            </button>
-            <div class="text-right shrink-0 w-24">
-                <p class="text-xs text-zinc-400">Web</p><p class="text-sm font-semibold">${p ? ars(p) : '—'}</p>
-                ${m !== null && p ? `<p class="text-[11px] ${m < 0 ? 'text-red-400' : m < 0.3 ? 'text-amber-400' : 'text-emerald-400'}">${pct(m)}</p>` : ''}
-            </div></div>`;
-    }).join('') || '<p class="text-zinc-500 text-sm">Sin productos.</p>';
+            <div class="text-right shrink-0">
+                <p class="text-sm">${c.costoUSD ? usd(c.costoUSD) : '<span class="text-red-400 text-xs">sin costo</span>'} <span class="text-zinc-500 text-xs">c/u</span></p>
+                ${s.stock > 0 && c.costoUSD ? `<p class="text-xs text-gold">${usd(s.stock * c.costoUSD)} invertido</p>` : ''}
+                ${p ? `<p class="text-[11px] text-zinc-500">web ${ars(p)}${m !== null ? ` · <span class="${m < 0 ? 'text-red-400' : m < 0.3 ? 'text-amber-400' : 'text-emerald-400'}">${pct(m)}</span>` : ''}</p>` : ''}
+            </div></button>`;
+    }).join('') || '<p class="text-zinc-500 text-sm py-6 text-center">No hay perfumes para mostrar.</p>';
 }
-['products-search', 'products-cat'].forEach(id => $(id).addEventListener('input', renderProductos));
+['products-search', 'products-filter', 'products-sort'].forEach(id => $(id).addEventListener('input', renderStockList));
+
+function openProduct(key) {
+    const c = catByKey(key); if (!c) return;
+    const s = stockInfo()[key] || EMPTY_STOCK, p = webPrice(c);
+    const KIND = { compra: ['Compra', 'text-emerald-400'], venta: ['Venta', 'text-zinc-300'], salida: ['Regalo / tester', 'text-amber-400'], ajuste: ['Ajuste', 'text-sky-400'] };
+    $('modal-title').textContent = c.nombre;
+    $('modal-body').innerHTML = `
+        <div class="grid grid-cols-3 gap-2 text-center mb-4">
+            <div class="card p-2"><p class="text-xs text-zinc-400">Stock</p><p class="font-bold text-lg ${s.stock < 0 ? 'text-red-400' : ''}">${s.stock}</p></div>
+            <div class="card p-2"><p class="text-xs text-zinc-400">Invertido</p><p class="font-bold text-lg text-gold">${usd(Math.max(0, s.stock) * (c.costoUSD || 0))}</p></div>
+            <div class="card p-2"><p class="text-xs text-zinc-400">Vendidos</p><p class="font-bold text-lg">${s.soldTotal}</p></div>
+        </div>
+        <div class="card p-3 text-sm space-y-1 mb-4">
+            <div class="flex justify-between"><span class="text-zinc-400">Costo por unidad</span><button data-cost="${esc(key)}" class="hover:text-gold">${c.costoUSD ? usd(c.costoUSD) : 'cargar'} <i class="fa-solid fa-pen text-xs ml-1 text-zinc-500"></i></button></div>
+            <div class="flex justify-between"><span class="text-zinc-400">Precio en la web</span><span>${p ? ars(p) : '—'}</span></div>
+            ${c.decant ? `<div class="flex justify-between"><span class="text-zinc-400">Decant 5 ml</span><span>${p ? ars(decantPrice(c)) : '—'} · costo ${usd(unitCostUSD(c, 'decant'))}</span></div>` : ''}
+            ${s.dias !== null ? `<div class="flex justify-between"><span class="text-zinc-400">Días en stock (unidad más vieja)</span><span>${s.dias}</span></div>` : ''}
+            ${s.stock < 0 ? '<p class="text-xs text-red-400">El stock da negativo: falta cargar una compra o hay una venta de más. Corregilo con un ajuste.</p>' : ''}
+        </div>
+        <form id="adjust-form" class="card p-3 space-y-2 mb-4">
+            <p class="font-semibold text-sm">Ajustar stock</p>
+            <div class="grid grid-cols-3 gap-2">
+                <input id="adj-q" type="number" step="1" class="inp" placeholder="−1 / +2" required aria-label="Cantidad a sumar o restar">
+                <select id="adj-motivo" class="inp col-span-2">${['Abierto para decants / tester', 'Roto o perdido', 'Corrección de conteo', 'Otro'].map(x => `<option>${x}</option>`).join('')}</select>
+            </div>
+            <p class="text-[11px] text-zinc-500">Negativo para restar (ej: −1 si abriste un frasco para decants), positivo para sumar.</p>
+            <button class="btn-ghost text-sm w-full">Guardar ajuste</button>
+        </form>
+        <h4 class="font-semibold mb-2">Movimientos</h4>
+        <div class="space-y-1 text-sm">${s.movs.length ? [...s.movs].reverse().map(e => `<div class="flex items-center gap-2 border-b border-zinc-800/60 py-1.5">
+            <span class="w-16 shrink-0 text-zinc-400">${fmtDate(e.fecha)}</span>
+            <span class="w-28 shrink-0 ${KIND[e.kind][1]}">${KIND[e.kind][0]}</span>
+            <span class="flex-1 truncate text-zinc-300">${esc(e.who || '')}</span>
+            <span class="shrink-0 font-semibold ${e.q > 0 ? 'text-emerald-400' : ''}">${e.q > 0 ? '+' : ''}${e.q}</span></div>`).join('') : '<p class="text-zinc-500">Sin movimientos.</p>'}</div>`;
+    openModal();
+    $('adjust-form').addEventListener('submit', async ev => {
+        ev.preventDefault();
+        const q = Math.round(Number($('adj-q').value));
+        if (!q) return toast('Poné una cantidad distinta de 0.', true);
+        const data = { tipo: 'ajuste', fecha: today(), proveedor: 'Ajuste', motivo: $('adj-motivo').value, items: [{ key, nombre: c.nombre, cantidad: q, costoUSD: c.costoUSD || 0 }], totalUSD: 0, origen: 'panel', creado: new Date().toISOString() };
+        const id = doc(col('gestion_compras')).id;
+        try { await setDoc(doc(col('gestion_compras'), id), data); S.compras.push({ id, ...data }); toast('Ajuste guardado ✓'); render(); openProduct(key); }
+        catch (err) { toast('No se pudo guardar.', true); }
+    });
+}
+
+// ---------- Compras ----------
+function renderCompras() {
+    const list = [...S.compras].sort((a, b) => (b.fecha + (b.creado || '')).localeCompare(a.fecha + (a.creado || '')));
+    const compras = list.filter(c => c.tipo !== 'ajuste');
+    const tot = compras.reduce((a, c) => a + (c.totalUSD || 0), 0), u = compras.reduce((a, c) => a + c.items.reduce((x, i) => x + Number(i.cantidad), 0), 0);
+    $('purchases-summary').innerHTML = `${compras.length} compras · ${u} unidades · <b class="text-zinc-200">${usd(tot)}</b> en total`;
+    $('purchases-list').innerHTML = list.map(c => {
+        const aj = c.tipo === 'ajuste', units = c.items.reduce((x, i) => x + Number(i.cantidad), 0);
+        return `<button data-purchase="${c.id}" class="card w-full text-left p-3 hover:border-gold/60 flex gap-3 items-start">
+            <div class="text-center shrink-0 w-11"><p class="text-lg font-bold leading-none">${c.fecha.slice(8)}</p><p class="text-[10px] uppercase text-zinc-500">${shortMonth(c.fecha.slice(0, 7))} ${c.fecha.slice(2, 4)}</p></div>
+            <div class="flex-1 min-w-0"><p class="font-semibold truncate">${aj ? '<span class="text-sky-400">Ajuste</span> · ' + esc(c.motivo || '') : esc(c.proveedor || 'Sin proveedor')}</p>
+            <p class="text-xs text-zinc-400 line-clamp-2">${c.items.map(i => `${i.cantidad}× ${esc(i.nombre)}`).join(', ')}</p></div>
+            <div class="text-right shrink-0">${aj ? `<p class="text-sm">${units > 0 ? '+' : ''}${units} u</p>` : `<p class="font-bold">${usd(c.totalUSD)}</p><p class="text-xs text-zinc-400">${units} u</p>`}</div></button>`;
+    }).join('') || '<p class="text-zinc-500 text-sm py-6 text-center">Todavía no hay compras.</p>';
+}
+const PROVEEDORES = ['Star Company', 'Prime Shop', 'Epic Importados', 'Atacado USA', 'Atacado Connect', 'Nissei', 'Cellshop', 'ASM Group', 'Pontocom'];
+let buying = null;
+const landed = (precio, b) => Math.round((Number(precio) + Number(b.pasero)) * (1 + Number(b.usdt)) * 100) / 100;
+function openPurchase(c) {
+    if (c && c.tipo === 'ajuste') {
+        if (confirm(`Ajuste del ${fmtDate(c.fecha)}: ${c.items.map(i => i.cantidad + '× ' + i.nombre).join(', ')} (${c.motivo}).\n\n¿Borrar este ajuste?`))
+            deleteDoc(doc(col('gestion_compras'), c.id)).then(() => { S.compras = S.compras.filter(x => x.id !== c.id); toast('Ajuste borrado'); render(); }).catch(() => toast('No se pudo borrar.', true));
+        return;
+    }
+    buying = c ? JSON.parse(JSON.stringify(c)) : { fecha: today(), proveedor: '', items: [], pasero: Number(S.config.pasero ?? 2.5), usdt: Number(S.config.usdt), notas: '' };
+    buying.pasero ??= Number(S.config.pasero ?? 2.5); buying.usdt ??= Number(S.config.usdt);
+    if (!buying.items.length) buying.items.push({ key: null, nombre: '', cantidad: 1, precioPY: '', costoUSD: 0 });
+    $('modal-title').textContent = c ? 'Editar compra' : 'Nueva compra';
+    $('modal-body').innerHTML = `<form id="purchase-form" class="space-y-4">
+        <div class="grid grid-cols-2 gap-3">
+            <div><label class="lbl" for="p-fecha">Fecha</label><input id="p-fecha" type="date" class="inp" value="${buying.fecha}" required></div>
+            <div><label class="lbl" for="p-prov">Tienda / proveedor</label><input id="p-prov" class="inp" list="dl-prov" value="${esc(buying.proveedor)}" placeholder="Ej: Star Company"></div>
+            <div><label class="lbl" for="p-pasero">Pasero + envío por perfume (US$)</label><input id="p-pasero" type="number" step="0.01" min="0" class="inp" value="${buying.pasero}"></div>
+            <div><label class="lbl" for="p-usdt">USDT de esta compra (%)</label><input id="p-usdt" type="number" step="0.01" min="0" class="inp" value="${Math.round(buying.usdt * 10000) / 100}"></div>
+        </div>
+        <datalist id="dl-prov">${[...new Set([...PROVEEDORES, ...S.compras.filter(x => x.tipo !== 'ajuste').map(x => x.proveedor)])].filter(Boolean).map(x => `<option value="${esc(x)}">`).join('')}</datalist>
+        <div>
+            <div class="flex items-center justify-between mb-2"><span class="lbl mb-0">Perfumes</span><button type="button" data-action="add-pitem" class="text-sm text-gold"><i class="fa-solid fa-plus mr-1"></i>Agregar</button></div>
+            <div id="p-items" class="space-y-2"></div>
+        </div>
+        <div id="p-totals" class="card p-3 text-sm"></div>
+        ${c ? '<p class="text-xs text-zinc-500">Al editar una compra vieja no se recalcula el costo promedio de los perfumes. Si cambió el precio, corregí el costo desde Stock.</p>' : '<p class="text-xs text-zinc-500">Al guardar, el stock sube solo y el costo de cada perfume pasa a ser el promedio entre lo que ya tenías y lo nuevo.</p>'}
+        <div class="flex gap-2">${c ? '<button type="button" data-action="delete-purchase" class="btn-ghost text-red-400"><i class="fa-solid fa-trash"></i></button>' : ''}<button class="btn-gold flex-1">${c ? 'Guardar cambios' : 'Guardar compra'}</button></div>
+    </form>`;
+    renderPItems(); openModal();
+    const form = $('purchase-form');
+    form.addEventListener('input', e => {
+        buying.fecha = $('p-fecha').value; buying.proveedor = $('p-prov').value.trim();
+        buying.pasero = Number($('p-pasero').value) || 0; buying.usdt = (Number($('p-usdt').value) || 0) / 100;
+        const box = e.target.closest('[data-pitem]');
+        if (box) {
+            const it = buying.items[Number(box.dataset.pitem)], f = e.target.dataset.f;
+            if (f === 'nombre') { it.nombre = e.target.value; const cc = catByName(e.target.value); it.key = cc ? cc.key : null; }
+            if (f === 'cantidad') it.cantidad = Math.max(1, Number(e.target.value) || 1);
+            if (f === 'precioPY') { it.precioPY = e.target.value; it.costoUSD = e.target.value === '' ? it.costoUSD : landed(e.target.value, buying); box.querySelector('[data-f="costoUSD"]').value = it.costoUSD || ''; }
+            if (f === 'costoUSD') it.costoUSD = Number(e.target.value) || 0;
+        } else if (e.target.id === 'p-pasero' || e.target.id === 'p-usdt') {
+            buying.items.forEach((it, idx) => { if (it.precioPY !== '' && it.precioPY != null) { it.costoUSD = landed(it.precioPY, buying); const el = document.querySelector(`[data-pitem="${idx}"] [data-f="costoUSD"]`); if (el) el.value = it.costoUSD; } });
+        }
+        updatePTotals();
+    });
+    form.addEventListener('change', e => { if (e.target.dataset.f === 'nombre') renderPItems(); });
+    form.addEventListener('submit', e => { e.preventDefault(); savePurchase(); });
+}
+function renderPItems() {
+    $('p-items').innerHTML = buying.items.map((it, idx) => {
+        const cc = catByKey(it.key);
+        return `<div data-pitem="${idx}" class="card p-3 space-y-2">
+            <div class="flex gap-2"><input data-f="nombre" class="inp flex-1" list="dl-products-all" value="${esc(it.nombre)}" placeholder="Perfume (escribí para buscar)" autocomplete="off">
+            <button type="button" data-action="del-pitem" class="w-10 shrink-0 text-zinc-500 hover:text-red-400" aria-label="Quitar"><i class="fa-solid fa-xmark"></i></button></div>
+            <div class="grid grid-cols-3 gap-2">
+                <div><label class="text-[10px] text-zinc-500">Cantidad</label><input data-f="cantidad" type="number" min="1" step="1" class="inp" value="${it.cantidad}"></div>
+                <div><label class="text-[10px] text-zinc-500">Precio tienda US$</label><input data-f="precioPY" type="number" min="0" step="0.01" class="inp" value="${it.precioPY ?? ''}" placeholder="23"></div>
+                <div><label class="text-[10px] text-zinc-500">Costo final US$ c/u</label><input data-f="costoUSD" type="number" min="0" step="0.01" class="inp" value="${it.costoUSD || ''}"></div>
+            </div>
+            <p class="text-[11px] text-zinc-500">${cc ? `Costo actual ${cc.costoUSD ? usd(cc.costoUSD) : '—'} · stock ${(stockInfo()[cc.key] || EMPTY_STOCK).stock}` : it.nombre ? '<span class="text-amber-400">Perfume nuevo: se agrega a tu lista de productos</span>' : 'El costo final suma el pasero y el USDT solo'}</p>
+        </div>`;
+    }).join('');
+    $('dl-products-all') || document.body.insertAdjacentHTML('beforeend', '<datalist id="dl-products-all"></datalist>');
+    $('dl-products-all').innerHTML = S.catalogo.map(c => `<option value="${esc(c.nombre)}">`).join('');
+    updatePTotals();
+}
+function updatePTotals() {
+    const u = buying.items.reduce((a, i) => a + (i.nombre ? Number(i.cantidad) : 0), 0), t = buying.items.reduce((a, i) => a + (i.nombre ? Number(i.cantidad) * (Number(i.costoUSD) || 0) : 0), 0);
+    $('p-totals').innerHTML = `<div class="flex justify-between"><span class="text-zinc-400">${u} perfume${u !== 1 ? 's' : ''}</span><b class="text-lg text-gold">${usd(t)}</b></div><p class="text-xs text-zinc-500">≈ ${ars(t * Number(S.config.dolar))} al dólar de hoy</p>`;
+}
+const slugify = s => norm(s).replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+async function savePurchase() {
+    buying.items = buying.items.filter(i => i.nombre.trim());
+    if (!buying.items.length) return toast('Agregá al menos un perfume.', true);
+    if (buying.items.some(i => !(Number(i.costoUSD) > 0))) return toast('Falta el costo de algún perfume.', true);
+    const isNew = !buying.id, info = isNew ? stockInfo() : null;
+    let catChanged = false;
+    for (const it of buying.items) {
+        it.cantidad = Math.max(1, Number(it.cantidad) || 1); it.costoUSD = Number(it.costoUSD);
+        if (it.precioPY === '' || it.precioPY == null) delete it.precioPY; else it.precioPY = Number(it.precioPY);
+        let cc = catByKey(it.key) || catByName(it.nombre);
+        if (!cc) {
+            cc = { key: 'x-' + slugify(it.nombre) + '-' + Date.now().toString(36), nombre: it.nombre.trim(), excel: null, webId: null, categoria: 'Fuera de la web', costoUSD: 0, ml: Number((it.nombre.match(/(\d+)\s*ml/i) || [])[1]) || 100, decant: false };
+            S.catalogo.push(cc); catChanged = true;
+        }
+        it.key = cc.key; it.nombre = cc.nombre;
+        if (isNew) {
+            const before = Math.max(0, (info[cc.key] || EMPTY_STOCK).stock);
+            cc.costoUSD = Math.round((before && cc.costoUSD ? (before * cc.costoUSD + it.cantidad * it.costoUSD) / (before + it.cantidad) : it.costoUSD) * 100) / 100;
+            cc.editado = true; delete cc.nuevo; catChanged = true;
+        }
+    }
+    buying.totalUSD = Math.round(buying.items.reduce((a, i) => a + i.cantidad * i.costoUSD, 0) * 100) / 100;
+    buying.tipo = 'compra';
+    if (isNew) { buying.creado = new Date().toISOString(); buying.origen = 'panel'; }
+    const id = buying.id || doc(col('gestion_compras')).id;
+    const { id: _o, ...data } = buying;
+    try {
+        await setDoc(doc(col('gestion_compras'), id), data);
+        if (catChanged) await saveCatalog();
+        S.compras = S.compras.filter(x => x.id !== id); S.compras.push({ id, ...data });
+        closeModal(); toast(isNew ? 'Compra guardada ✓ El stock ya está actualizado' : 'Cambios guardados ✓'); render();
+    } catch (err) { console.error(err); toast('No se pudo guardar. Revisá la conexión.', true); }
+}
+// ---------- Precios (conectados a la tienda) ----------
+const prCfg = () => ({ dolar: Number(S.config.dolar), usdt: Number(S.config.usdt), pasero: Number(S.config.pasero ?? 2.5) });
+function priceFor(c, cfg = prCfg()) {
+    const actual = webPrice(c);
+    const repl = c.mercadoUSD ? (Number(c.mercadoUSD) + cfg.pasero) * (1 + cfg.usdt) : 0;
+    const baseUSD = Math.max(repl, Number(c.costoUSD) || 0);
+    const costoARS = baseUSD * cfg.dolar;
+    const m = c.margen ?? 0.40;
+    let sug = !costoARS ? 0 : m < 0.15 ? Math.ceil(Math.round(costoARS * (1 + m)) / 1000) * 1000 : Math.round(costoARS * (1 + m) / 5000) * 5000;
+    let motivo = '';
+    if (c.precioFijo) { sug = Number(c.precioFijo); motivo = 'precio fijado'; }
+    if (c.noBajar && sug < actual) { sug = actual; motivo = 'no bajar'; }
+    if (sug && sug < costoARS) { sug = Math.ceil(costoARS / 1000) * 1000; motivo = 'ajustado para no perder'; }
+    return { actual, repl, baseUSD, costoARS, m, sug, motivo, sobre: repl > (Number(c.costoUSD) || 0) ? 'reposición' : 'lo que pagaste' };
+}
+const PRICING = { skip: new Set() };
+function renderPrecios() {
+    const cfg = prCfg();
+    $('pr-dolar').value = cfg.dolar; $('pr-usdt').value = Math.round(cfg.usdt * 10000) / 100; $('pr-pasero').value = cfg.pasero;
+    $('market-date').textContent = S.config.mercadoFecha ? `Precios de Paraguay del ${fmtDate(S.config.mercadoFecha)}` : 'Todavía no cargaste precios de Paraguay: se usa lo que pagaste.';
+    const q = norm($('pricing-search').value), f = $('pricing-filter').value;
+    const rows = S.catalogo.filter(c => c.webId && webPrice(c)).map(c => ({ c, r: priceFor(c, cfg) }));
+    const changes = rows.filter(x => x.r.sug && x.r.sug !== x.r.actual);
+    const list = rows.filter(x => (!q || norm(x.c.nombre).includes(q)) && (q || f === 'todos' || (f === 'cambian' && x.r.sug && x.r.sug !== x.r.actual) || (f === 'sinmercado' && !x.c.mercadoUSD)))
+        .sort((a, b) => Math.abs(b.r.sug - b.r.actual) - Math.abs(a.r.sug - a.r.actual) || a.c.nombre.localeCompare(b.c.nombre));
+    const sel = changes.filter(x => !PRICING.skip.has(x.c.key));
+    $('pricing-summary').innerHTML = `${changes.filter(x => x.r.sug > x.r.actual).length} suben · ${changes.filter(x => x.r.sug < x.r.actual).length} bajan · ${rows.length - changes.length} quedan igual`;
+    $('pricing-list').innerHTML = list.map(({ c, r }) => {
+        const diff = r.sug - r.actual, ch = r.sug && diff !== 0;
+        const real = r.costoARS ? (r.sug || r.actual) / r.costoARS - 1 : null;
+        return `<div class="card p-3 flex gap-3 items-center">
+            ${ch ? `<input type="checkbox" data-pick="${esc(c.key)}" class="w-5 h-5 accent-yellow-500 shrink-0" ${PRICING.skip.has(c.key) ? '' : 'checked'} aria-label="Actualizar este precio">` : '<span class="w-5 shrink-0"></span>'}
+            <button data-rules="${esc(c.key)}" class="flex-1 min-w-0 text-left hover:text-gold">
+                <p class="font-semibold truncate">${esc(c.nombre)}</p>
+                <p class="text-xs text-zinc-400 truncate">Paraguay ${c.mercadoUSD ? usd(c.mercadoUSD) : '<span class="text-amber-400">sin dato</span>'} · costo ${usd(r.baseUSD)} (${r.sobre}) · ganancia ${pct(r.m)}${r.motivo ? ' · <span class="text-sky-400">' + r.motivo + '</span>' : ''}</p>
+            </button>
+            <div class="text-right shrink-0">
+                ${ch ? `<p class="text-xs text-zinc-500 line-through">${ars(r.actual)}</p><p class="font-bold ${diff > 0 ? 'text-emerald-400' : 'text-amber-400'}">${ars(r.sug)}</p>` : `<p class="font-bold">${ars(r.actual)}</p>`}
+                ${real !== null ? `<p class="text-[11px] ${real < 0 ? 'text-red-400' : 'text-zinc-500'}">${pct(real)} gan.${c.decant ? ' · decant ' + ars(Math.round((r.sug || r.actual) / 10 / 100) * 100) : ''}</p>` : ''}
+            </div></div>`;
+    }).join('') || '<p class="text-zinc-500 text-sm py-6 text-center">No hay precios para cambiar. 👍</p>';
+    const btn = $('apply-prices');
+    btn.textContent = sel.length ? `Actualizar ${sel.length} precio${sel.length > 1 ? 's' : ''} en la tienda` : 'No hay precios para actualizar';
+    btn.disabled = !sel.length; btn.classList.toggle('opacity-40', !sel.length);
+}
+['pricing-search', 'pricing-filter'].forEach(id => $(id).addEventListener('input', renderPrecios));
+$('pricing-list').addEventListener('change', e => {
+    const k = e.target.dataset.pick; if (!k) return;
+    if (e.target.checked) PRICING.skip.delete(k); else PRICING.skip.add(k);
+    renderPrecios();
+});
+$('pricing-form').addEventListener('change', async e => {
+    if (e.target.id === 'market-file') return;
+    const cfg = { ...S.config, dolar: Number($('pr-dolar').value) || S.config.dolar, usdt: (Number($('pr-usdt').value) || 0) / 100, pasero: Number($('pr-pasero').value) || 0 };
+    try { await setDoc(datosRef('config'), cfg); S.config = cfg; renderPrecios(); toast('Cotización guardada ✓'); } catch (err) { toast('No se pudo guardar.', true); }
+});
+$('pricing-form').addEventListener('submit', e => e.preventDefault());
+$('market-file').addEventListener('change', async e => {
+    const file = e.target.files[0]; e.target.value = '';
+    if (!file) return;
+    let data; try { data = JSON.parse(await file.text()); } catch { return toast('El archivo no es válido.', true); }
+    if (data.tipo !== 'black-perfumes-mercado') return toast('Ese no es el archivo de precios de Paraguay.', true);
+    let n = 0;
+    for (const c of S.catalogo) {
+        const m = c.webId && data.precios[c.webId]; if (!m) continue;
+        c.mercadoUSD = m.mercadoUSD; n++;
+        for (const k of ['margen', 'precioFijo', 'noBajar']) if (k in m) { if (m[k] === null) delete c[k]; else c[k] = m[k]; }
+    }
+    const cfg = { ...S.config, mercadoFecha: data.fecha, ...(data.dolar ? { dolar: data.dolar } : {}), ...(data.usdt != null ? { usdt: data.usdt } : {}) };
+    try { await saveCatalog(); await setDoc(datosRef('config'), cfg); S.config = cfg; PRICING.skip.clear(); toast(`Precios de Paraguay cargados: ${n} perfumes ✓`); renderPrecios(); }
+    catch (err) { toast('No se pudo guardar.', true); }
+});
+function openRules(key) {
+    const c = catByKey(key); if (!c) return;
+    const r = priceFor(c);
+    $('modal-title').textContent = c.nombre;
+    $('modal-body').innerHTML = `<form id="rules-form" class="space-y-3">
+        <div class="grid grid-cols-2 gap-3">
+            <div><label class="lbl" for="ru-mercado">Precio en Paraguay (US$)</label><input id="ru-mercado" type="number" min="0" step="0.01" class="inp" value="${c.mercadoUSD ?? ''}"></div>
+            <div><label class="lbl" for="ru-costo">Lo que pagaste (US$)</label><input id="ru-costo" type="number" min="0" step="0.01" class="inp" value="${c.costoUSD || ''}"></div>
+            <div><label class="lbl" for="ru-margen">Ganancia (%)</label><input id="ru-margen" type="number" min="0" step="1" class="inp" value="${Math.round((c.margen ?? 0.4) * 100)}"></div>
+            <div><label class="lbl" for="ru-fijo">Precio fijo ($)</label><input id="ru-fijo" type="number" min="0" step="1000" class="inp" value="${c.precioFijo || ''}" placeholder="Vacío = automático"></div>
+        </div>
+        <label class="flex items-center gap-2 text-sm"><input id="ru-nobajar" type="checkbox" class="w-4 h-4 accent-yellow-500" ${c.noBajar ? 'checked' : ''}> No bajarlo nunca del precio actual de la web</label>
+        <div class="card p-3 text-sm space-y-1">
+            <div class="flex justify-between"><span class="text-zinc-400">Precio actual</span><span>${ars(r.actual)}</span></div>
+            <div class="flex justify-between"><span class="text-zinc-400">Precio sugerido</span><b>${ars(r.sug)}</b></div>
+        </div>
+        <button class="btn-gold w-full">Guardar</button>
+    </form>`;
+    openModal();
+    $('rules-form').addEventListener('submit', async e => {
+        e.preventDefault();
+        const mer = $('ru-mercado').value, fijo = Number($('ru-fijo').value);
+        if (mer === '') delete c.mercadoUSD; else c.mercadoUSD = Number(mer);
+        const cost = Number($('ru-costo').value); if (cost !== c.costoUSD) { c.costoUSD = cost; c.editado = true; }
+        const mg = Number($('ru-margen').value) / 100; if (Math.abs(mg - 0.4) < 1e-9) delete c.margen; else c.margen = mg;
+        if (fijo) c.precioFijo = fijo; else delete c.precioFijo;
+        if ($('ru-nobajar').checked) c.noBajar = true; else delete c.noBajar;
+        try { await saveCatalog(); closeModal(); toast('Guardado ✓'); render(); } catch (err) { toast('No se pudo guardar.', true); }
+    });
+}
+async function applyPrices() {
+    const cfg = prCfg();
+    const sel = S.catalogo.filter(c => c.webId && webPrice(c) && !PRICING.skip.has(c.key)).map(c => ({ c, r: priceFor(c, cfg) })).filter(x => x.r.sug && x.r.sug !== x.r.actual);
+    if (!sel.length) return;
+    if (!confirm(`Se van a cambiar ${sel.length} precios en la tienda.\n\nAntes se guarda una copia en el historial de Respaldo, así que se puede volver atrás.\n\n¿Seguimos?`)) return;
+    const btn = $('apply-prices'); btn.disabled = true; btn.textContent = 'Actualizando…';
+    try {
+        const ref = doc(db, 'artifacts', APP, 'store_state', 'main');
+        const snap = await getDoc(ref);
+        if (!snap.exists()) throw new Error('sin datos');
+        const data = snap.data();
+        const savedAt = Date.now();
+        await setDoc(doc(col('backups'), String(savedAt)), { products: data.products, settings: data.settings, savedAt, productCount: data.products.length, note: 'Antes de actualizar precios desde Gestión' });
+        const nuevo = Object.fromEntries(sel.map(x => [x.c.webId, x.r.sug]));
+        const products = data.products.map(p => nuevo[p.id] ? { ...p, price: nuevo[p.id] } : p);
+        await setDoc(ref, { ...data, products });
+        S.web = products; PRICING.skip.clear();
+        toast(`¡Listo! ${sel.length} precios actualizados en la tienda ✓`); render();
+    } catch (err) { console.error(err); toast('No se pudo actualizar la tienda. No se cambió nada.', true); renderPrecios(); }
+}
+
+async function deletePurchase() {
+    if (!buying?.id || !confirm('¿Borrar esta compra? El stock baja, pero el costo de los perfumes no cambia.')) return;
+    try { await deleteDoc(doc(col('gestion_compras'), buying.id)); S.compras = S.compras.filter(x => x.id !== buying.id); closeModal(); toast('Compra borrada'); render(); }
+    catch (err) { toast('No se pudo borrar.', true); }
+}
 async function editCost(key) {
     const c = catByKey(key); if (!c) return;
     const v = prompt(`Costo de "${c.nombre}" en dólares (lo que pagaste, con pasero y USDT):`, c.costoUSD || '');
@@ -736,13 +1145,13 @@ const saveCatalog = () => setDoc(datosRef('catalogo'), { items: S.catalogo.map((
 // ---------- Más ----------
 function renderMas() {
     $('cfg-dolar').value = S.config.dolar; $('cfg-usdt').value = Math.round(S.config.usdt * 10000) / 100; $('cfg-pack').value = S.config.packagingDecantUSD;
-    $('cfg-recompra').value = S.config.recompraMeses || 4;
+    $('cfg-recompra').value = S.config.recompraMeses || 4; $('cfg-pasero').value = S.config.pasero ?? 2.5;
     const n = S.ventas.filter(v => v.origen === 'excel').length;
     $('import-status').textContent = n ? `Ya cargado: ${n} registros del Excel. Si lo cargás de nuevo, se reemplazan.` : 'Todavía no cargaste el historial del Excel. Usá el archivo que te pasó Claude.';
 }
 $('config-form').addEventListener('submit', async e => {
     e.preventDefault();
-    const cfg = { ...S.config, dolar: Number($('cfg-dolar').value), usdt: Number($('cfg-usdt').value) / 100, packagingDecantUSD: Number($('cfg-pack').value), recompraMeses: Math.max(1, Number($('cfg-recompra').value) || 4) };
+    const cfg = { ...S.config, dolar: Number($('cfg-dolar').value), usdt: Number($('cfg-usdt').value) / 100, packagingDecantUSD: Number($('cfg-pack').value), recompraMeses: Math.max(1, Number($('cfg-recompra').value) || 4), pasero: Number($('cfg-pasero').value) || 0 };
     try { await setDoc(datosRef('config'), cfg); S.config = cfg; toast('Guardado ✓'); render(); } catch (err) { toast('No se pudo guardar.', true); }
 });
 $('import-file').addEventListener('change', async e => {
@@ -787,8 +1196,17 @@ function closeModal() { $('modal').classList.add('hidden'); document.body.style.
 $('modal').addEventListener('click', e => { if (e.target === $('modal')) closeModal(); });
 document.addEventListener('keydown', e => { if (e.key === 'Escape' && !$('modal').classList.contains('hidden')) closeModal(); });
 document.addEventListener('click', e => {
-    const t = e.target.closest('[data-action],[data-goto],[data-sale],[data-client],[data-month],[data-cost],[data-expense],[data-contacted]');
+    const t = e.target.closest('[data-action],[data-goto],[data-sale],[data-client],[data-month],[data-cost],[data-expense],[data-contacted],[data-sub],[data-product],[data-purchase],[data-rules]');
     if (!t) return;
+    if (t.dataset.sub) { SUB = t.dataset.sub; return renderStock(); }
+    if (t.dataset.rules) return openRules(t.dataset.rules);
+    if (t.dataset.action === 'apply-prices') return applyPrices();
+    if (t.dataset.product) return openProduct(t.dataset.product);
+    if (t.dataset.purchase) { const c = S.compras.find(x => x.id === t.dataset.purchase); if (c) openPurchase(c); return; }
+    if (t.dataset.action === 'new-purchase') return openPurchase();
+    if (t.dataset.action === 'add-pitem') { buying.items.push({ key: null, nombre: '', cantidad: 1, precioPY: '', costoUSD: 0 }); return renderPItems(); }
+    if (t.dataset.action === 'del-pitem') { buying.items.splice(Number(t.closest('[data-pitem]').dataset.pitem), 1); if (!buying.items.length) buying.items.push({ key: null, nombre: '', cantidad: 1, precioPY: '', costoUSD: 0 }); return renderPItems(); }
+    if (t.dataset.action === 'delete-purchase') return deletePurchase();
     if (t.dataset.expense) { const g = S.gastos.find(x => x.id === t.dataset.expense); if (g) openExpense(g); return; }
     if (t.dataset.contacted) return markContacted(t.dataset.contacted);
     if (t.dataset.action === 'new-expense') return openExpense();
