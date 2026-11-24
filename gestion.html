@@ -25,7 +25,18 @@
         .btn-gold:hover { background: rgb(243 229 171); }
         .btn-ghost { border: 1px solid #3f3f46; border-radius: .75rem; padding: .55rem .9rem; color: #d4d4d8; }
         .btn-ghost:hover { border-color: rgb(212 175 55); color: rgb(212 175 55); }
-        .tab-btn.active { color: rgb(212 175 55); }
+        .tab-btn { border: 1px solid transparent; }
+        .tab-btn.active { color: #34d399; background: rgba(16,185,129,.14); border-color: rgba(52,211,153,.75); box-shadow: 0 0 12px rgba(16,185,129,.18); }
+        #bottom-tabs .tab-btn { border-radius: .75rem; margin: .25rem; }
+        /* Íconos de colores en los formularios */
+        .ic { display: inline-flex; align-items: center; justify-content: center; width: 1.45rem; height: 1.45rem; border-radius: .45rem; font-size: .72rem; margin-right: .35rem; vertical-align: middle; text-transform: none; }
+        .ic-green { background: rgba(16,185,129,.16); color: #34d399; } .ic-gold { background: rgba(212,175,55,.16); color: #d4af37; }
+        .ic-blue { background: rgba(56,189,248,.15); color: #38bdf8; } .ic-orange { background: rgba(251,146,60,.16); color: #fb923c; }
+        .ic-pink { background: rgba(244,114,182,.15); color: #f472b6; } .ic-violet { background: rgba(167,139,250,.16); color: #a78bfa; } .ic-zinc { background: #27272a; color: #a1a1aa; }
+        .fsec { border-radius: 1rem; padding: .9rem; border: 1px solid #27272a; background: #131316; }
+        .fsec-t { display: flex; align-items: center; gap: .5rem; font-weight: 700; font-size: .9rem; margin-bottom: .75rem; }
+        .fsec-t .ic { width: 1.8rem; height: 1.8rem; font-size: .9rem; margin: 0; }
+        .fsec.green { border-color: rgba(16,185,129,.35); } .fsec.gold { border-color: rgba(212,175,55,.35); } .fsec.blue { border-color: rgba(56,189,248,.3); }
         .tab-btn.active .tab-dot { opacity: 1; }
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { scrollbar-width: none; }
@@ -526,12 +537,18 @@ function openExpense(g) {
 // ---------- Ventas ----------
 function saleRow(v) {
     const m = v.costoARS > 0 ? v.gananciaARS / v.costoARS : null;
-    const items = v.items.map(i => `${i.cantidad > 1 ? i.cantidad + '× ' : ''}${esc(i.nombre)}${i.tipo === 'decant' && !/dec|dcnt/i.test(i.nombre) ? ' (decant)' : ''}`).join(', ');
+    const grouped = [];
+    for (const i of v.items) {
+        const name = i.nombre + (i.tipo === 'decant' && !/dec|dcnt/i.test(i.nombre) ? ' (decant)' : '');
+        const g = grouped.find(x => x.name === name);
+        if (g) g.q += Number(i.cantidad) || 1; else grouped.push({ name, q: Number(i.cantidad) || 1 });
+    }
+    const items = grouped.map(g => `<span class="block">${esc(g.name)} <span class="text-zinc-200 font-semibold">x${g.q}</span></span>`).join('');
     return `<button data-sale="${v.id}" class="card w-full text-left p-3 hover:border-gold/60 flex gap-3 items-start">
         <div class="text-center shrink-0 w-11"><p class="text-lg font-bold leading-none">${v.fecha.slice(8)}</p><p class="text-[10px] uppercase text-zinc-500">${shortMonth(v.fecha.slice(0, 7))}</p></div>
         <div class="flex-1 min-w-0">
             <p class="font-semibold truncate">${esc(v.cliente || 'Sin nombre')}${isMayorista(v.cliente) ? ' <span class="text-[10px] text-gold border border-gold/40 rounded px-1 align-middle">MAYORISTA</span>' : ''}</p>
-            <p class="text-xs text-zinc-400 line-clamp-2">${items}</p>
+            <p class="text-xs text-zinc-400 leading-5 mt-0.5">${items}</p>
             ${v.zona || v.entrega ? `<p class="text-[11px] text-zinc-500 truncate"><i class="fa-solid fa-location-dot mr-1"></i>${esc([v.zona, v.entrega].filter(Boolean).join(' · '))}</p>` : ''}
             ${v.notas ? `<p class="text-xs text-zinc-500 italic truncate">${esc(v.notas)}</p>` : ''}
         </div>
@@ -566,28 +583,34 @@ function openSaleForm(sale) {
     $('modal-title').textContent = sale ? 'Editar venta' : 'Nueva venta';
     $('modal-body').innerHTML = `
     <form id="sale-form" class="space-y-4">
+        <div class="fsec blue space-y-3">
+        <p class="fsec-t"><span class="ic ic-blue"><i class="fa-solid fa-user"></i></span>Cliente y entrega</p>
         <div class="grid grid-cols-2 gap-3">
-            <div><label class="lbl" for="f-fecha">Fecha</label><input id="f-fecha" type="date" class="inp" value="${editing.fecha}" required></div>
-            <div><label class="lbl" for="f-clase">Tipo</label><select id="f-clase" class="inp"><option value="venta">Venta</option><option value="salida">Regalo / tester (sin cobro)</option></select></div>
+            <div><label class="lbl" for="f-fecha"><span class="ic ic-zinc"><i class="fa-solid fa-calendar-day"></i></span>Fecha</label><input id="f-fecha" type="date" class="inp" value="${editing.fecha}" required></div>
+            <div><label class="lbl" for="f-clase"><span class="ic ic-pink"><i class="fa-solid fa-tag"></i></span>Tipo</label><select id="f-clase" class="inp"><option value="venta">Venta</option><option value="salida">Regalo / tester (sin cobro)</option></select></div>
         </div>
-        <div><label class="lbl" for="f-cliente">Cliente</label><input id="f-cliente" class="inp" list="dl-clients" value="${esc(editing.cliente)}" placeholder="Nombre del cliente" autocomplete="off"></div>
+        <div><label class="lbl" for="f-cliente"><span class="ic ic-blue"><i class="fa-solid fa-user"></i></span>Cliente</label><input id="f-cliente" class="inp" list="dl-clients" value="${esc(editing.cliente)}" placeholder="Nombre del cliente" autocomplete="off"></div>
         <div class="grid grid-cols-2 gap-3">
-            <div><label class="lbl" for="f-zona">Zona</label><input id="f-zona" class="inp" list="dl-zonas" value="${esc(editing.zona)}" placeholder="Ej: Villa Urquiza" autocomplete="off"></div>
-            <div><label class="lbl" for="f-entrega">Entrega</label><select id="f-entrega" class="inp"><option value="">—</option>${ENTREGAS.map(x => `<option>${x}</option>`).join('')}</select></div>
+            <div><label class="lbl" for="f-zona"><span class="ic ic-pink"><i class="fa-solid fa-location-dot"></i></span>Zona</label><input id="f-zona" class="inp" list="dl-zonas" value="${esc(editing.zona)}" placeholder="Ej: Villa Urquiza" autocomplete="off"></div>
+            <div><label class="lbl" for="f-entrega"><span class="ic ic-orange"><i class="fa-solid fa-motorcycle"></i></span>Entrega</label><select id="f-entrega" class="inp"><option value="">—</option>${ENTREGAS.map(x => `<option>${x}</option>`).join('')}</select></div>
         </div>
-        <div><label class="lbl" for="f-canal">Cómo te conoció <span class="normal-case font-normal text-zinc-500">(opcional)</span></label><select id="f-canal" class="inp"><option value="">No sé / no pregunté</option>${CANALES.map(x => `<option>${x}</option>`).join('')}</select></div>
-        <div>
-            <div class="flex items-center justify-between mb-2"><span class="lbl mb-0">Productos</span><button type="button" data-action="add-item" class="text-sm text-gold"><i class="fa-solid fa-plus mr-1"></i>Agregar</button></div>
+        <div><label class="lbl" for="f-canal"><span class="ic ic-violet"><i class="fa-solid fa-bullhorn"></i></span>Cómo te conoció <span class="normal-case font-normal text-zinc-500">(opcional)</span></label><select id="f-canal" class="inp"><option value="">No sé / no pregunté</option>${CANALES.map(x => `<option>${x}</option>`).join('')}</select></div>
+        </div>
+        <div class="fsec gold">
+            <div class="flex items-center justify-between mb-3"><p class="fsec-t !mb-0"><span class="ic ic-gold"><i class="fa-solid fa-spray-can-sparkles"></i></span>Perfumes</p><button type="button" data-action="add-item" class="text-sm text-gold"><i class="fa-solid fa-plus mr-1"></i>Agregar</button></div>
             <div id="f-items" class="space-y-2"></div>
         </div>
-        <div id="f-pay" class="grid grid-cols-2 gap-3">
-            <div><label class="lbl" for="f-medio">Medio de pago</label><select id="f-medio" class="inp">${['Efectivo', 'Transferencia', 'Mercado Pago', 'Dólares', 'Tarjeta', 'Otro'].map(m => `<option>${m}</option>`).join('')}</select></div>
-            <div><label class="lbl" for="f-envio">Envío que pagás vos ($)</label><input id="f-envio" type="number" min="0" step="100" class="inp" value="${editing.envioARS || ''}" placeholder="0"></div>
-            <div><label class="lbl" for="f-usd">Parte pagada en dólares (US$)</label><input id="f-usd" type="number" min="0" step="1" class="inp" value="${editing.cobradoUSD || ''}" placeholder="0"></div>
-            <div><label class="lbl" for="f-cotiz">Dólar del día ($)</label><input id="f-cotiz" type="number" min="1" step="1" class="inp" value="${editing.cotiz}"></div>
+        <div id="f-pay" class="fsec green">
+            <p class="fsec-t"><span class="ic ic-green"><i class="fa-solid fa-dollar-sign"></i></span>Cobro</p>
+            <div class="grid grid-cols-2 gap-3">
+            <div><label class="lbl" for="f-medio"><span class="ic ic-green"><i class="fa-solid fa-wallet"></i></span>Medio de pago</label><select id="f-medio" class="inp">${['Efectivo', 'Transferencia', 'Mercado Pago', 'Dólares', 'Tarjeta', 'Otro'].map(m => `<option>${m}</option>`).join('')}</select></div>
+            <div><label class="lbl" for="f-envio"><span class="ic ic-orange"><i class="fa-solid fa-motorcycle"></i></span>Envío que pagás vos ($)</label><input id="f-envio" type="number" min="0" step="100" class="inp" value="${editing.envioARS || ''}" placeholder="0"></div>
+            <div><label class="lbl" for="f-usd"><span class="ic ic-green"><i class="fa-solid fa-money-bill-wave"></i></span>Parte en dólares (US$)</label><input id="f-usd" type="number" min="0" step="1" class="inp" value="${editing.cobradoUSD || ''}" placeholder="0"></div>
+            <div><label class="lbl" for="f-cotiz"><span class="ic ic-green"><i class="fa-solid fa-dollar-sign"></i></span>Dólar del día ($)</label><input id="f-cotiz" type="number" min="1" step="1" class="inp" value="${editing.cotiz}"></div>
+            </div>
         </div>
-        <div><label class="lbl" for="f-notas">Notas</label><input id="f-notas" class="inp" value="${esc(editing.notas)}" placeholder="Ej: le hice precio por llevar 3, envío gratis…"></div>
-        <div id="f-totals" class="card p-3 text-sm space-y-1"></div>
+        <div><label class="lbl" for="f-notas"><span class="ic ic-zinc"><i class="fa-solid fa-pen"></i></span>Notas</label><input id="f-notas" class="inp" value="${esc(editing.notas)}" placeholder="Ej: le hice precio por llevar 3, envío gratis…"></div>
+        <div id="f-totals" class="card p-3 text-sm space-y-1 !border-emerald-500/30"></div>
         <div class="flex gap-2">
             ${sale ? '<button type="button" data-action="delete-sale" class="btn-ghost text-red-400 hover:!border-red-500 hover:!text-red-400"><i class="fa-solid fa-trash"></i></button>' : ''}
             <button class="btn-gold flex-1">${sale ? 'Guardar cambios' : 'Guardar venta'}</button>
@@ -617,8 +640,8 @@ function renderItems() {
             <button type="button" data-action="del-item" class="w-10 shrink-0 text-zinc-500 hover:text-red-400" aria-label="Quitar"><i class="fa-solid fa-xmark"></i></button></div>
             <div class="grid grid-cols-3 gap-2">
                 <select data-f="tipo" class="inp"><option value="frasco">Frasco</option>${(!c || c.decant || it.tipo === 'decant') ? '<option value="decant">Decant 5ml</option>' : ''}<option value="otro">Otro</option></select>
-                <input data-f="cantidad" type="number" min="1" step="1" class="inp" value="${it.cantidad}" aria-label="Cantidad">
-                <input data-f="totalARS" type="number" min="0" step="100" class="inp" value="${it.totalARS || ''}" placeholder="Total $" aria-label="Total cobrado por esta línea">
+                <div class="relative"><span class="absolute left-2.5 top-1/2 -translate-y-1/2 text-zinc-400 text-sm font-bold">x</span><input data-f="cantidad" type="number" min="1" step="1" class="inp !pl-6" value="${it.cantidad}" aria-label="Cantidad"></div>
+                <div class="relative"><span class="absolute left-2.5 top-1/2 -translate-y-1/2 text-emerald-400 text-sm font-bold">$</span><input data-f="totalARS" type="number" min="0" step="100" class="inp !pl-6 !border-emerald-500/40" value="${it.totalARS || ''}" placeholder="Total" aria-label="Total cobrado por esta línea"></div>
             </div>
             <p class="text-[11px] text-zinc-500">${c ? `Precio web: ${sug ? ars(sug) + (it.tipo === 'decant' ? ' (decant)' : '') + ' c/u' : 'sin precio en la web'} · costo ${usd(unitCostUSD(c, it.tipo))} c/u${it.tipo !== 'decant' ? ((st => ` · <span class="${st <= 0 && !editing.id ? 'text-red-400' : ''}">stock ${st}${st <= 0 && !editing.id ? ' (no tenés cargado)' : ''}</span>`)((info[c.key] || EMPTY_STOCK).stock)) : ''}` : it.nombre ? (it.key === null && it.costoUnitUSD ? `Costo estimado ${usd(it.costoUnitUSD)} c/u` : 'Producto fuera del catálogo: sin costo') : 'Elegí un perfume de la lista'}</p>
         </div>`;
@@ -912,18 +935,21 @@ function openPurchase(c) {
     if (!buying.items.length) buying.items.push({ key: null, nombre: '', cantidad: 1, precioPY: '', costoUSD: 0 });
     $('modal-title').textContent = c ? 'Editar compra' : 'Nueva compra';
     $('modal-body').innerHTML = `<form id="purchase-form" class="space-y-4">
+        <div class="fsec blue">
+        <p class="fsec-t"><span class="ic ic-blue"><i class="fa-solid fa-store"></i></span>Dónde compraste</p>
         <div class="grid grid-cols-2 gap-3">
-            <div><label class="lbl" for="p-fecha">Fecha</label><input id="p-fecha" type="date" class="inp" value="${buying.fecha}" required></div>
-            <div><label class="lbl" for="p-prov">Tienda / proveedor</label><input id="p-prov" class="inp" list="dl-prov" value="${esc(buying.proveedor)}" placeholder="Ej: Star Company"></div>
-            <div><label class="lbl" for="p-pasero">Pasero + envío por perfume (US$)</label><input id="p-pasero" type="number" step="0.01" min="0" class="inp" value="${buying.pasero}"></div>
-            <div><label class="lbl" for="p-usdt">USDT de esta compra (%)</label><input id="p-usdt" type="number" step="0.01" min="0" class="inp" value="${Math.round(buying.usdt * 10000) / 100}"></div>
+            <div><label class="lbl" for="p-fecha"><span class="ic ic-zinc"><i class="fa-solid fa-calendar-day"></i></span>Fecha</label><input id="p-fecha" type="date" class="inp" value="${buying.fecha}" required></div>
+            <div><label class="lbl" for="p-prov"><span class="ic ic-blue"><i class="fa-solid fa-store"></i></span>Tienda / proveedor</label><input id="p-prov" class="inp" list="dl-prov" value="${esc(buying.proveedor)}" placeholder="Ej: Star Company"></div>
+            <div><label class="lbl" for="p-pasero"><span class="ic ic-orange"><i class="fa-solid fa-truck-fast"></i></span>Pasero + envío c/u (US$)</label><input id="p-pasero" type="number" step="0.01" min="0" class="inp" value="${buying.pasero}"></div>
+            <div><label class="lbl" for="p-usdt"><span class="ic ic-green"><i class="fa-solid fa-percent"></i></span>USDT de esta compra (%)</label><input id="p-usdt" type="number" step="0.01" min="0" class="inp" value="${Math.round(buying.usdt * 10000) / 100}"></div>
+        </div>
         </div>
         <datalist id="dl-prov">${[...new Set([...PROVEEDORES, ...S.compras.filter(x => x.tipo !== 'ajuste').map(x => x.proveedor)])].filter(Boolean).map(x => `<option value="${esc(x)}">`).join('')}</datalist>
-        <div>
-            <div class="flex items-center justify-between mb-2"><span class="lbl mb-0">Perfumes</span><button type="button" data-action="add-pitem" class="text-sm text-gold"><i class="fa-solid fa-plus mr-1"></i>Agregar</button></div>
+        <div class="fsec gold">
+            <div class="flex items-center justify-between mb-3"><p class="fsec-t !mb-0"><span class="ic ic-gold"><i class="fa-solid fa-spray-can-sparkles"></i></span>Perfumes</p><button type="button" data-action="add-pitem" class="text-sm text-gold"><i class="fa-solid fa-plus mr-1"></i>Agregar</button></div>
             <div id="p-items" class="space-y-2"></div>
         </div>
-        <div id="p-totals" class="card p-3 text-sm"></div>
+        <div id="p-totals" class="fsec green text-sm"></div>
         ${c ? '<p class="text-xs text-zinc-500">Al editar una compra vieja no se recalcula el costo promedio de los perfumes. Si cambió el precio, corregí el costo desde Stock.</p>' : '<p class="text-xs text-zinc-500">Al guardar, el stock sube solo y el costo de cada perfume pasa a ser el promedio entre lo que ya tenías y lo nuevo.</p>'}
         <div class="flex gap-2">${c ? '<button type="button" data-action="delete-purchase" class="btn-ghost text-red-400"><i class="fa-solid fa-trash"></i></button>' : ''}<button class="btn-gold flex-1">${c ? 'Guardar cambios' : 'Guardar compra'}</button></div>
     </form>`;
@@ -954,9 +980,9 @@ function renderPItems() {
             <div class="flex gap-2"><input data-f="nombre" class="inp flex-1" list="dl-products-all" value="${esc(it.nombre)}" placeholder="Perfume (escribí para buscar)" autocomplete="off">
             <button type="button" data-action="del-pitem" class="w-10 shrink-0 text-zinc-500 hover:text-red-400" aria-label="Quitar"><i class="fa-solid fa-xmark"></i></button></div>
             <div class="grid grid-cols-3 gap-2">
-                <div><label class="text-[10px] text-zinc-500">Cantidad</label><input data-f="cantidad" type="number" min="1" step="1" class="inp" value="${it.cantidad}"></div>
-                <div><label class="text-[10px] text-zinc-500">Precio tienda US$</label><input data-f="precioPY" type="number" min="0" step="0.01" class="inp" value="${it.precioPY ?? ''}" placeholder="23"></div>
-                <div><label class="text-[10px] text-zinc-500">Costo final US$ c/u</label><input data-f="costoUSD" type="number" min="0" step="0.01" class="inp" value="${it.costoUSD || ''}"></div>
+                <div><label class="text-[10px] text-zinc-400"><i class="fa-solid fa-boxes-stacked text-zinc-400 mr-1"></i>Cantidad</label><input data-f="cantidad" type="number" min="1" step="1" class="inp" value="${it.cantidad}"></div>
+                <div><label class="text-[10px] text-sky-400"><i class="fa-solid fa-tag mr-1"></i>Precio tienda US$</label><input data-f="precioPY" type="number" min="0" step="0.01" class="inp" value="${it.precioPY ?? ''}" placeholder="23"></div>
+                <div><label class="text-[10px] text-emerald-400"><i class="fa-solid fa-dollar-sign mr-1"></i>Costo final c/u</label><input data-f="costoUSD" type="number" min="0" step="0.01" class="inp" value="${it.costoUSD || ''}"></div>
             </div>
             <p class="text-[11px] text-zinc-500">${cc ? `Costo actual ${cc.costoUSD ? usd(cc.costoUSD) : '—'} · stock ${(stockInfo()[cc.key] || EMPTY_STOCK).stock}` : it.nombre ? '<span class="text-amber-400">Perfume nuevo: se agrega a tu lista de productos</span>' : 'El costo final suma el pasero y el USDT solo'}</p>
         </div>`;
